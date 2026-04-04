@@ -71,18 +71,18 @@
             <div x-data="{ 
                 open: false, 
                 messages: [
-                    { role: 'bot', text: 'Bonjour ! Bienvenue chez Lahad Enterprise. Comment puis-je vous aider aujourd\'hui ?' }
+                    { role: 'bot', text: "{{ __('messages.assistant_greeting') }}" }
                 ],
                 quickActions: [
-                    { label: '📦 Suivre ma commande', action: 'track' },
-                    { label: '🐔 Nos produits', action: 'products' },
-                    { label: '📞 Parler à un agent', action: 'whatsapp' }
+                    { label: "📦 {{ __('messages.track_order') }}", action: 'track' },
+                    { label: "🐔 {{ __('messages.our_products') }}", action: 'products' },
+                    { label: "📞 {{ __('messages.talk_to_agent') }}", action: 'whatsapp' }
                 ],
                 handleAction(action) {
                     if (action === 'track') {
-                        this.messages.push({ role: 'user', text: 'Je souhaite suivre ma commande' });
+                        this.messages.push({ role: 'user', text: "{{ __('messages.track_order') }}" });
                         setTimeout(() => {
-                            this.messages.push({ role: 'bot', text: 'Pour suivre votre commande, merci de vous connecter à votre compte et de consulter la section \'Mes Commandes\'.' });
+                            this.messages.push({ role: 'bot', text: "{{ __('messages.track_order_response') ?? 'Pour suivre votre commande, merci de vous connecter à votre compte.' }}" });
                         }, 500);
                     } else if (action === 'products') {
                         window.location.href = '{{ route('shop.index') }}';
@@ -110,10 +110,10 @@
                                 <i class="fas fa-robot text-lg"></i>
                             </div>
                             <div>
-                                <h3 class="font-black text-sm uppercase tracking-wider">Assistant Lahad</h3>
+                                <h3 class="font-black text-sm uppercase tracking-wider">{{ __('messages.assistant_name') }}</h3>
                                 <div class="flex items-center gap-1.5">
                                     <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                                    <span class="text-[10px] font-bold text-white/80">En ligne</span>
+                                    <span class="text-[10px] font-bold text-white/80">{{ __('messages.assistant_online') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
 
                     <!-- Actions -->
                     <div class="p-4 bg-white border-t border-slate-50 space-y-2">
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2">Actions rapides</p>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2">{{ __('messages.quick_actions') }}</p>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="action in quickActions">
                                 <button @click="handleAction(action.action)" 
@@ -153,7 +153,7 @@
                     <i class="fas fa-times text-2xl absolute transition-transform" :class="open ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'"></i>
                     
                     <div x-show="!open" class="absolute right-full mr-4 bg-white px-4 py-2 rounded-xl shadow-xl border border-slate-50 text-slate-800 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
-                        Besoin d'aide ? Chattez ici
+                        {{ __('messages.need_help') }}
                     </div>
                 </button>
             </div>
@@ -163,7 +163,7 @@
                 <div class="container-custom">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-8">
                         <p class="text-sm text-slate-500">
-                            © {{ date('Y') }} Lahad Enterprise — Viande poulet locale, caille, agneau, lait, yaourt, fromage, aliments bétail, poussins Goliath.
+                            © {{ date('Y') }} Lahad Enterprise — {{ __('messages.footer_text') }}
                         </p>
                         <div class="flex items-center gap-6">
                             <a href="#" class="text-slate-400 hover:text-primary transition-colors"><i class="fab fa-facebook-f"></i></a>

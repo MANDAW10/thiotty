@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'welcome' => 'Welcome to Lahad Enterprise',
+    'home' => 'Home',
+    'shop' => 'Products',
+    'gallery' => 'Gallery',
+    'contact' => 'Contact',
+    'cart' => 'Cart',
+    'my_orders' => 'My Orders',
+    'profile' => 'My Profile',
+    'logout' => 'Logout',
+    'login' => 'Login',
+    'register' => 'Register',
+    'search_placeholder' => 'Search products, categories...',
+    'assistant_name' => 'Lahad Assistant',
+    'assistant_online' => 'Online',
+    'assistant_greeting' => 'Hello! Welcome to Lahad Enterprise. How can I help you today?',
+    'quick_actions' => 'Quick Actions',
+    'track_order' => 'Track my order',
+    'our_products' => 'Our products',
+    'talk_to_agent' => 'Talk to an agent',
+    'need_help' => 'Need help? Chat here',
+    'footer_text' => 'Local chicken, quail, lamb, milk, yogurt, cheese, livestock feed, Goliath chicks.',
+];

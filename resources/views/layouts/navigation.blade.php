@@ -97,6 +97,12 @@
                     </span>
                 </a>
 
+                <!-- Language Switcher -->
+                <div class="flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
+                    <a href="{{ route('language.switch', 'en') }}" class="w-8 h-8 flex items-center justify-center rounded-xl text-[10px] font-black transition-all {{ app()->getLocale() == 'en' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-primary hover:bg-white' }}">EN</a>
+                    <a href="{{ route('language.switch', 'fr') }}" class="w-8 h-8 flex items-center justify-center rounded-xl text-[10px] font-black transition-all {{ app()->getLocale() == 'fr' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-primary hover:bg-white' }}">FR</a>
+                </div>
+
                 <!-- User Profile / Inscription -->
                 @auth
                     <x-dropdown align="right" width="48">
@@ -107,17 +113,17 @@
                         </x-slot>
                         <x-slot name="content">
                             <div class="px-4 py-2 border-b border-slate-50 text-xs text-slate-500">
-                                Connecté en tant que <strong>{{ Auth::user()->name }}</strong>
+                                {{ __('messages.profile_linked_as') ?? 'Connecté en tant que' }} <strong>{{ Auth::user()->name }}</strong>
                             </div>
-                            <x-dropdown-link href="javascript:void(0)" @click="showProfile = true">Profil</x-dropdown-link>
+                            <x-dropdown-link href="javascript:void(0)" @click="showProfile = true">{{ __('messages.profile') }}</x-dropdown-link>
                             @if(Auth::user()->is_admin)
                                 <x-dropdown-link :href="route('admin.dashboard')" class="text-primary font-black">Administration</x-dropdown-link>
                             @endif
-                            <x-dropdown-link :href="route('orders.history')">Mes Commandes</x-dropdown-link>
+                            <x-dropdown-link :href="route('orders.history')">{{ __('messages.my_orders') }}</x-dropdown-link>
                             <div class="border-t border-slate-50"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-500">Déconnexion</x-dropdown-link>
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-500">{{ __('messages.logout') }}</x-dropdown-link>
                             </form>
                         </x-slot>
                     </x-dropdown>
@@ -127,7 +133,7 @@
                             <i class="fas fa-user-circle text-2xl"></i>
                         </button>
                         <button @click="showRegister = true" class="hidden sm:block btn-lahad py-2 px-6 text-sm">
-                            Inscription
+                            {{ __('messages.register') }}
                         </button>
                     </div>
                 @endauth
@@ -136,17 +142,17 @@
 
         <!-- Bottom Header: Navigation Links (Desktop Only) -->
         <div class="header-bottom hidden md:flex">
-            <a href="{{ route('home') }}" class="nav-link-lahad {{ request()->routeIs('home') ? 'active' : '' }}">Accueil</a>
-            <a href="{{ route('gallery') }}" class="nav-link-lahad {{ request()->routeIs('gallery') ? 'active' : '' }}">Galerie</a>
+            <a href="{{ route('home') }}" class="nav-link-lahad {{ request()->routeIs('home') ? 'active' : '' }}">{{ __('messages.home') }}</a>
+            <a href="{{ route('gallery') }}" class="nav-link-lahad {{ request()->routeIs('gallery') ? 'active' : '' }}">{{ __('messages.gallery') }}</a>
             @auth
                 @if(Auth::user()->is_admin)
                     <a href="{{ route('admin.dashboard') }}" class="nav-link-lahad text-primary border-primary">Administration</a>
                 @endif
-                <a href="{{ route('orders.history') }}" class="nav-link-lahad {{ request()->routeIs('orders.history') ? 'active' : '' }}">Mes Commandes</a>
-                <a href="javascript:void(0)" @click="showProfile = true" class="nav-link-lahad {{ request()->routeIs('profile.edit') ? 'active' : '' }}">Mon Profil</a>
+                <a href="{{ route('orders.history') }}" class="nav-link-lahad {{ request()->routeIs('orders.history') ? 'active' : '' }}">{{ __('messages.my_orders') }}</a>
+                <a href="javascript:void(0)" @click="showProfile = true" class="nav-link-lahad {{ request()->routeIs('profile.edit') ? 'active' : '' }}">{{ __('messages.profile') }}</a>
             @endauth
-            <a href="{{ route('shop.index') }}" class="nav-link-lahad {{ request()->routeIs('shop.index') ? 'active' : '' }}">Produits</a>
-            <a href="{{ route('contact') }}" class="nav-link-lahad {{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
+            <a href="{{ route('shop.index') }}" class="nav-link-lahad {{ request()->routeIs('shop.index') ? 'active' : '' }}">{{ __('messages.shop') }}</a>
+            <a href="{{ route('contact') }}" class="nav-link-lahad {{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('messages.contact') }}</a>
         </div>
     </div>
 

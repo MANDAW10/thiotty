@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'welcome' => 'Bienvenue chez Lahad Enterprise',
+    'home' => 'Accueil',
+    'shop' => 'Produits',
+    'gallery' => 'Galerie',
+    'contact' => 'Contact',
+    'cart' => 'Panier',
+    'my_orders' => 'Mes Commandes',
+    'profile' => 'Mon Profil',
+    'logout' => 'Déconnexion',
+    'login' => 'Connexion',
+    'register' => 'Inscription',
+    'search_placeholder' => 'Rechercher des produits, catégories...',
+    'assistant_name' => 'Assistant Lahad',
+    'assistant_online' => 'En ligne',
+    'assistant_greeting' => 'Bonjour ! Bienvenue chez Lahad Enterprise. Comment puis-je vous aider aujourd\'hui ?',
+    'quick_actions' => 'Actions rapides',
+    'track_order' => 'Suivre ma commande',
+    'our_products' => 'Nos produits',
+    'talk_to_agent' => 'Parler à un agent',
+    'need_help' => 'Besoin d\'aide ? Chattez ici',
+    'footer_text' => 'Viande poulet locale, caille, agneau, lait, yaourt, fromage, aliments bétail, poussins Goliath.',
+];
