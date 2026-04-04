@@ -61,6 +61,8 @@ try {
         $bindings = array_keys($app->getBindings());
         echo implode(", ", array_slice($bindings, 0, 20)) . "...\n";
     }
+} catch (Exception $e) {
+    echo "General Laravel Boot Error: " . $e->getMessage() . "\n";
 }
 
 echo "\n--- DATABASE TEST ---\n";
