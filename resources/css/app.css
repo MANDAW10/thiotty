@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    /* Base Light Colors */
+    --primary: #E65100;
+    --primary-light: #FF9800;
+    --secondary: #1B5E20;
+    
+    --bg-page: #FDFDFD;
+    --bg-surface: #FFFFFF;
+    --bg-muted: #F8FAFC;
+    
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --text-inverse: #FFFFFF;
+    
+    --border-main: #F1F5F9;
+    --border-light: #F8FAFC;
+
+    /* Shadow Config */
+    --shadow-color: 230, 81, 0; /* Primary RGB */
+    --shadow-main: 0 10px 30px -5px rgba(var(--shadow-color), 0.15);
+}
+
+/* Dark Mode Overrides (Explicit) */
+.dark {
+    --bg-page: #0F172A;
+    --bg-surface: #1E293B;
+    --bg-muted: #334155;
+    
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --text-inverse: #0F172A;
+    
+    --border-main: #334155;
+    --border-light: #1E293B;
+
+    --shadow-main: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+}
+
+@layer base {
+    body {
+        background-color: var(--bg-page);
+        color: var(--text-main);
+        @apply font-sans antialiased transition-colors duration-300 overflow-x-hidden;
+        font-family: 'Outfit', sans-serif;
+    }
+}
+
+@layer components {
+    .container-custom {
+        @apply max-w-[1400px] mx-auto px-4 lg:px-8;
+    }
+
+    /* Main Header Styling */
+    .header-main {
+        background-color: var(--bg-surface);
+        border-bottom-color: var(--border-main);
+        @apply border-b sticky top-0 z-[1000] transition-colors duration-300;
+    }
+    .header-top {
+        @apply py-4 flex items-center justify-between gap-8;
+    }
+    .header-bottom {
+        border-top-color: var(--border-light);
+        @apply border-t py-3 flex items-center gap-10;
+    }
+
+    /* Search Bar */
+    .search-bar-container {
+        @apply flex-1 max-w-2xl relative;
+    }
+    .search-input {
+        background-color: var(--bg-muted);
+        color: var(--text-main);
+        @apply w-full border-none rounded-xl py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary transition-all placeholder-[var(--text-muted)];
+    }
+
+    /* Primary Button */
+    .btn-lahad {
+        background-color: var(--primary);
+        @apply px-8 py-3 text-white font-bold rounded-xl transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2;
+        box-shadow: var(--shadow-main);
+    }
+    .btn-lahad-outline {
+        border-color: var(--border-main);
+        color: var(--text-main);
+        @apply px-8 py-3 border-2 font-bold rounded-xl transition-all hover:border-[var(--primary)] hover:text-[var(--primary)] active:scale-95 flex items-center justify-center gap-2;
+    }
+
+    /* Category Card */
+    .category-card {
+        background-color: var(--bg-surface);
+        @apply p-6 rounded-2xl text-center transition-all hover:shadow-xl border border-transparent cursor-pointer;
+    }
+    .category-card:hover {
+        border-color: rgba(var(--shadow-color), 0.1);
+    }
+    .category-icon {
+        background-color: var(--bg-muted);
+        color: var(--primary);
+        @apply w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-all hover:bg-[var(--primary)] hover:text-white;
+    }
+
+    /* Product Card */
+    .product-card-lahad {
+        background-color: var(--bg-surface);
+        border-color: var(--border-main);
+        @apply rounded-[32px] overflow-hidden border transition-all hover:shadow-2xl hover:-translate-y-1;
+    }
+    .product-card-img {
+        background-color: var(--bg-muted);
+        @apply aspect-[4/3] overflow-hidden relative;
+    }
+    .product-card-btn-add {
+        background-color: var(--primary);
+        @apply absolute bottom-6 right-6 w-12 h-12 text-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-90 z-10;
+        box-shadow: 0 10px 20px -5px var(--primary);
+    }
+
+    /* Custom Navigation Link */
+    .nav-link-lahad {
+        color: var(--text-muted);
+        @apply text-sm font-semibold hover:text-[var(--primary)] transition-colors relative;
+    }
+    .nav-link-lahad.active {
+        color: var(--primary);
+    }
+    .nav-link-lahad.active::after {
+        content: '';
+        background-color: var(--primary);
+        @apply absolute -bottom-3 left-0 right-0 h-1 rounded-full;
+    }
+
+    /* Selection */
+    ::selection { 
+        background-color: var(--primary);
+        color: white;
+    }
+}
+
+/* Animations */
+.fade-in {
+    @apply opacity-0 animate-[fadeIn_0.5s_ease-out_forwards];
+}
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* Floating Chat */
+.floating-chat {
+    background-color: var(--primary);
+    @apply fixed bottom-8 right-8 w-16 h-16 text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform cursor-pointer z-[1000];
+    box-shadow: 0 15px 30px -5px var(--primary);
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background-color: var(--bg-muted); }
+::-webkit-scrollbar-thumb { 
+    background-color: rgba(var(--shadow-color), 0.2);
+    @apply rounded-full hover:bg-[var(--primary)]; 
+}
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(var(--shadow-color), 0.1);
+    border-radius: 20px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
