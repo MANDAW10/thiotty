@@ -34,6 +34,23 @@ function checkCase($path, $level = 0) {
 }
 checkCase(realpath(__DIR__ . '/..'));
 
+// --- LARAVEL BOOT TEST ---
+echo "\n--- LARAVEL BOOT TEST ---\n";
+try {
+    require __DIR__ . '/../vendor/autoload.php';
+    $app = require_once __DIR__ . '/../bootstrap/app.php';
+    $app->useStoragePath('/tmp/storage');
+    $app->make('view'); // Try to resolve view
+    echo "Laravel view service: RESOLVED\n";
+} catch (Exception $e) {
+    echo "Laravel view service: FAILED - " . $e->getMessage() . "\n";
+    if (isset($app)) {
+        echo "Registered Bindings (sample): \n";
+        $bindings = array_keys($app->getBindings());
+        echo implode(", ", array_slice($bindings, 0, 20)) . "...\n";
+    }
+}
+
 echo "\n--- DATABASE TEST ---\n";
 $host = getenv('DB_HOST');
 $port = getenv('DB_PORT');
