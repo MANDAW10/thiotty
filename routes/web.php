@@ -17,6 +17,7 @@ Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('l
 // EMERGENCY FINAL ADMIN SETUP (TEMPORARY)
 Route::get('/setup-final-admin', function () {
     try {
+        // Create Admin
         \App\Models\User::updateOrCreate(
             ['email' => 'admin@thiotty.com'],
             [
@@ -25,7 +26,11 @@ Route::get('/setup-final-admin', function () {
                 'is_admin' => true
             ]
         );
-        return "Compte Admin prêt ! <br>Email: <b>admin@thiotty.com</b> <br>Pass: <b>thiotty2026</b> <br><a href='/login'>Se connecter</a>";
+
+        // Seed Categories and Products
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+
+        return "Boutique configurée ! <br>✅ Compte Admin : <b>admin@thiotty.com</b> (Pass: thiotty2026) <br>✅ Catégories & Produits insérés ! <br><a href='/login'>Aller à la connexion</a>";
     } catch (\Exception $e) {
         return "Erreur : " . $e->getMessage();
     }
