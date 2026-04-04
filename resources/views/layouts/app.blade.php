@@ -71,18 +71,18 @@
             <div x-data="{ 
                 open: false, 
                 messages: [
-                    { role: 'bot', text: "{{ __('messages.assistant_greeting') }}" }
+                    { role: 'bot', text: '{{ addslashes(__('messages.assistant_greeting')) }}' }
                 ],
                 quickActions: [
-                    { label: "📦 {{ __('messages.track_order') }}", action: 'track' },
-                    { label: "🐔 {{ __('messages.our_products') }}", action: 'products' },
-                    { label: "📞 {{ __('messages.talk_to_agent') }}", action: 'whatsapp' }
+                    { label: '📦 {{ addslashes(__('messages.track_order')) }}', action: 'track' },
+                    { label: '🐔 {{ addslashes(__('messages.our_products')) }}', action: 'products' },
+                    { label: '📞 {{ addslashes(__('messages.talk_to_agent')) }}', action: 'whatsapp' }
                 ],
                 handleAction(action) {
                     if (action === 'track') {
-                        this.messages.push({ role: 'user', text: "{{ __('messages.track_order') }}" });
+                        this.messages.push({ role: 'user', text: '{{ addslashes(__('messages.track_order')) }}' });
                         setTimeout(() => {
-                            this.messages.push({ role: 'bot', text: "{{ __('messages.track_order_response') ?? 'Pour suivre votre commande, merci de vous connecter à votre compte.' }}" });
+                            this.messages.push({ role: 'bot', text: '{{ addslashes(__('messages.track_order_response') ?? 'Pour suivre votre commande, merci de vous connecter à votre compte.') }}' });
                         }, 500);
                     } else if (action === 'products') {
                         window.location.href = '{{ route('shop.index') }}';
