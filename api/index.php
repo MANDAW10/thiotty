@@ -7,7 +7,25 @@ error_reporting(E_ALL);
 
 try {
     require __DIR__ . '/../vendor/autoload.php';
+    /** @var \Illuminate\Foundation\Application $app */
     $app = require_once __DIR__ . '/../bootstrap/app.php';
+
+    // HARD FORCED REGISTRATION: Ignore auto-discovery, force load the core
+    $coreProviders = [
+        \Illuminate\Filesystem\FilesystemServiceProvider::class,
+        \Illuminate\View\ViewServiceProvider::class,
+        \Illuminate\Session\SessionServiceProvider::class,
+        \Illuminate\Cache\CacheServiceProvider::class,
+        \Illuminate\Database\DatabaseServiceProvider::class,
+        \Illuminate\Encryption\EncryptionServiceProvider::class,
+        \Illuminate\Translation\TranslationServiceProvider::class,
+    ];
+
+    foreach ($coreProviders as $provider) {
+        if (!$app->getProvider($provider)) {
+            $app->register($provider);
+        }
+    }
 
     $storagePath = '/tmp/storage';
     foreach (['/framework/views', '/framework/sessions', '/framework/cache'] as $sub) {
