@@ -14,6 +14,23 @@ use Illuminate\Support\Facades\Route;
 // Language Switch Route
 Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
+// EMERGENCY FINAL ADMIN SETUP (TEMPORARY)
+Route::get('/setup-final-admin', function () {
+    try {
+        \App\Models\User::updateOrCreate(
+            ['email' => 'admin@thiotty.com'],
+            [
+                'name' => 'Adama Thiotty',
+                'password' => \Illuminate\Support\Facades\Hash::make('thiotty2026'),
+                'is_admin' => true
+            ]
+        );
+        return "Compte Admin prêt ! <br>Email: <b>admin@thiotty.com</b> <br>Pass: <b>thiotty2026</b> <br><a href='/login'>Se connecter</a>";
+    } catch (\Exception $e) {
+        return "Erreur : " . $e->getMessage();
+    }
+});
+
 // Shop Routes
 Route::get('/', [ShopController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'shop'])->name('shop.index');
