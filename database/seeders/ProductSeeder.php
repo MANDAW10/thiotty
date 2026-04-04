@@ -90,7 +90,46 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($products as $product) {
-            Product::create($product);
+            Product::updateOrCreate(
+                ['slug' => $product['slug']],
+                $product
+            );
+        }
+
+        // Produits supplémentaires
+        $extras = [
+            [
+                'category_id' => $categories['poulets'] ?? 1,
+                'name' => 'Pintade Locale (Plein air)',
+                'slug' => 'pintade-locale-plein-air',
+                'description' => 'Pintade savoureuse élevée traditionnellement. Idéal pour les repas de fête.',
+                'price' => 6500,
+                'stock' => 50,
+                'image' => 'pintade.jpg'
+            ],
+            [
+                'category_id' => $categories['lait'] ?? 4,
+                'name' => 'Miel Bio de Casamance (1L)',
+                'slug' => 'miel-bio-casamance-1l',
+                'description' => 'Miel pure forêt de Casamance, riche en arômes et vertus naturelles.',
+                'price' => 8000,
+                'stock' => 100,
+                'is_featured' => true,
+                'image' => 'miel.jpg'
+            ],
+            [
+                'category_id' => $categories['vaches'] ?? 2,
+                'name' => 'Vache Laitière Montbéliarde',
+                'slug' => 'vache-laitiere-montbeliarde',
+                'description' => 'Excellente race pour la production de lait et de fromage de qualité.',
+                'price' => 1200000,
+                'stock' => 2,
+                'image' => 'vache3.jpg'
+            ]
+        ];
+
+        foreach ($extras as $extra) {
+            Product::updateOrCreate(['slug' => $extra['slug']], $extra);
         }
     }
 }
