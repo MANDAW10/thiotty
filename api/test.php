@@ -35,9 +35,19 @@ function checkCase($path, $level = 0) {
 checkCase(realpath(__DIR__ . '/..'));
 
 echo "\n--- DATABASE TEST ---\n";
+$host = getenv('DB_HOST');
+$port = getenv('DB_PORT');
+$database = getenv('DB_DATABASE');
+$username = getenv('DB_USERNAME');
+$sslmode = getenv('DB_SSLMODE') ?: 'require';
+
+echo "Testing connection to: $host:$port (DB: $database, User: $username, SSL: $sslmode)\n";
+
 try {
-    $dsn = "pgsql:host=" . getenv('DB_HOST') . ";port=" . getenv('DB_PORT') . ";dbname=" . getenv('DB_DATABASE');
-    $pdo = new PDO($dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+    $dsn = "pgsql:host=$host;port=$port;dbname=$database;sslmode=$sslmode";
+    $pdo = new PDO($dsn, $username, getenv('DB_PASSWORD'), [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    ]);
     echo "Database connection: SUCCESS\n";
 } catch (Exception $e) {
     echo "Database connection: FAILED - " . $e->getMessage() . "\n";
