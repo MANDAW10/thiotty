@@ -38,6 +38,7 @@
         "SESSION_DRIVER": "cookie",
         "CACHE_STORE": "array",
         "DB_CONNECTION": "pgsql",
+        "ASSET_URL": "https://thiottys.vercel.app",
         "APP_SERVICES_CACHE": "/tmp/services.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
         "APP_CONFIG_CACHE": "/tmp/config.php",
