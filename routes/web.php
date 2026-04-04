@@ -14,16 +14,6 @@ use Illuminate\Support\Facades\Route;
 // Language Switch Route
 Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
-// EMERGENCY MIGRATION ROUTE (TEMPORARY)
-Route::get('/migrate', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return "Migrations réussies ! " . \Illuminate\Support\Facades\Artisan::output() . " <br><a href='/'>Retour à l'accueil</a>";
-    } catch (\Exception $e) {
-        return "Erreur lors de la migration : " . $e->getMessage();
-    }
-});
-
 // Shop Routes
 Route::get('/', [ShopController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'shop'])->name('shop.index');
