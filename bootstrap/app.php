@@ -11,9 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withProviders([
+        \Illuminate\Filesystem\FilesystemServiceProvider::class,
         \Illuminate\View\ViewServiceProvider::class,
         \Illuminate\Session\SessionServiceProvider::class,
         \Illuminate\Cache\CacheServiceProvider::class,
+        \Illuminate\Database\DatabaseServiceProvider::class,
+        \Illuminate\Encryption\EncryptionServiceProvider::class,
+        \Illuminate\Translation\TranslationServiceProvider::class,
     ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
