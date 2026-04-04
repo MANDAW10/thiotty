@@ -11,7 +11,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Force register essential services if they are missing (Vercel fix)
+        if (!$this->app->bound('view')) {
+            $this->app->register(\Illuminate\View\ViewServiceProvider::class);
+        }
+        if (!$this->app->bound('session')) {
+            $this->app->register(\Illuminate\Session\SessionServiceProvider::class);
+        }
     }
 
     /**
