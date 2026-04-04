@@ -1,27 +1,44 @@
 <?php
 header('Content-Type: text/plain');
 echo "PHP Version: " . phpversion() . "\n";
-echo "Current Dir: " . __DIR__ . "\n";
-echo "Base Path: " . (isset($_SERVER['PWD']) ? $_SERVER['PWD'] : realpath(__DIR__ . '/..')) . "\n";
 
-echo "\n--- DIR STRUCTURE (..) ---\n";
-$base = realpath(__DIR__ . '/..');
-if ($base) {
-    $files = scandir($base);
+echo "\n--- BOOTSTRAP CACHE CHECK ---\n";
+$cachePath = realpath(__DIR__ . '/../bootstrap/cache');
+if ($cachePath) {
+    $files = scandir($cachePath);
     foreach ($files as $file) {
         if ($file === '.' || $file === '..') continue;
-        echo (is_dir($base . '/' . $file) ? "[DIR] " : "[FILE] ") . $file . "\n";
+        echo "[FILE] $file\n";
+        // If it's a php file, show the first few lines to check for absolute paths
+        if (str_ends_with($file, '.php')) {
+            $content = file_get_contents($cachePath . '/' . $file);
+            if (strpos($content, 'C:\\') !== false || strpos($content, 'Users\\') !== false) {
+                echo "   !!! WARNING: Local Windows paths detected in cache file !!!\n";
+            }
+        }
     }
-} else {
-    echo "Could not find base path.\n";
 }
 
-echo "\n--- EXTENSIONS ---\n";
-print_r(get_loaded_extensions());
+echo "\n--- DIR CASE CHECK ---\n";
+function checkCase($path, $level = 0) {
+    if ($level > 3) return;
+    $files = scandir($path);
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..') continue;
+        if (in_array(strtolower($file), ['app', 'http', 'controllers', 'auth', 'models', 'providers'])) {
+            echo str_repeat("  ", $level) . "$file\n";
+            $full = $path . '/' . $file;
+            if (is_dir($full)) checkCase($full, $level + 1);
+        }
+    }
+}
+checkCase(realpath(__DIR__ . '/..'));
 
-echo "\n--- COMPOSER CHECK ---\n";
-$autoload = __DIR__ . '/../vendor/autoload.php';
-echo "Autoload.php exists: " . (file_exists($autoload) ? "YES" : "NO") . "\n";
-if (file_exists($autoload)) {
-    echo "Autoload path: " . realpath($autoload) . "\n";
+echo "\n--- DATABASE TEST ---\n";
+try {
+    $dsn = "pgsql:host=" . getenv('DB_HOST') . ";port=" . getenv('DB_PORT') . ";dbname=" . getenv('DB_DATABASE');
+    $pdo = new PDO($dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+    echo "Database connection: SUCCESS\n";
+} catch (Exception $e) {
+    echo "Database connection: FAILED - " . $e->getMessage() . "\n";
 }
