@@ -40,10 +40,22 @@ try {
     require __DIR__ . '/../vendor/autoload.php';
     $app = require_once __DIR__ . '/../bootstrap/app.php';
     $app->useStoragePath('/tmp/storage');
-    $app->make('view'); // Try to resolve view
-    echo "Laravel view service: RESOLVED\n";
-} catch (Exception $e) {
-    echo "Laravel view service: FAILED - " . $e->getMessage() . "\n";
+    // Test 1: Standard Resolve
+    try {
+        $app->make('view');
+        echo "Test 1 (Auto): view service RESOLVED\n";
+    } catch (Exception $e) {
+        echo "Test 1 (Auto): view service FAILED\n";
+    }
+
+    // Test 2: Manual Register
+    try {
+        $app->register(\Illuminate\View\ViewServiceProvider::class);
+        $app->make('view');
+        echo "Test 2 (Manual): view service RESOLVED\n";
+    } catch (Exception $e) {
+        echo "Test 2 (Manual): view service FAILED - " . $e->getMessage() . "\n";
+    }
     if (isset($app)) {
         echo "Registered Bindings (sample): \n";
         $bindings = array_keys($app->getBindings());
