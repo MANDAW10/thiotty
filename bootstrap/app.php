@@ -10,6 +10,11 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withProviders([
+        \Illuminate\View\ViewServiceProvider::class,
+        \Illuminate\Session\SessionServiceProvider::class,
+        \Illuminate\Cache\CacheServiceProvider::class,
+    ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             \App\Http\Middleware\SetLocaleMiddleware::class,
