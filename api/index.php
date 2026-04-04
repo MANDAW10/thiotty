@@ -15,22 +15,30 @@ try {
     }
     $app->useStoragePath($storagePath);
 
-    // Force a minimal 'view' binding to prevent the error renderer from crashing
-    $app->singleton('view', function() {
-        return new class { public function replaceNamespace() {} public function exists() { return false; } public function make() { return $this; } public function render() { return 'Error page failed to load (View service missing)'; } };
-    });
-
     $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-    $response = $kernel->handle($request = Illuminate\Http\Request::capture());
+    
+    // We catch the request manually to avoid the Kernel's built-in error handler if possible
+    $request = Illuminate\Http\Request::capture();
+    
+    // If the kernel handles it and fails, it returns a response. 
+    // We want to see if we can trigger the error ourselves.
+    $response = $kernel->handle($request);
+    
+    // If we have an error status, let's try to extract the exception from the response if it's there
+    if ($response->isServerError() || $response->isClientError()) {
+        echo "--- HTTP ERROR " . $response->getStatusCode() . " DETECTED ---\n";
+        if (isset($response->exception)) {
+            echo "Exception: " . $response->exception->getMessage() . "\n";
+            echo "Trace: " . $response->exception->getTraceAsString() . "\n";
+        }
+    }
+
     $response->send();
     $kernel->terminate($request, $response);
 
 } catch (\Throwable $e) {
-    echo "--- ROOT EXCEPTION DETECTED ---\n";
+    echo "--- CRITICAL BOOT ERROR ---\n";
     echo "Message: " . $e->getMessage() . "\n";
     echo "File: " . $e->getFile() . " (Line: " . $e->getLine() . ")\n";
-    if ($e->getPrevious()) {
-        echo "Previous Exception: " . $e->getPrevious()->getMessage() . "\n";
-    }
     echo "Full Trace: \n" . $e->getTraceAsString() . "\n";
 }
