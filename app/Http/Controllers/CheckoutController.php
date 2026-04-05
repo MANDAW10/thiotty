@@ -75,11 +75,11 @@ class CheckoutController extends Controller
 
     public function confirmation(Order $order)
     {
-        $order->load(['orderItems.product', 'deliveryZone']);
+        $order->load(['items.product', 'deliveryZone']);
         
         // Generate WhatsApp message
         $itemsText = "";
-        foreach($order->orderItems as $item) {
+        foreach($order->items as $item) {
             $itemsText .= "- " . $item->product->name . " x " . $item->quantity . " (" . number_format($item->unit_price * $item->quantity, 0, ',', ' ') . " CFA)\n";
         }
 
