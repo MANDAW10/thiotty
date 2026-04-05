@@ -83,6 +83,17 @@
                                 <i class="fab fa-whatsapp text-2xl text-[#25D366]"></i>
                             </a>
                         </div>
+
+                        <!-- Payment Trust Badge -->
+                        <div class="mt-8 flex items-center gap-4 p-5 bg-primary/5 rounded-2xl border border-primary/10">
+                            <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-primary">
+                                <i class="fas fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-0.5">Paiement 100% Sécurisé</p>
+                                <p class="text-xs font-bold text-slate-700">Règlement en espèces à la livraison uniquement.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

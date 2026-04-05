@@ -72,6 +72,46 @@
         </div>
     </section>
 
+    <!-- Features Section -->
+    <section class="py-12 border-y border-slate-100 bg-white">
+        <div class="container-custom">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Feature 1: Payment -->
+                <div class="flex items-center gap-6 group">
+                    <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
+                        <i class="fas fa-hand-holding-dollar text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">Paiement à la Livraison</h4>
+                        <p class="text-xs text-slate-500 font-medium">Commandez l'esprit tranquille, payez à réception.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 2: Delivery -->
+                <div class="flex items-center gap-6 group">
+                    <div class="w-14 h-14 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
+                        <i class="fas fa-truck-fast text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">Livraison Express</h4>
+                        <p class="text-xs text-slate-500 font-medium">Vos produits livrés chez vous en 24h à Dakar.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Quality -->
+                <div class="flex items-center gap-6 group">
+                    <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
+                        <i class="fas fa-award text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">Qualité Bio & Fraiche</h4>
+                        <p class="text-xs text-slate-500 font-medium">Des produits direct du producteur au client.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Featured Products -->
     <section class="py-20">
         <div class="container-custom">

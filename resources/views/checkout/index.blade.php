@@ -82,40 +82,28 @@
                         </div>
 
                         <!-- Section 2: Paiement -->
-                        <div class="bg-white rounded-[32px] p-8 md:p-10 border border-slate-100 shadow-sm">
+                        <div class="bg-white rounded-[32px] p-8 md:p-10 border border-slate-100 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
                             <div class="flex items-center gap-4 mb-10">
                                 <span class="w-10 h-10 bg-primary text-white rounded-2xl flex items-center justify-center text-sm font-black shadow-lg shadow-primary/20">2</span>
                                 <h3 class="text-xl font-bold text-slate-900">Mode de Paiement</h3>
                             </div>
                             
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                <label class="relative block cursor-pointer group">
-                                    <input type="radio" name="payment_method" value="cash" class="peer hidden" required checked>
-                                    <div class="p-6 text-center border-2 border-slate-100 bg-white peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-all rounded-2xl hover:bg-slate-50">
-                                        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 group-hover:text-primary transition-colors">
-                                            <i class="fas fa-money-bill-wave text-xl"></i>
-                                        </div>
-                                        <span class="font-black block text-[10px] uppercase tracking-widest">Espèces</span>
-                                    </div>
-                                </label>
-                                <label class="relative block cursor-pointer group">
-                                    <input type="radio" name="payment_method" value="wave" class="peer hidden" required>
-                                    <div class="p-6 text-center border-2 border-slate-100 bg-white peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-all rounded-2xl hover:bg-slate-50">
-                                        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 group-hover:text-primary transition-colors">
-                                            <i class="fas fa-mobile-alt text-xl"></i>
-                                        </div>
-                                        <span class="font-black block text-[10px] uppercase tracking-widest">Wave</span>
-                                    </div>
-                                </label>
-                                <label class="relative block cursor-pointer group">
-                                    <input type="radio" name="payment_method" value="orange_money" class="peer hidden" required>
-                                    <div class="p-6 text-center border-2 border-slate-100 bg-white peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-all rounded-2xl hover:bg-slate-50">
-                                        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 group-hover:text-primary transition-colors">
-                                            <i class="fas fa-wallet text-xl"></i>
-                                        </div>
-                                        <span class="font-black block text-[10px] uppercase tracking-widest">Orange Money</span>
-                                    </div>
-                                </label>
+                            <div class="flex flex-col md:flex-row items-center gap-8 p-8 bg-slate-50 rounded-[28px] border border-slate-100 relative z-10">
+                                <div class="w-20 h-20 bg-white rounded-[24px] shadow-xl shadow-primary/10 flex items-center justify-center text-primary shrink-0 border border-primary/10 transition-transform hover:scale-105">
+                                    <i class="fas fa-hand-holding-dollar text-3xl"></i>
+                                </div>
+                                <div class="flex-1 text-center md:text-left">
+                                    <h4 class="text-lg font-black text-slate-900 mb-2 uppercase tracking-wide">Paiement à la livraison</h4>
+                                    <p class="text-sm text-slate-500 font-medium leading-relaxed max-w-sm">
+                                        Payez en espèces en toute sécurité dès que vous recevez vos produits. Pas de transaction en ligne requise.
+                                    </p>
+                                    <input type="hidden" name="payment_method" value="cash">
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black uppercase tracking-widest shrink-0">
+                                    <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                                    Activé par défaut
+                                </div>
                             </div>
                         </div>
 
