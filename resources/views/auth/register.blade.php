@@ -52,8 +52,6 @@
             </div>
         </div>
 
-        <x-input-error :messages="$errors->get('name')" class="mt-1" />
-        <x-input-error :messages="$errors->get('phone')" class="mt-1" />
 
         <!-- Email Address -->
         <div class="space-y-1.5">
@@ -67,8 +65,7 @@
                        placeholder="votre@email.com"
                        value="{{ old('email') }}" required autocomplete="username">
             </div>
-            <x-input-error :messages="$errors->get('email')" class="mt-1" />
-        </div>
+            </div>
 
         <div class="grid grid-cols-2 gap-4">
             <!-- Password -->
@@ -83,7 +80,7 @@
                            placeholder="••••"
                            required autocomplete="new-password">
                     <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
-                        <i class="fas" :class="show ? 'fa-eye-slash' : 'fa-eye' text-[10px]"></i>
+                        <i class="fas text-[10px]" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
                     </button>
                 </div>
             </div>
@@ -100,12 +97,11 @@
                            placeholder="••••"
                            required autocomplete="new-password">
                     <button type="button" @click="showConfirm = !showConfirm" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
-                        <i class="fas" :class="showConfirm ? 'fa-eye-slash' : 'fa-eye' text-[10px]"></i>
+                        <i class="fas text-[10px]" :class="showConfirm ? 'fa-eye-slash' : 'fa-eye'"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <x-input-error :messages="$errors->get('password')" class="mt-1" />
 
         <div class="pt-4">
             <button type="submit" class="btn-lahad w-full py-4 text-base shadow-xl shadow-primary/20 relative overflow-hidden group" :disabled="loading">

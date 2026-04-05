@@ -25,7 +25,6 @@
                        placeholder="votre@email.com"
                        value="{{ old('email') }}" required autofocus autocomplete="username">
             </div>
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
@@ -50,7 +49,6 @@
                     <i class="fas" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
                 </button>
             </div>
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Remember Me -->

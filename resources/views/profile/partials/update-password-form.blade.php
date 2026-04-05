@@ -6,20 +6,17 @@
         <div class="space-y-1">
             <label for="update_password_current_password" class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Mot de passe actuel</label>
             <input id="update_password_current_password" name="current_password" type="password" class="w-full bg-white border-none rounded-2xl py-3 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all font-sans shadow-sm" autocomplete="current-password">
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-1" />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
                 <label for="update_password_password" class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Nouveau mot de passe</label>
                 <input id="update_password_password" name="password" type="password" class="w-full bg-white border-none rounded-2xl py-3 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all font-sans shadow-sm" autocomplete="new-password">
-                <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-1" />
             </div>
 
             <div class="space-y-1">
                 <label for="update_password_password_confirmation" class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Confirmer mot de passe</label>
                 <input id="update_password_password_confirmation" name="password_confirmation" type="password" class="w-full bg-white border-none rounded-2xl py-3 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all font-sans shadow-sm" autocomplete="new-password">
-                <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-1" />
             </div>
         </div>
 
