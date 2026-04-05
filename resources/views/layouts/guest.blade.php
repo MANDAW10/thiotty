@@ -53,7 +53,7 @@
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] overflow-hidden rounded-[40px] border border-slate-50 p-10">
+            <div class="w-[calc(100%-2rem)] sm:max-w-md bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] overflow-hidden rounded-[32px] sm:rounded-[40px] border border-slate-50 p-6 sm:p-10">
                 {{ $slot }}
             </div>
         </div>
