@@ -75,7 +75,28 @@ class CheckoutController extends Controller
 
     public function confirmation(Order $order)
     {
-        return view('checkout.confirmation', compact('order'));
+        $order->load(['orderItems.product', 'deliveryZone']);
+        
+        // Generate WhatsApp message
+        $itemsText = "";
+        foreach($order->orderItems as $item) {
+            $itemsText .= "- " . $item->product->name . " x " . $item->quantity . " (" . number_format($item->unit_price * $item->quantity, 0, ',', ' ') . " CFA)\n";
+        }
+
+        $message = "📦 *NOUVELLE COMMANDE THIOTTY !*\n\n"
+                 . "🔖 *Réf:* #" . str_pad($order->id, 5, '0', STR_PAD_LEFT) . "\n"
+                 . "👤 *Client:* " . $order->customer_name . "\n"
+                 . "📞 *WhatsApp:* " . $order->customer_phone . "\n"
+                 . "📍 *Zone:* " . $order->deliveryZone->name . " (+ " . number_format($order->delivery_fee, 0, ',', ' ') . " CFA)\n"
+                 . "🏠 *Adresse:* " . $order->customer_address . "\n\n"
+                 . "🛒 *ARTICLES:*\n" . $itemsText . "\n"
+                 . "💰 *TOTAL À PAYER: " . number_format($order->total_amount, 0, ',', ' ') . " CFA*\n\n"
+                 . "✨ *Mode:* " . strtoupper(str_replace('_', ' ', $order->payment_method)) . "\n"
+                 . "🚀 *Statut:* Paiement à la livraison";
+
+        $whatsappUrl = "https://wa.me/221783577431?text=" . urlencode($message);
+
+        return view('checkout.confirmation', compact('order', 'whatsappUrl'));
     }
 
     public function history()

@@ -44,14 +44,25 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap justify-center gap-8 relative z-10">
-                <a href="{{ route('shop.index') }}" class="btn-simple px-10 py-5 text-lg">
-                    Revenir Boutique <i class="fas fa-shopping-bag ml-3 text-xs opacity-50"></i>
+            <div class="flex flex-col sm:flex-row justify-center gap-6 relative z-10 w-full max-w-lg mx-auto">
+                <a href="{{ $whatsappUrl }}" target="_blank" class="w-full flex items-center justify-center gap-4 px-10 py-6 bg-[#25D366] text-white rounded-[24px] font-black shadow-xl shadow-[#25D366]/30 hover:bg-[#128C7E] transition-all text-sm uppercase tracking-widest active:scale-95 animate-button-pulse">
+                    <i class="fab fa-whatsapp text-2xl"></i> Finaliser sur WhatsApp
                 </a>
-                <a href="https://wa.me/221773004050" class="flex items-center gap-4 px-10 py-5 bg-white text-slate-900 rounded-xl font-black shadow-sm border border-slate-100 hover:text-primary transition-all text-lg uppercase tracking-widest active:scale-95">
-                    <i class="fab fa-whatsapp text-2xl text-primary"></i> Support Client
+                <a href="{{ route('shop.index') }}" class="w-full sm:w-auto px-10 py-6 bg-slate-100 text-slate-500 rounded-[24px] font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all text-center">
+                    Retour Boutique
                 </a>
             </div>
+
+            <style>
+                @keyframes button-pulse {
+                    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+                    70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+                    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+                }
+                .animate-button-pulse {
+                    animation: button-pulse 2s infinite;
+                }
+            </style>
         </div>
     </div>
 </x-app-layout>
