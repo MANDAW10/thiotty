@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\DeliveryZone;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
@@ -65,6 +67,16 @@ class CheckoutController extends Controller
 
             DB::commit();
             Session::forget('cart');
+
+            // Send automatic WhatsApp notification to admin
+            try {
+                $order->load(['items.product', 'deliveryZone']);
+                $whatsapp = new WhatsAppService();
+                $whatsapp->sendOrderNotification($order);
+            } catch (\Exception $e) {
+                // Silently fail if WhatsApp service has issues, don't block the user
+                Log::error('Erreur lors de l\'envoi de la notification WhatsApp: ' . $e->getMessage());
+            }
 
             return redirect()->route('order.confirmation', $order)->with('success', 'Commande passée avec succès !');
         } catch (\Exception $e) {

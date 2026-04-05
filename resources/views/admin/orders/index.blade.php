@@ -1,16 +1,16 @@
 <x-admin-layout>
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 md:mb-12 gap-6">
         <div>
-            <h1 class="text-3xl font-black text-slate-900 mb-2">Gestion des Commandes</h1>
-            <nav class="flex text-[10px] font-black text-slate-400 uppercase tracking-widest gap-2">
+            <h1 class="text-2xl md:text-3xl font-black text-slate-900 mb-2">Gestion des Commandes</h1>
+            <nav class="flex text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest gap-2">
                 <a href="{{ route('admin.dashboard') }}" class="hover:text-primary transition-colors">Admin</a>
                 <span>/</span>
                 <span class="text-slate-900">Commandes</span>
             </nav>
         </div>
-        <div>
-            <div class="bg-white px-6 py-3 rounded-2xl border border-slate-100 shadow-sm text-xs font-bold text-slate-500">
-                Total: <span class="text-slate-900 font-black ml-2">{{ $orders->total() }} commandes</span>
+        <div class="w-full sm:w-auto">
+            <div class="bg-white px-6 py-3 rounded-2xl border border-slate-100 shadow-sm text-[10px] md:text-xs font-bold text-slate-500 text-center">
+                Total: <span class="text-slate-900 font-black ml-2">{{ $orders->total() }}</span>
             </div>
         </div>
     </div>
@@ -26,28 +26,28 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">
-                        <th class="p-8">ID & Date</th>
-                        <th class="p-8">Client</th>
-                        <th class="p-8">Paiement</th>
-                        <th class="p-8">Statut Livraison</th>
-                        <th class="p-8 text-right">Actions</th>
+                    <tr class="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">
+                        <th class="p-4 md:p-8 whitespace-nowrap">ID & Date</th>
+                        <th class="p-4 md:p-8 whitespace-nowrap">Client</th>
+                        <th class="p-4 md:p-8 whitespace-nowrap">Paiement</th>
+                        <th class="p-4 md:p-8 whitespace-nowrap">Statut Livraison</th>
+                        <th class="p-4 md:p-8 text-right whitespace-nowrap">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50 font-bold text-slate-600">
                     @foreach($orders as $order)
                         <tr id="order-{{ $order->id }}" class="hover:bg-slate-50/50 transition-colors">
-                            <td class="p-8">
+                            <td class="p-4 md:p-8">
                                 <div class="text-primary font-black mb-1">#{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</div>
                                 <div class="text-[10px] text-slate-400 uppercase tracking-widest">{{ $order->created_at->format('d/m/Y H:i') }}</div>
                             </td>
-                            <td class="p-8">
+                            <td class="p-4 md:p-8">
                                 <div class="text-slate-900">{{ $order->customer_name }}</div>
                                 <div class="text-[10px] text-slate-400 flex items-center gap-2 mt-1 italic">
                                     {{ $order->customer_phone }} — {{ $order->deliveryZone?->name ?? 'Zone inconnue' }}
                                 </div>
                             </td>
-                            <td class="p-8">
+                            <td class="p-4 md:p-8">
                                 <div class="text-slate-900 mb-2">{{ number_format($order->total_amount, 0, ',', ' ') }} <small class="text-[10px] opacity-40">CFA</small></div>
                                 <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST">
                                     @csrf
@@ -61,7 +61,7 @@
                                     </select>
                                 </form>
                             </td>
-                            <td class="p-8">
+                            <td class="p-4 md:p-8">
                                 <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST">
                                     @csrf
                                     @method('PATCH')

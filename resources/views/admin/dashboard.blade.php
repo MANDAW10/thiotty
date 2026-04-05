@@ -1,19 +1,19 @@
 <x-admin-layout>
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6">
         <div>
-            <h1 class="text-3xl font-black text-slate-900 mb-2">Tableau de Bord</h1>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Lahad Enterprise — Administration</p>
+            <h1 class="text-2xl md:text-3xl font-black text-slate-900 mb-1">Tableau de Bord</h1>
+            <p class="text-[9px] md:text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Lahad Enterprise — Administration</p>
         </div>
-        <div class="flex gap-4">
-            <a href="{{ route('admin.products.create') }}" class="btn-lahad py-3 px-6 text-sm">
-                <i class="fas fa-plus mr-2 text-xs"></i> Nouveau Produit
+        <div class="flex w-full sm:w-auto">
+            <a href="{{ route('admin.products.create') }}" class="btn-lahad w-full sm:w-auto py-3 px-6 text-xs text-center">
+                <i class="fas fa-plus mr-2"></i> Nouveau Produit
             </a>
         </div>
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
+    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 md:mb-12">
+        <div class="bg-white p-6 md:p-8 rounded-[28px] md:rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
             <div class="w-12 h-12 bg-orange-50 text-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <i class="fas fa-shopping-bag text-xl"></i>
             </div>
@@ -21,7 +21,7 @@
             <h3 class="text-3xl font-black text-slate-900">{{ $stats['total_orders'] }}</h3>
         </div>
         
-        <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
+        <div class="bg-white p-6 md:p-8 rounded-[28px] md:rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
             <div class="w-12 h-12 bg-green-50 text-secondary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <i class="fas fa-coins text-xl"></i>
             </div>
@@ -29,7 +29,7 @@
             <h3 class="text-3xl font-black text-slate-900">{{ number_format($stats['total_revenue'], 0, ',', ' ') }} <small class="text-xs uppercase opacity-30">CFA</small></h3>
         </div>
 
-        <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
+        <div class="bg-white p-6 md:p-8 rounded-[28px] md:rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
             <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <i class="fas fa-box-open text-xl"></i>
             </div>
