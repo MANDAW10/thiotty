@@ -389,7 +389,8 @@
                         <label for="modal_reg_name" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Nom</label>
                         <input id="modal_reg_name" name="name" type="text" 
                                class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
-                               required placeholder="Nom complet">
+                               required placeholder="Nom complet" value="{{ old('name') }}">
+                        <x-input-error :messages="$errors->get('name')" class="mt-1" />
                     </div>
                     <div class="space-y-1.5">
                         <label for="modal_reg_phone" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Numéro</label>
@@ -397,8 +398,9 @@
                             <span class="absolute left-3 text-[10px] font-black text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">+221</span>
                             <input id="modal_reg_phone" name="phone" type="tel" x-on:input="formatPhone($event)" 
                                    class="w-full bg-slate-50 border-none rounded-xl py-3 pl-14 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300" 
-                                   required placeholder="7x xxx xx">
+                                   required placeholder="7x xxx xx" value="{{ old('phone') }}">
                         </div>
+                        <x-input-error :messages="$errors->get('phone')" class="mt-1" />
                     </div>
                 </div>
                 
@@ -406,7 +408,7 @@
                     <label for="modal_reg_email" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email</label>
                     <input id="modal_reg_email" name="email" type="email" 
                            class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
-                           required placeholder="votre@email.com">
+                           required placeholder="votre@email.com" value="{{ old('email') }}">
                     <x-input-error :messages="$errors->get('email')" class="mt-1" />
                 </div>
 
@@ -417,6 +419,7 @@
                             <input id="modal_reg_password" name="password" :type="showPass ? 'text' : 'password'" 
                                    class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
                                    required placeholder="••••">
+                            <x-input-error :messages="$errors->get('password')" class="mt-1" />
                             <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
                                 <i class="fas" :class="showPass ? 'fa-eye-slash' : 'fa-eye' text-[10px]"></i>
                             </button>
