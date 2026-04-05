@@ -2,14 +2,14 @@
     <!-- Product Detail Header -->
     <header class="py-12 bg-white border-b border-slate-50">
         <div class="container-custom">
-            <nav class="flex mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest gap-2">
+            <nav class="flex flex-wrap items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">
                 <a href="{{ route('home') }}" class="hover:text-primary transition-colors">Accueil</a>
-                <span>/</span>
+                <span class="opacity-30">/</span>
                 <a href="{{ route('shop.index') }}" class="hover:text-primary transition-colors">Boutique</a>
-                <span>/</span>
+                <span class="opacity-30">/</span>
                 <a href="{{ route('shop.category', $product->category->slug) }}" class="hover:text-primary transition-colors">{{ $product->category->name }}</a>
-                <span>/</span>
-                <span class="text-slate-900">{{ $product->name }}</span>
+                <span class="opacity-30">/</span>
+                <span class="text-slate-900 truncate max-w-[150px] sm:max-w-none">{{ $product->name }}</span>
             </nav>
         </div>
     </header>
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             
-                            <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-6">{{ $product->name }}</h1>
+                            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-4 sm:mb-6">{{ $product->name }}</h1>
                             
                             <div class="flex items-center gap-4 text-sm font-semibold text-slate-500">
                                 <i class="fas fa-map-marker-alt text-primary"></i>

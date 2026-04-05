@@ -47,9 +47,24 @@
                     </div>
 
                     <!-- Categories Widget -->
-                    <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm">
-                        <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-8">Univers Lahad</h3>
-                        <div class="flex flex-col gap-3">
+                    <div class="bg-white p-6 lg:p-8 rounded-[32px] border border-slate-100 shadow-sm relative z-20">
+                        <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-6 lg:mb-8">Univers Lahad</h3>
+                        
+                        <!-- Mobile View: Horizontal Scroll -->
+                        <div class="flex lg:hidden overflow-x-auto pb-4 gap-4 no-scrollbar -mx-2 px-2">
+                            <a href="{{ route('shop.index') }}" class="flex-none flex items-center gap-3 px-6 py-3 rounded-2xl transition-all {{ !isset($category) ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-slate-50 text-slate-600' }}">
+                                <span class="text-xs font-black uppercase tracking-widest whitespace-nowrap">Tout voir</span>
+                            </a>
+                            @foreach($categories as $cat)
+                                <a href="{{ route('shop.category', $cat->slug) }}" class="flex-none flex items-center gap-3 px-6 py-3 rounded-2xl transition-all {{ (isset($category) && $category->id == $cat->id) ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-slate-50 text-slate-600' }}">
+                                    <i class="{{ $cat->icon }} text-xs"></i>
+                                    <span class="text-xs font-black uppercase tracking-widest whitespace-nowrap">{{ $cat->name }}</span>
+                                </a>
+                            @endforeach
+                        </div>
+
+                        <!-- Desktop View: Vertical Stack -->
+                        <div class="hidden lg:flex flex-col gap-3">
                             <a href="{{ route('shop.index') }}" class="flex items-center gap-4 p-4 rounded-2xl transition-all group {{ !isset($category) ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
                                 <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-all {{ !isset($category) ? 'bg-white/10' : 'bg-white text-primary shadow-sm group-hover:bg-primary group-hover:text-white' }}">
                                     <i class="fas fa-th-large text-sm"></i>
@@ -144,7 +159,7 @@
                                             </span>
                                         </div>
                                         <a href="{{ route('shop.product', $product->slug) }}">
-                                            <h3 class="text-xl font-black text-slate-900 mb-3 truncate hover:text-primary transition-colors">
+                                            <h3 class="text-base sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 line-clamp-2 min-h-[2.5rem] sm:min-h-[3.5rem] hover:text-primary transition-colors">
                                                 {{ $product->name }}
                                             </h3>
                                         </a>

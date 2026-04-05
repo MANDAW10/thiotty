@@ -90,7 +90,7 @@
                         window.open('https://wa.me/221773004050', '_blank');
                     }
                 }
-            }" class="fixed bottom-8 right-8 z-[100]">
+            }" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50">
                 
                 <!-- Chat Window -->
                 <div x-show="open" 
@@ -100,27 +100,27 @@
                      x-transition:leave="transition ease-in duration-200 transform"
                      x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                      x-transition:leave-end="opacity-0 scale-95 translate-y-10"
-                     class="absolute bottom-20 right-0 w-[350px] bg-white rounded-[32px] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[500px]"
+                     class="absolute bottom-16 sm:bottom-20 right-0 w-[calc(100vw-2rem)] sm:w-[350px] bg-white rounded-[32px] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[70vh] sm:max-h-[500px]"
                      style="display: none;">
                     
                     <!-- Header -->
-                    <div class="bg-primary p-6 text-white">
+                    <div class="bg-primary p-5 sm:p-6 text-white">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                                <i class="fas fa-robot text-lg"></i>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg sm:rounded-xl flex items-center justify-center backdrop-blur-sm">
+                                <i class="fas fa-robot text-base sm:text-lg"></i>
                             </div>
                             <div>
-                                <h3 class="font-black text-sm uppercase tracking-wider">{{ __('messages.assistant_name') }}</h3>
+                                <h3 class="font-black text-xs sm:text-sm uppercase tracking-wider">{{ __('messages.assistant_name') }}</h3>
                                 <div class="flex items-center gap-1.5">
                                     <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                                    <span class="text-[10px] font-bold text-white/80">{{ __('messages.assistant_online') }}</span>
+                                    <span class="text-[9px] sm:text-[10px] font-bold text-white/80">{{ __('messages.assistant_online') }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Messages -->
-                    <div class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50 custom-scrollbar">
+                    <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4 bg-slate-50/50 custom-scrollbar">
                         <template x-for="msg in messages">
                             <div :class="msg.role === 'bot' ? 'flex justify-start' : 'flex justify-end'">
                                 <div :class="msg.role === 'bot' ? 'bg-white text-slate-800 rounded-2xl rounded-tl-none shadow-sm border border-slate-100' : 'bg-primary text-white rounded-2xl rounded-tr-none shadow-md'" 
@@ -137,7 +137,7 @@
                         <div class="flex flex-wrap gap-2">
                             <template x-for="action in quickActions">
                                 <button @click="handleAction(action.action)" 
-                                        class="bg-slate-50 hover:bg-primary/5 hover:text-primary border border-slate-100 text-slate-600 px-3 py-2 rounded-xl text-[10px] font-black transition-all">
+                                        class="bg-slate-50 hover:bg-primary/5 hover:text-primary border border-slate-100 text-slate-600 px-3 py-2 rounded-xl text-[9px] sm:text-[10px] font-black transition-all">
                                     <span x-text="action.label"></span>
                                 </button>
                             </template>
@@ -148,11 +148,11 @@
                 <!-- Toggle Button -->
                 <button @click="open = !open" 
                         :class="open ? 'bg-slate-900 border-slate-800' : 'bg-primary border-primary'"
-                        class="w-16 h-16 rounded-[24px] shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-110 active:scale-95 border-4 group">
-                    <i class="fas fa-comment-dots text-2xl transition-transform" :class="open ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100'"></i>
-                    <i class="fas fa-times text-2xl absolute transition-transform" :class="open ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'"></i>
+                        class="w-12 h-12 sm:w-16 sm:h-16 rounded-[18px] sm:rounded-[24px] shadow-2xl flex items-center justify-center text-white transition-all transform hover:scale-110 active:scale-95 border-[3px] sm:border-4 group">
+                    <i class="fas fa-comment-dots text-xl sm:text-2xl transition-transform" :class="open ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100'"></i>
+                    <i class="fas fa-times text-xl sm:text-2xl absolute transition-transform" :class="open ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'"></i>
                     
-                    <div x-show="!open" class="absolute right-full mr-4 bg-white px-4 py-2 rounded-xl shadow-xl border border-slate-50 text-slate-800 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
+                    <div x-show="!open" class="hidden sm:block absolute right-full mr-4 bg-white px-4 py-2 rounded-xl shadow-xl border border-slate-50 text-slate-800 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
                         {{ __('messages.need_help') }}
                     </div>
                 </button>
