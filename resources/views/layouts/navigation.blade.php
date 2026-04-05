@@ -421,7 +421,7 @@
                                    required placeholder="••••">
                             <x-input-error :messages="$errors->get('password')" class="mt-1" />
                             <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
-                                <i class="fas" :class="showPass ? 'fa-eye-slash' : 'fa-eye' text-[10px]"></i>
+                                <i class="fas text-[10px]" :class="showPass ? 'fa-eye-slash' : 'fa-eye'"></i>
                             </button>
                         </div>
                     </div>
@@ -432,7 +432,7 @@
                                    class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
                                    required placeholder="••••">
                             <button type="button" @click="showConfirm = !showConfirm" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
-                                <i class="fas" :class="showConfirm ? 'fa-eye-slash' : 'fa-eye' text-[10px]"></i>
+                                <i class="fas text-[10px]" :class="showConfirm ? 'fa-eye-slash' : 'fa-eye'"></i>
                             </button>
                         </div>
                     </div>

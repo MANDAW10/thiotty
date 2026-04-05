@@ -81,27 +81,24 @@ class="fixed top-6 right-6 z-[9999] flex flex-col gap-4 w-full max-w-[380px] poi
             </button>
 
             <!-- Life Progress Bar -->
-            <div class="absolute bottom-0 left-0 h-0.5 bg-current opacity-20 transition-all duration-[8000ms] ease-linear w-full group-hover:opacity-40" 
+            <div class="absolute bottom-0 left-0 h-0.5 bg-current opacity-20 animation-life w-full group-hover:opacity-40" 
                  :class="{
                     'text-emerald-500': toast.type === 'success',
                     'text-primary': toast.type === 'error',
                     'text-blue-500': toast.type === 'info'
-                 }"
-                 style="width: 100%; transition-property: width; width: 0%;">
-                 <script>
-                    // Small hack to animate the bar without complex logic
-                    setTimeout(() => {
-                        const bars = document.querySelectorAll('.life-progress');
-                        bars.forEach(b => b.style.width = '0%');
-                    }, 50);
-                 </script>
-            </div>
+                 }"></div>
         </div>
     </template>
 </div>
 
 <style>
-    /* Custom scrollbar for toast list if needed */
+    .animation-life {
+        animation: life 8s linear forwards;
+    }
+    @keyframes life {
+        from { width: 100%; }
+        to { width: 0%; }
+    }
     .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
     }
