@@ -173,3 +173,20 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+
+/* Infinite Marquee Animation (Smooth Auto-scroll) */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-50% - 1rem)); }
+}
+
+.animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 60s linear infinite;
+    gap: 2rem;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}

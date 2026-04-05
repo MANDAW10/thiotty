@@ -167,70 +167,98 @@
                 <h3 class="text-4xl md:text-5xl font-black text-slate-900">La Voix de nos <span class="italic-font text-primary underline decoration-primary/20 underline-offset-8">Clients</span></h3>
             </div>
 
-            <!-- Horizontal Scroll Container -->
-            <div class="flex overflow-x-auto gap-8 pb-12 no-scrollbar scroll-snap-x snap-mandatory -mx-4 px-4">
-                @php
-                    $testimonials = [
-                        [
-                            'name' => 'Pape Mandaw Dieng',
-                            'role' => 'Éleveur Professionnel',
-                            'text' => 'Une plateforme révolutionnaire pour nous ! La qualité du bétail est tout simplement exceptionnelle. Thiotty est devenu mon partenaire numéro 1.',
-                            'stars' => 5
-                        ],
-                        [
-                            'name' => 'Abdou Lahad Geuye',
-                            'role' => 'Client Fidèle',
-                            'text' => 'Le lait frais livré directement à domicile au petit matin... Un pur bonheur pour toute la famille. Service et qualité irréprochables.',
-                            'stars' => 5
-                        ],
-                        [
-                            'name' => 'Fallou Geuye',
-                            'role' => 'Entrepreneur Agricole',
-                            'text' => 'Enfin une solution sérieuse pour l\'achat d\'aliments de bétail. Les prix sont compétitifs et la livraison est toujours ponctuelle.',
-                            'stars' => 5
-                        ],
-                        [
-                            'name' => 'Khoudosse Geuye',
-                            'role' => 'Particulier',
-                            'text' => 'Très impressionné par le professionnalisme de l\'équipe. Les produits sont authentiques et le service client est toujours à l\'écoute.',
-                            'stars' => 5
-                        ]
-                    ];
-                @endphp
+            <!-- Infinite Auto-Scroll Marquee -->
+            <div class="relative mt-4">
+                <div class="flex animate-marquee py-12">
+                    @php
+                        $testimonials = [
+                            [
+                                'name' => 'Pape Mandaw Dieng',
+                                'role' => 'Éleveur Professionnel',
+                                'text' => 'Une plateforme révolutionnaire pour nous ! La qualité du bétail est tout simplement exceptionnelle. Thiotty est devenu mon partenaire numéro 1.',
+                                'stars' => 5
+                            ],
+                            [
+                                'name' => 'Abdou Lahad Geuye',
+                                'role' => 'Client Fidèle',
+                                'text' => 'Le lait frais livré directement à domicile au petit matin... Un pur bonheur pour toute la famille. Service et qualité irréprochables.',
+                                'stars' => 5
+                            ],
+                            [
+                                'name' => 'Fallou Geuye',
+                                'role' => 'Entrepreneur Agricole',
+                                'text' => 'Enfin une solution sérieuse pour l\'achat d\'aliments de bétail. Les prix sont compétitifs et la livraison est toujours ponctuelle.',
+                                'stars' => 5
+                            ],
+                            [
+                                'name' => 'Khoudosse Geuye',
+                                'role' => 'Particulier',
+                                'text' => 'Très impressionné par le professionnalisme de l\'équipe. Les produits sont authentiques et le service client est toujours à l\'écoute.',
+                                'stars' => 5
+                            ]
+                        ];
+                    @endphp
 
-                @foreach($testimonials as $t)
-                    <div class="flex-none w-[320px] md:w-[400px] snap-center">
-                        <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 h-full flex flex-col group hover:-translate-y-2 transition-all duration-500">
-                            <div class="flex gap-1 mb-6 text-amber-400">
-                                @for($i = 0; $i < $t['stars']; $i++)
-                                    <i class="fas fa-star text-xs"></i>
-                                @endfor
-                            </div>
-                            
-                            <p class="text-slate-600 font-medium leading-relaxed mb-10 flex-1 italic">
-                                "{{ $t['text'] }}"
-                            </p>
-
-                            <div class="flex items-center gap-4 pt-6 border-t border-slate-50">
-                                <div class="w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-primary/5">
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=E65100&color=fff&bold=true" 
-                                         class="w-full h-full object-cover">
+                    <!-- First Set -->
+                    @foreach($testimonials as $t)
+                        <div class="flex-none w-[320px] md:w-[400px]">
+                            <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 h-full flex flex-col group hover:-translate-y-2 transition-all duration-500">
+                                <div class="flex gap-1 mb-6 text-amber-400">
+                                    @for($i = 0; $i < $t['stars']; $i++)
+                                        <i class="fas fa-star text-xs"></i>
+                                    @endfor
                                 </div>
-                                <div>
-                                    <h4 class="font-black text-slate-900 uppercase tracking-widest text-xs">{{ $t['name'] }}</h4>
-                                    <p class="text-[10px] font-bold text-primary mt-1">{{ $t['role'] }}</p>
+                                
+                                <p class="text-slate-600 font-medium leading-relaxed mb-10 flex-1 italic">
+                                    "{{ $t['text'] }}"
+                                </p>
+
+                                <div class="flex items-center gap-4 pt-6 border-t border-slate-50">
+                                    <div class="w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-primary/5">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=E65100&color=fff&bold=true" 
+                                             class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-black text-slate-900 uppercase tracking-widest text-xs">{{ $t['name'] }}</h4>
+                                        <p class="text-[10px] font-bold text-primary mt-1">{{ $t['role'] }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
+                    @endforeach
 
-            <!-- Scroll Indicator (Dots) -->
-            <div class="flex justify-center gap-2 mt-4 lg:hidden">
-                <div class="w-8 h-1 bg-primary rounded-full"></div>
-                <div class="w-2 h-1 bg-slate-200 rounded-full"></div>
-                <div class="w-2 h-1 bg-slate-200 rounded-full"></div>
+                    <!-- Duplicate Set for Seamless Loop -->
+                    @foreach($testimonials as $t)
+                        <div class="flex-none w-[320px] md:w-[400px]">
+                            <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 h-full flex flex-col group hover:-translate-y-2 transition-all duration-500">
+                                <div class="flex gap-1 mb-6 text-amber-400">
+                                    @for($i = 0; $i < $t['stars']; $i++)
+                                        <i class="fas fa-star text-xs"></i>
+                                    @endfor
+                                </div>
+                                
+                                <p class="text-slate-600 font-medium leading-relaxed mb-10 flex-1 italic">
+                                    "{{ $t['text'] }}"
+                                </p>
+
+                                <div class="flex items-center gap-4 pt-6 border-t border-slate-50">
+                                    <div class="w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-primary/5">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=E65100&color=fff&bold=true" 
+                                             class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-black text-slate-900 uppercase tracking-widest text-xs">{{ $t['name'] }}</h4>
+                                        <p class="text-[10px] font-bold text-primary mt-1">{{ $t['role'] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Gradient Fade Edges -->
+                <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-50/50 to-transparent z-10 pointer-events-none"></div>
+                <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-50/50 to-transparent z-10 pointer-events-none"></div>
             </div>
         </div>
     </section>
