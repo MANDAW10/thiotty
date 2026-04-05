@@ -24,7 +24,11 @@ export default {
                 'lahad': 'var(--shadow-main)',
                 '3xl': '0 35px 60px -15px rgba(var(--shadow-color), 0.1)',
                 '4xl': '0 50px 100px -20px rgba(var(--shadow-color), 0.25)',
-            }
+            },
+            screens: {
+                'xs': '475px',
+                ...defaultTheme.screens,
+            },
         },
     },
 
