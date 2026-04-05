@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\DeliveryZone;
-use App\Services\WhatsAppService;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -68,14 +68,14 @@ class CheckoutController extends Controller
             DB::commit();
             Session::forget('cart');
 
-            // Send automatic WhatsApp notification to admin
+            // Send automatic Telegram notification to admin (Free & Automatic)
             try {
                 $order->load(['items.product', 'deliveryZone']);
-                $whatsapp = new WhatsAppService();
-                $whatsapp->sendOrderNotification($order);
+                $telegram = new TelegramService();
+                $telegram->sendOrderNotification($order);
             } catch (\Exception $e) {
-                // Silently fail if WhatsApp service has issues, don't block the user
-                Log::error('Erreur lors de l\'envoi de la notification WhatsApp: ' . $e->getMessage());
+                // Silently fail if Telegram service has issues, don't block the user
+                Log::error('Erreur lors de l\'envoi de la notification Telegram: ' . $e->getMessage());
             }
 
             return redirect()->route('order.confirmation', $order)->with('success', 'Commande passée avec succès !');

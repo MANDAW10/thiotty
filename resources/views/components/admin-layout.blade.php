@@ -198,8 +198,3 @@
     </main>
 </body>
 </html>
-
-    <!-- Mobile Drawer (Optional) -->
-    <!-- Could add a slide-over for mobile admin if needed -->
-</body>
-</html>
