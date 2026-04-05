@@ -99,7 +99,7 @@
                 <!-- Product Grid -->
                 <main class="w-full lg:w-3/4">
                     @if($products->count() > 0)
-                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-10">
+                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
                             @foreach($products as $product)
                                 <div class="product-card-lahad group fade-in" style="animation-delay: {{ $loop->index * 0.1 }}s">
                                     <div class="product-card-img">
@@ -108,19 +108,20 @@
                                                  alt="{{ $product->name }}" 
                                                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
                                         </a>
-                                        <div class="absolute top-4 left-4 z-20">
-                                            <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black uppercase text-slate-900 tracking-widest shadow-sm">
+                                        <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-20">
+                                            <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[8px] sm:text-[9px] font-black uppercase text-slate-900 tracking-widest shadow-sm">
                                                 Nouveau
                                             </span>
                                         </div>
-                                        <div class="absolute top-4 right-4 z-20" x-data="{ 
+                                        
+                                        <!-- Big Heart Wishlist Icon -->
+                                        <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-20" x-data="{ 
                                             isFavorited: {{ (Auth::check() && $product->isFavoritedBy(Auth::user())) ? 'true' : 'false' }},
                                             async toggleFavorite() {
                                                 @if(!Auth::check())
                                                     this.$dispatch('open-login');
                                                     return;
                                                 @endif
-                                                
                                                 try {
                                                     const response = await fetch('{{ route('wishlist.toggle', $product) }}', {
                                                         method: 'POST',
@@ -140,30 +141,34 @@
                                             }
                                         }">
                                             <button @click.prevent="toggleFavorite()" 
-                                                    :class="isFavorited ? 'bg-primary text-white' : 'bg-white/90 text-slate-400 hover:text-primary'"
-                                                    class="w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center transition-all shadow-sm">
-                                                <i class="fas fa-heart text-[10px]" :class="isFavorited ? 'fas' : 'far'"></i>
+                                                    :class="isFavorited ? 'bg-white text-primary shadow-lg' : 'bg-white/80 text-slate-400 hover:text-primary'"
+                                                    class="w-10 h-10 sm:w-8 sm:h-8 rounded-full backdrop-blur-sm flex items-center justify-center transition-all shadow-sm group/heart">
+                                                <i class="text-xs sm:text-[10px]" :class="isFavorited ? 'fas fa-heart scale-125' : 'far fa-heart group-hover/heart:scale-110 transition-transform'"></i>
                                             </button>
                                         </div>
-                                        <form action="{{ route('cart.add', $product) }}" method="POST">
+
+                                        <!-- Desktop Floating Button (Hidden on Mobile) -->
+                                        <form action="{{ route('cart.add', $product) }}" method="POST" class="hidden sm:block">
                                             @csrf
                                             <button type="submit" class="product-card-btn-add">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </form>
                                     </div>
-                                    <div class="p-8">
-                                        <div class="flex items-center gap-2 mb-4">
-                                            <span class="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/5 px-2 py-1 rounded-md">
+                                    <div class="p-4 sm:p-8">
+                                        <div class="flex items-center gap-2 mb-3">
+                                            <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-widest text-primary bg-primary/5 px-2 py-1 rounded-md">
                                                 {{ $product->category->name }}
                                             </span>
                                         </div>
                                         <a href="{{ route('shop.product', $product->slug) }}">
-                                            <h3 class="text-base sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 line-clamp-2 min-h-[2.5rem] sm:min-h-[3.5rem] hover:text-primary transition-colors">
+                                            <h3 class="text-base sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 line-clamp-2 min-h-[3rem] sm:min-h-[3.5rem] hover:text-primary transition-colors">
                                                 {{ $product->name }}
                                             </h3>
                                         </a>
-                                        <div class="flex items-center justify-between mb-8 pb-6 border-b border-slate-50">
+                                        
+                                        <!-- Secondary Info (Hidden on Mobile) -->
+                                        <div class="hidden sm:flex items-center justify-between mb-8 pb-6 border-b border-slate-50">
                                             <div class="flex items-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                                                 <i class="fas fa-map-marker-alt text-primary/40"></i>
                                                 <span>{{ $product->location ?: 'Dakar' }}</span>
@@ -173,18 +178,27 @@
                                                 <span>{{ number_format($product->rating ?: 4.8, 1) }}</span>
                                             </div>
                                         </div>
-                                        <div class="flex items-end justify-between">
+
+                                        <div class="flex items-end justify-between sm:mt-0">
                                             <div>
-                                                <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Prix unitaire</div>
-                                                <div class="text-2xl font-black text-primary flex items-baseline gap-1">
+                                                <div class="hidden sm:block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Prix unitaire</div>
+                                                <div class="text-xl sm:text-2xl font-black text-primary flex items-baseline gap-1">
                                                     {{ number_format($product->price, 0, ',', ' ') }} 
                                                     <span class="text-[10px] text-primary/60 uppercase">CFA</span>
                                                 </div>
                                             </div>
-                                            <div class="text-slate-300 group-hover:text-primary transition-colors">
+                                            <div class="hidden sm:block text-slate-300 group-hover:text-primary transition-colors">
                                                 <i class="fas fa-chevron-right"></i>
                                             </div>
                                         </div>
+
+                                        <!-- Mobile Action Button (Hidden on Desktop) -->
+                                        <form action="{{ route('cart.add', $product) }}" method="POST" class="sm:hidden mt-6">
+                                            @csrf
+                                            <button type="submit" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2 border border-primary/10 shadow-sm shadow-primary/5">
+                                                <i class="fas fa-shopping-basket"></i> Ajouter au panier
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             @endforeach
