@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-    /* Base Light Colors */
-    --primary: #E65100;
-    --primary-light: #FF9800;
+    /* Base Light Colors - Updated to vibrant orange */
+    --primary: #FF5722;
+    --primary-light: #FF7043;
     --secondary: #1B5E20;
     
     --bg-page: #FDFDFD;
@@ -20,7 +20,7 @@
     --border-light: #F8FAFC;
 
     /* Shadow Config */
-    --shadow-color: 230, 81, 0; /* Primary RGB */
+    --shadow-color: 255, 87, 34; /* Primary RGB for #FF5722 */
     --shadow-main: 0 10px 30px -5px rgba(var(--shadow-color), 0.15);
 }
 

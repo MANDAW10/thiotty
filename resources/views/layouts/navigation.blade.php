@@ -286,41 +286,63 @@
              x-transition:enter="transition ease-out duration-300 transform"
              x-transition:enter-start="opacity-0 scale-95 translate-y-4"
              x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-             class="bg-white w-full max-w-md rounded-[40px] p-8 md:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+             class="bg-white w-full max-w-sm rounded-[40px] p-8 md:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar"
+             x-data="{ showPass: false, loading: false }">
             
             <button @click="showLogin = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
                 <i class="fas fa-times text-xl"></i>
             </button>
 
-            <div class="mb-6 text-center">
-                <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div class="mb-10 text-center">
+                <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/10">
                     <i class="fas fa-user text-xl"></i>
                 </div>
                 <h2 class="text-2xl font-black text-slate-900 mb-1">Bienvenue</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest px-8">Accédez à votre compte <span class="text-primary">Lahad</span></p>
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Accédez à votre compte <span class="text-primary">Lahad</span></p>
             </div>
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-4">
+            <form method="POST" action="{{ route('login') }}" class="space-y-6" @submit="loading = true">
                 @csrf
-                <div class="space-y-1">
-                    <label for="modal_email" class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email</label>
-                    <input id="modal_email" name="email" type="email" class="w-full bg-slate-50 border-none rounded-2xl py-3.5 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all" required autofocus>
+                <div class="space-y-1.5">
+                    <label for="modal_email" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email</label>
+                    <input id="modal_email" name="email" type="email" 
+                           class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                           placeholder="votre@email.com"
+                           required autofocus>
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
 
-                <div class="space-y-1">
+                <div class="space-y-1.5">
                     <div class="flex justify-between items-center ml-1">
-                        <label for="modal_password" class="text-[10px] font-black uppercase tracking-widest text-slate-400">Mot de passe</label>
+                        <label for="modal_password" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Mot de passe</label>
                         <button type="button" @click="showLogin = false; showForgot = true" class="text-[9px] font-black text-primary uppercase tracking-widest hover:underline">Oublié ?</button>
                     </div>
-                    <input id="modal_password" name="password" type="password" class="w-full bg-slate-50 border-none rounded-2xl py-3.5 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all" required>
+                    <div class="relative group">
+                        <input id="modal_password" name="password" :type="showPass ? 'text' : 'password'" 
+                               class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-6 pr-12 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                               placeholder="••••••••"
+                               required>
+                        <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-400 hover:text-primary transition-colors">
+                            <i class="fas" :class="showPass ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        </button>
+                    </div>
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
 
-                <button type="submit" class="btn-lahad w-full py-4 text-base shadow-xl shadow-primary/10 text-white">Se Connecter</button>
+                <div class="pt-2">
+                    <button type="submit" class="btn-lahad w-full py-4 text-base shadow-xl shadow-primary/10 text-white relative overflow-hidden group" :disabled="loading">
+                        <span x-show="!loading">Se Connecter</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-3" style="display: none;">
+                            <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
 
                 <div class="text-center pt-2">
-                    <p class="text-xs font-bold text-slate-400">
+                    <p class="text-[11px] font-bold text-slate-400">
                         Pas de compte ? 
                         <button type="button" @click="showLogin = false; showRegister = true" class="text-primary hover:underline ml-1 font-black">Inscrivez-vous</button>
                     </p>
@@ -345,59 +367,88 @@
              x-transition:enter="transition ease-out duration-300 transform"
              x-transition:enter-start="opacity-0 scale-95 translate-y-4"
              x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-             class="bg-white w-full max-w-md rounded-[40px] p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+             class="bg-white w-full max-w-md rounded-[40px] p-8 md:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar"
+             x-data="{ showPass: false, showConfirm: false, loading: false }">
             
             <button @click="showRegister = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
                 <i class="fas fa-times text-xl"></i>
             </button>
 
-            <div class="mb-4 text-center sm:block hidden">
-                <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center mx-auto mb-2">
-                    <i class="fas fa-user-plus text-lg"></i>
+            <div class="mb-8 text-center">
+                <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/10">
+                    <i class="fas fa-user-plus text-xl"></i>
                 </div>
-                <h2 class="text-xl font-black text-slate-900">Inscription</h2>
-            </div>
-            
-            <div class="block sm:hidden mb-4 text-left px-2">
-                <h2 class="text-xl font-black text-slate-900">Inscription</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Rejoignez <span class="text-primary">Lahad</span></p>
+                <h2 class="text-2xl font-black text-slate-900 mb-1">Inscription</h2>
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Rejoignez la <span class="text-primary text-xs ml-1">famille Lahad</span></p>
             </div>
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-2">
+            <form method="POST" action="{{ route('register') }}" class="space-y-4" @submit="loading = true">
                 @csrf
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="space-y-1">
-                        <label for="modal_reg_name" class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Nom</label>
-                        <input id="modal_reg_name" name="name" type="text" class="w-full bg-slate-50 border-none rounded-xl py-2 px-4 font-bold text-slate-900 text-sm focus:ring-2 focus:ring-primary/20 transition-all" required placeholder="Nom">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label for="modal_reg_name" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Nom</label>
+                        <input id="modal_reg_name" name="name" type="text" 
+                               class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                               required placeholder="Nom complet">
                     </div>
-                    <div class="space-y-1">
-                        <label for="modal_reg_phone" class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Numéro</label>
-                        <input id="modal_reg_phone" name="phone" type="tel" x-on:input="formatPhone($event)" class="w-full bg-slate-50 border-none rounded-xl py-2 px-4 font-bold text-slate-900 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-sans" required placeholder="7x xxx xx">
+                    <div class="space-y-1.5">
+                        <label for="modal_reg_phone" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Numéro</label>
+                        <div class="relative flex items-center">
+                            <span class="absolute left-3 text-[10px] font-black text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">+221</span>
+                            <input id="modal_reg_phone" name="phone" type="tel" x-on:input="formatPhone($event)" 
+                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-14 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300" 
+                                   required placeholder="7x xxx xx">
+                        </div>
                     </div>
                 </div>
                 
-                <div class="space-y-1">
-                    <label for="modal_reg_email" class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Email</label>
-                    <input id="modal_reg_email" name="email" type="email" class="w-full bg-slate-50 border-none rounded-xl py-2 px-4 font-bold text-slate-900 text-sm focus:ring-2 focus:ring-primary/20 transition-all" required placeholder="Email">
+                <div class="space-y-1.5">
+                    <label for="modal_reg_email" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email</label>
+                    <input id="modal_reg_email" name="email" type="email" 
+                           class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                           required placeholder="votre@email.com">
+                    <x-input-error :messages="$errors->get('email')" class="mt-1" />
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="space-y-1">
-                        <label for="modal_reg_password" class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Pass</label>
-                        <input id="modal_reg_password" name="password" type="password" class="w-full bg-slate-50 border-none rounded-xl py-2 px-4 font-bold text-slate-900 text-sm focus:ring-2 focus:ring-primary/20 transition-all" required placeholder="****">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label for="modal_reg_password" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Pass</label>
+                        <div class="relative group">
+                            <input id="modal_reg_password" name="password" :type="showPass ? 'text' : 'password'" 
+                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                                   required placeholder="••••">
+                            <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
+                                <i class="fas" :class="showPass ? 'fa-eye-slash' : 'fa-eye' text-[10px]"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="space-y-1">
-                        <label for="modal_reg_confirm" class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Confirmer</label>
-                        <input id="modal_reg_confirm" name="password_confirmation" type="password" class="w-full bg-slate-50 border-none rounded-xl py-2 px-4 font-bold text-slate-900 text-sm focus:ring-2 focus:ring-primary/20 transition-all" required placeholder="****">
+                    <div class="space-y-1.5">
+                        <label for="modal_reg_confirm" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Confirmer</label>
+                        <div class="relative group">
+                            <input id="modal_reg_confirm" name="password_confirmation" :type="showConfirm ? 'text' : 'password'" 
+                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                                   required placeholder="••••">
+                            <button type="button" @click="showConfirm = !showConfirm" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
+                                <i class="fas" :class="showConfirm ? 'fa-eye-slash' : 'fa-eye' text-[10px]"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="pt-2">
-                    <button type="submit" class="btn-lahad w-full py-3 text-sm shadow-xl shadow-primary/10 text-white">Continuer</button>
+                <div class="pt-4">
+                    <button type="submit" class="btn-lahad w-full py-4 text-sm shadow-xl shadow-primary/10 text-white relative overflow-hidden group" :disabled="loading">
+                        <span x-show="!loading">Continuer</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-3" style="display: none;">
+                            <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </span>
+                    </button>
                 </div>
 
-                <div class="text-center pt-1">
-                    <p class="text-[10px] font-bold text-slate-400">
+                <div class="text-center pt-2">
+                    <p class="text-[11px] font-bold text-slate-400">
                         Déjà inscrit ? 
                         <button type="button" @click="showRegister = false; showLogin = true" class="text-primary hover:underline ml-1 font-black">Connexion</button>
                     </p>
@@ -405,6 +456,7 @@
             </form>
         </div>
     </div>
+
 
     <!-- Forgot Password Modal -->
     <div x-show="showForgot" 
