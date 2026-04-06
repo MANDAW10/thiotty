@@ -70,11 +70,7 @@
                         <!-- Placeholder if empty -->
                         <div class="col-span-full py-32 text-center bg-slate-50 rounded-[48px] border-2 border-dashed border-slate-200">
                             <i class="fas fa-camera-retro text-4xl text-slate-200 mb-6"></i>
-                            <p class="text-slate-400 font-black uppercase tracking-widest text-[10px] mb-8">L'album est en cours de préparation...</p>
-                            
-                            <a href="{{ url('/seed-gallery-hd') }}" class="inline-flex items-center gap-4 bg-white border border-slate-200 px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-primary hover:border-primary transition-all shadow-sm">
-                                <i class="fas fa-magic text-primary"></i> Activer la Galerie HD
-                            </a>
+                            <p class="text-slate-400 font-black uppercase tracking-widest text-[10px]">L'album est en cours de préparation...</p>
                         </div>
                     @endforelse
                 </div>
