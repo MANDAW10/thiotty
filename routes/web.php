@@ -37,6 +37,17 @@ Route::get('/setup-final-admin', function () {
     }
 });
 
+// Shop Routes
+Route::get('/', [ShopController::class, 'index'])->name('home');
+Route::get('/shop', [ShopController::class, 'shop'])->name('shop.index');
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+Route::post('/contact', [\App\Http\Controllers\ShopController::class, 'contactStore'])->name('contact.store');
+Route::get('/category/{category:slug}', [ShopController::class, 'category'])->name('shop.category');
+Route::get('/product/{product:slug}', [ShopController::class, 'product'])->name('shop.product');
+Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
+
 Route::get('/galerie', function () {
     // Auto-seed if empty for a seamless experience
     if (\App\Models\GalleryItem::count() === 0) {
