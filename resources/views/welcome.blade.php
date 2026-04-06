@@ -342,8 +342,7 @@
                     <div class="relative multiply">
                         <img src="{{ asset('img/gallery/truck-clean.png') }}" 
                              alt="Thiotty Delivery" 
-                             class="w-24 md:w-48 h-auto object-contain transition-transform mix-blend-multiply" 
-                             style="filter: contrast(1.1) brightness(1.08);">
+                             class="w-24 md:w-48 h-auto object-contain transition-transform">
                         <!-- Speed effect lines -->
                         <div class="absolute -left-8 top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-20">
                             <div class="w-6 h-0.5 bg-primary rounded-full"></div>
