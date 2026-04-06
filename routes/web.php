@@ -37,6 +37,28 @@ Route::get('/setup-final-admin', function () {
     }
 });
 
+// Gallery Seeder (TEMPORARY)
+Route::get('/seed-gallery-hd', function () {
+    try {
+        $items = [
+            ['image' => 'gobra.png', 'title' => 'Majesté Gobra', 'category' => 'Élevage', 'description' => 'Notre troupeau de zébus Gobra pur-sang sous le soleil du Sénégal.'],
+            ['image' => 'harvest.png', 'title' => 'Récolte du Matin', 'category' => 'Terroir', 'description' => 'Des produits frais, bio et locaux cueillis chaque jour pour votre table.'],
+            ['image' => 'poultry.png', 'title' => 'Innovation Avicole', 'category' => 'Culture', 'description' => 'Nos installations modernes garantissent une hygiène et une santé optimales.'],
+            ['image' => 'pasture.png', 'title' => 'Pâturages de Liberté', 'category' => 'Élevage', 'description' => 'Un élevage en plein air pour une qualité de viande et de lait incomparable.'],
+            ['image' => 'truck.png', 'title' => 'Fraîcheur Garantie', 'category' => 'Logistique', 'description' => 'Notre flotte logistique assure une livraison express en moins de 24h.'],
+            ['image' => 'honey.png', 'title' => 'L\'Or de Casamance', 'category' => 'Terroir', 'description' => 'Un miel pur et artisanal, pilier de notre engagement pour le terroir.'],
+        ];
+
+        foreach ($items as $item) {
+            \App\Models\GalleryItem::updateOrCreate(['title' => $item['title']], $item);
+        }
+
+        return "Galerie activée avec succès ! ✨📸 <br><a href='/galerie'>Voir la galerie</a>";
+    } catch (\Exception $e) {
+        return "Erreur Seeder : " . $e->getMessage();
+    }
+});
+
 // Shop Routes
 Route::get('/', [ShopController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'shop'])->name('shop.index');
