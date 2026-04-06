@@ -26,7 +26,7 @@ class ProductSeeder extends Seeder
                 'price' => 750000,
                 'stock' => 5,
                 'is_featured' => true,
-                'image' => 'vache1.jpg'
+                'image' => 'vache1.png'
             ],
             [
                 'category_id' => $categories['vaches'],
@@ -35,7 +35,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Vache métisse de haute qualité, excellente production laitière.',
                 'price' => 850000,
                 'stock' => 3,
-                'image' => 'vache2.jpg'
+                'image' => 'vache2.png'
             ],
             // Chevaux
             [
@@ -46,7 +46,7 @@ class ProductSeeder extends Seeder
                 'price' => 1500000,
                 'stock' => 2,
                 'is_featured' => true,
-                'image' => 'cheval1.jpg'
+                'image' => 'cheval1.png'
             ],
             // Poulets
             [
@@ -56,7 +56,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Poussins de race Goliath, croissance rapide et très résistants.',
                 'price' => 45000,
                 'stock' => 20,
-                'image' => 'poussins.jpg'
+                'image' => 'poussins.png'
             ],
             [
                 'category_id' => $categories['poulets'],
@@ -65,7 +65,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Poulet bio élevé en plein air, abattu et nettoyé. Poids moyen 1.8kg.',
                 'price' => 4500,
                 'stock' => 100,
-                'image' => 'poulet_chair.jpg'
+                'image' => 'poulet_chair.png'
             ],
             // Aliments
             [

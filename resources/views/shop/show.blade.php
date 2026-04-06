@@ -23,7 +23,7 @@
                     <div class="relative group">
                         <!-- Main Image with "Glass" frame effect -->
                         <div class="aspect-[4/5] md:aspect-square rounded-[48px] overflow-hidden bg-slate-50 border-8 border-white shadow-2xl shadow-slate-200/50 transition-all duration-700 hover:shadow-primary/5">
-                            <img src="{{ $product->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=1200&auto=format&fit=crop' }}" 
+                            <img src="{{ $product->image_url }}" 
                                  alt="{{ $product->name }}" 
                                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
                         </div>
@@ -174,7 +174,7 @@
                             <div class="product-card-lahad group bg-white p-4 rounded-[40px] border border-slate-50 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500">
                                 <div class="product-card-img h-80 rounded-[32px] overflow-hidden relative mb-6">
                                     <a href="{{ route('shop.product', $related->slug) }}">
-                                        <img src="{{ $related->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=800&auto=format&fit=crop' }}" 
+                                        <img src="{{ $related->image_url }}" 
                                              alt="{{ $related->name }}" 
                                              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                     </a>

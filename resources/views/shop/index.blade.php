@@ -123,7 +123,7 @@
                                 <div class="product-card-lahad group bg-white p-4 rounded-[40px] border border-slate-50 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-700">
                                     <div class="product-card-img h-80 rounded-[32px] overflow-hidden relative mb-6">
                                         <a href="{{ route('shop.product', $product->slug) }}">
-                                            <img src="{{ $product->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=800&auto=format&fit=crop' }}" 
+                                            <img src="{{ $product->image_url }}" 
                                                  alt="{{ $product->name }}" 
                                                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
                                         </a>

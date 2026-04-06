@@ -127,7 +127,7 @@
                     <div class="product-card-lahad group fade-in" style="animation-delay: {{ $loop->index * 0.1 }}s">
                         <div class="product-card-img">
                             <a href="{{ route('shop.product', $product->slug) }}">
-                                <img src="{{ $product->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=800&auto=format&fit=crop' }}" 
+                                <img src="{{ $product->image_url }}" 
                                      alt="{{ $product->name }}" 
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                             </a>
