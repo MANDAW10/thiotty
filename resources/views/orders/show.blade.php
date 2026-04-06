@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="py-24 bg-white">
+    <div class="py-24 bg-white min-h-screen">
         <div class="max-w-4xl mx-auto px-6 lg:px-8">
             <!-- Header Section -->
             <div class="mb-16 border-b border-slate-50 pb-12">
@@ -12,59 +12,153 @@
                             <span>/</span>
                             <span class="text-slate-900">#{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}</span>
                         </nav>
-                        <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-4 leading-tight">Détails <span class="text-primary italic">Commande</span>.</h1>
+                        <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-4 leading-tight">Suivi <span class="text-primary italic">Live</span>.</h1>
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Référence : #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }} — Passée le {{ $order->created_at->format('d/m/Y') }}</p>
                     </div>
                     <div class="text-right">
-                        <p class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2 leading-none">Total Réglé</p>
+                        <p class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2 leading-none text-right">Montant Total</p>
                         <p class="text-4xl font-black text-slate-900 leading-none tracking-tighter">{{ number_format($order->total_amount, 0, ',', ' ') }} <small class="text-xs italic opacity-20 font-black">XOF</small></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Status Timeline -->
-            <div class="bg-[#FCFCFC] rounded-[40px] p-10 md:p-16 mb-16 border border-slate-100 relative overflow-hidden group">
-                <div class="flex flex-col md:flex-row justify-between items-center relative z-10 gap-12">
-                    @php
-                        $statuses = [
-                            ['key' => 'pending', 'label' => 'En attente', 'icon' => 'fa-clock'],
-                            ['key' => 'validated', 'label' => 'Validée', 'icon' => 'fa-check-circle'],
-                            ['key' => 'delivered', 'label' => 'Livrée', 'icon' => 'fa-truck'],
-                        ];
-                        $currentStep = array_search($order->status, array_column($statuses, 'key'));
-                        if ($currentStep === false && $order->status !== 'cancelled') $currentStep = 0;
-                    @endphp
-
-                    @foreach($statuses as $index => $status)
-                        <div class="flex flex-col items-center text-center relative w-full md:w-1/3">
-                            <div class="w-20 h-20 rounded-3xl flex items-center justify-center mb-6 transition-all duration-500 border-2
-                                @if($index <= $currentStep && $order->status !== 'cancelled') bg-primary text-white border-white shadow-xl shadow-primary/20 scale-110 @else bg-slate-50 text-slate-300 border-white shadow-sm @endif
-                                @if($order->status == 'cancelled') bg-red-50 text-red-300 @endif">
-                                <i class="fas {{ $status['icon'] }} text-2xl"></i>
-                            </div>
-                            <p class="text-[10px] font-black uppercase tracking-widest 
-                                @if($index <= $currentStep && $order->status !== 'cancelled') text-primary @else text-slate-400 @endif">
-                                {{ $status['label'] }}
-                            </p>
-
-                            @if($index < count($statuses) - 1)
-                                <div class="hidden md:block absolute top-10 left-[60%] w-[80%] h-0.5 bg-slate-50">
-                                    <div class="h-full bg-primary transition-all duration-1000 ease-out" 
-                                         style="width: {{ $index < $currentStep ? '100%' : '0%' }}"></div>
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
+            <!-- Uber-Style Tracking Visualization -->
+            <div class="bg-[#FCFCFC] rounded-[48px] p-8 md:p-16 mb-16 border border-slate-100 relative overflow-hidden group shadow-2xl shadow-slate-200/50">
+                
+                <!-- ETA Notification -->
+                @if($order->status == 'shipping' || $order->status == 'arriving')
+                <div class="mb-12 flex items-center gap-6 bg-white p-6 rounded-[32px] border border-primary/10 shadow-xl shadow-primary/5 animate-fade-in-up">
+                    <div class="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-primary/20 animate-pulse">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[10px] font-black text-primary uppercase tracking-widest mb-1">Arrivée prévue</p>
+                        <h3 class="text-2xl font-black text-slate-900 tracking-tighter">{{ $order->estimated_delivery_time ?: '15-25 minutes' }}</h3>
+                    </div>
+                    <div class="hidden md:block">
+                        <span class="px-5 py-2 bg-green-50 text-green-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-green-100">En route</span>
+                    </div>
                 </div>
-                <!-- Background decoration -->
-                <div class="absolute -bottom-10 -right-10 text-[180px] font-black text-slate-100 opacity-20 pointer-events-none italic select-none tracking-tighter">Status.</div>
+                @endif
+
+                <!-- Animated Transit Path (Uber Style) -->
+                <div class="relative py-12 mb-12">
+                    <!-- The Background Line -->
+                    <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-100 -translate-y-1/2 rounded-full overflow-hidden">
+                        @php
+                            $progressMap = [
+                                'pending' => 5,
+                                'validated' => 20,
+                                'preparing' => 45,
+                                'shipping' => 70,
+                                'arriving' => 90,
+                                'delivered' => 100,
+                                'cancelled' => 0
+                            ];
+                            $progress = $progressMap[$order->status] ?? 5;
+                        @endphp
+                        <div class="h-full bg-primary transition-all duration-1000 ease-out" style="width: {{ $progress }}%"></div>
+                    </div>
+
+                    <!-- The Thiotty Truck Icon (Moves with progress) -->
+                    <div class="absolute top-1/2 -translate-y-[80%] transition-all duration-1000 ease-out flex flex-col items-center gap-2"
+                         style="left: calc({{ $progress }}% - 30px)">
+                        <div class="w-16 h-10 bg-slate-900 rounded-lg shadow-2xl flex items-center justify-center relative overflow-hidden group/truck">
+                            <i class="fas fa-truck text-white text-xl translate-x-[-2px]"></i>
+                            <div class="absolute -bottom-1 left-2 flex gap-1">
+                                <div class="w-3 h-3 bg-slate-700 rounded-full border-2 border-slate-900"></div>
+                                <div class="w-3 h-3 bg-slate-700 rounded-full border-2 border-slate-900 ml-4"></div>
+                            </div>
+                            <!-- Tail lights effect -->
+                            <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary/40 blur-[2px]"></div>
+                        </div>
+                        <span class="text-[8px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded-md whitespace-nowrap">Thiotty Truck</span>
+                    </div>
+
+                    <!-- Key Milestones -->
+                    <div class="flex justify-between items-center relative z-10">
+                        @php
+                            $steps = [
+                                ['status' => 'pending', 'icon' => 'fa-clipboard-list', 'label' => 'Reçue'],
+                                ['status' => 'preparing', 'icon' => 'fa-box-open', 'label' => 'Préparation'],
+                                ['status' => 'shipping', 'icon' => 'fa-route', 'label' => 'En route'],
+                                ['status' => 'delivered', 'icon' => 'fa-house-chimney-check', 'label' => 'Livrée'],
+                            ];
+                            $currentIdx = 0;
+                            foreach($steps as $idx => $s) {
+                                if ($order->status == $s['status']) $currentIdx = $idx;
+                            }
+                            // Special cases for intermediate statuses
+                            if ($order->status == 'validated') $currentIdx = 0;
+                            if ($order->status == 'arriving') $currentIdx = 2;
+                        @endphp
+
+                        @foreach($steps as $index => $step)
+                            <div class="flex flex-col items-center">
+                                <div class="w-12 h-12 rounded-2xl flex items-center justify-center border-2 transition-all duration-500
+                                    @if($order->status == $step['status'] || ($progress >= $progressMap[$step['status']])) bg-white border-primary text-primary shadow-lg shadow-primary/10 scale-110 z-20 @else bg-slate-50 border-white text-slate-300 @endif">
+                                    <i class="fas {{ $step['icon'] }} text-sm"></i>
+                                </div>
+                                <p class="mt-4 text-[9px] font-black uppercase tracking-widest leading-none
+                                    @if($order->status == $step['status'] || ($progress >= $progressMap[$step['status']])) text-slate-900 @else text-slate-300 @endif">
+                                    {{ $step['label'] }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Status Contextual Message -->
+                <div class="text-center mt-12">
+                    <h4 class="text-lg font-black text-slate-900 mb-2">
+                        @if($order->status == 'pending') Nous avons bien reçu votre commande !
+                        @elseif($order->status == 'validated') Votre commande a été validée par nos équipes.
+                        @elseif($order->status == 'preparing') Nous préparons vos produits avec le plus grand soin.
+                        @elseif($order->status == 'shipping') Votre livreur est en route vers votre adresse.
+                        @elseif($order->status == 'arriving') Le livreur est dans votre quartier, préparez-vous !
+                        @elseif($order->status == 'delivered') Commande livrée. Merci de votre confiance !
+                        @elseif($order->status == 'cancelled') Commande annulée.
+                        @endif
+                    </h4>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Dernière mise à jour : {{ $order->updated_at->format('H:i') }}</p>
+                </div>
             </div>
 
-            <!-- Order Details Grid -->
+            <!-- Delivery Person Card -->
+            @if($order->delivery_person_name)
+            <div class="bg-slate-900 rounded-[40px] p-8 md:p-12 text-white mb-16 shadow-2xl shadow-primary/20 relative overflow-hidden animate-fade-in-up">
+                 <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
+                    <div class="w-24 h-24 bg-primary/20 rounded-[32px] flex items-center justify-center border border-primary/30 relative">
+                        <i class="fas fa-user-tie text-4xl text-primary"></i>
+                        <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-slate-900 flex items-center justify-center">
+                            <i class="fas fa-check text-[10px]"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center md:text-left space-y-2">
+                        <p class="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Votre Livreur Thiotty</p>
+                        <h3 class="text-3xl font-black tracking-tighter">{{ $order->delivery_person_name }}</h3>
+                        <p class="text-slate-400 font-medium text-sm">Professionnel certifié — +100 livraisons réussies</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                        @if($order->delivery_person_phone)
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $order->delivery_person_phone) }}?text=Bonjour {{ $order->delivery_person_name }}, je vous contacte pour ma commande Thiotty #{{ $order->id }}" 
+                           target="_blank"
+                           class="flex-1 flex items-center justify-center gap-4 bg-white text-slate-900 px-8 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all group">
+                           <i class="fab fa-whatsapp text-lg text-green-500 group-hover:text-white"></i> Contacter
+                        </a>
+                        @endif
+                    </div>
+                 </div>
+                 <!-- Background abstract -->
+                 <div class="absolute -bottom-10 -right-10 text-[120px] font-black text-white/5 opacity-10 pointer-events-none italic select-none tracking-tighter">Livreur.</div>
+            </div>
+            @endif
+
+            <!-- Order Details (Summary) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
                 <!-- Items list -->
                 <div class="flex flex-col gap-6">
-                    <h3 class="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-4 border-l-4 border-primary pl-4">Articles Commandés</h3>
+                    <h3 class="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-4 border-l-4 border-primary pl-4">Récapitulatif Articles</h3>
                     <div class="space-y-6">
                         @foreach($order->items as $item)
                             <div class="flex items-center gap-6 group">
@@ -76,7 +170,7 @@
                                     @endif
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-sm font-black text-slate-900 group-hover:text-primary transition-colors">{{ $item->product->name ?? 'Produit Supprimé' }}</h4>
+                                    <h4 class="text-sm font-black text-slate-900 group-hover:text-primary transition-colors text-slate-900">{{ $item->product->name ?? 'Produit Thiotty' }}</h4>
                                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{{ $item->quantity }} x {{ number_format($item->unit_price, 0, ',', ' ') }} CFA</p>
                                 </div>
                                 <div class="text-right">
@@ -87,44 +181,35 @@
                     </div>
                 </div>
 
-                <!-- Shipping / Summary -->
-                <div class="flex flex-col gap-10">
+                <!-- Info Column -->
+                <div class="space-y-10">
                     <div class="bg-slate-50 rounded-[32px] p-10 border border-white shadow-sm">
-                        <h3 class="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-8 leading-none">Informations de Livraison</h3>
+                        <h3 class="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-8 leading-none">Destination</h3>
                         <div class="space-y-6">
                             <div>
-                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">Adresse</p>
+                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">Adresse de livraison</p>
                                 <p class="text-sm font-black text-slate-800 leading-relaxed">{{ $order->customer_address }}</p>
                             </div>
-                            <div class="grid grid-cols-2 gap-6">
-                                <div>
-                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">Zone</p>
-                                    <p class="text-sm font-black text-slate-800">{{ $order->deliveryZone->name ?? 'N/A' }}</p>
+                            <div class="flex items-center gap-4 py-4 border-t border-slate-200/50 mt-4">
+                                <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-primary">
+                                    <i class="fas fa-location-dot"></i>
                                 </div>
                                 <div>
-                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">Frais</p>
-                                    <p class="text-sm font-black text-slate-800">{{ number_format($order->delivery_fee, 0, ',', ' ') }} CFA</p>
+                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Zone de livraison</p>
+                                    <p class="text-xs font-black text-slate-900">{{ $order->deliveryZone->name ?? 'Dakar' }} (+{{ number_format($order->delivery_fee, 0, ',', ' ') }})</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-slate-900 rounded-[32px] p-10 text-white shadow-2xl shadow-primary/20">
-                         <div class="flex justify-between items-center">
-                            <p class="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Total de la Commande</p>
-                            <p class="text-3xl font-black text-white tracking-tighter">{{ number_format($order->total_amount, 0, ',', ' ') }} <small class="text-[10px] italic opacity-50 ml-1">XOF</small></p>
-                         </div>
+                    <div class="flex justify-between items-center px-4">
+                        <a href="{{ route('orders.index') }}" class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-primary transition-colors">
+                            <i class="fas fa-arrow-left mr-3"></i> Retour
+                        </a>
+                        <button onclick="window.print()" class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-primary transition-colors">
+                            <i class="fas fa-print mr-3"></i> Imprimer
+                        </button>
                     </div>
-                </div>
-            </div>
-
-            <div class="pt-12 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-8">
-                <a href="{{ route('orders.index') }}" class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-primary transition-colors">
-                    <i class="fas fa-arrow-left mr-3"></i> Retour à mes commandes
-                </a>
-                <div class="flex gap-4">
-                    <a href="{{ route('contact') }}" class="px-8 py-4 bg-slate-50 text-slate-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-100 transition-colors">Support Technique</a>
-                    <a href="{{ route('shop.index') }}" class="px-8 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:-translate-y-1 transition-all duration-300">Reprendre le Shopping</a>
                 </div>
             </div>
         </div>

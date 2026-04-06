@@ -17,15 +17,27 @@ class OrderController extends Controller
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:pending,validated,delivered,cancelled',
+            'status' => 'required|in:pending,validated,preparing,shipping,arriving,delivered,cancelled',
             'payment_status' => 'required|in:pending,paid',
+            'delivery_person_name' => 'nullable|string',
+            'delivery_person_phone' => 'nullable|string',
+            'estimated_delivery_time' => 'nullable|string',
         ]);
 
-        $order->update([
+        $data = [
             'status' => $request->status,
             'payment_status' => $request->payment_status,
-        ]);
+            'delivery_person_name' => $request->delivery_person_name,
+            'delivery_person_phone' => $request->delivery_person_phone,
+            'estimated_delivery_time' => $request->estimated_delivery_time,
+        ];
 
-        return back()->with('success', 'Statut de la commande #'.$order->id.' mis à jour.');
+        if ($request->status === 'shipping' && !$order->shipped_at) {
+            $data['shipped_at'] = now();
+        }
+
+        $order->update($data);
+
+        return back()->with('success', 'Statut de la commande #' . $order->id . ' et informations de suivi mis à jour.');
     }
 }

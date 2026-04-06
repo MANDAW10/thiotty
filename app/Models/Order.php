@@ -18,7 +18,11 @@ class Order extends Model
         'delivery_fee',
         'status',
         'payment_method',
-        'payment_status'
+        'payment_status',
+        'delivery_person_name',
+        'delivery_person_phone',
+        'shipped_at',
+        'estimated_delivery_time'
     ];
 
     public function user(): BelongsTo

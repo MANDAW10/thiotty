@@ -30,7 +30,7 @@
                         <th class="p-4 md:p-8 whitespace-nowrap">ID & Date</th>
                         <th class="p-4 md:p-8 whitespace-nowrap">Client</th>
                         <th class="p-4 md:p-8 whitespace-nowrap">Paiement</th>
-                        <th class="p-4 md:p-8 whitespace-nowrap">Statut Livraison</th>
+                        <th class="p-4 md:p-8 whitespace-nowrap">Suivi Livraison</th>
                         <th class="p-4 md:p-8 text-right whitespace-nowrap">Actions</th>
                     </tr>
                 </thead>
@@ -62,23 +62,54 @@
                                 </form>
                             </td>
                             <td class="p-4 md:p-8">
-                                <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <input type="hidden" name="payment_status" value="{{ $order->payment_status }}">
-                                    <div class="relative max-w-[160px]">
-                                        <select name="status" onchange="this.form.submit()" 
-                                                class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-4 text-xs font-bold text-slate-600 appearance-none cursor-pointer hover:bg-slate-100 transition-colors focus:ring-1 focus:ring-primary/20 shadow-sm">
-                                            <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>En attente</option>
-                                            <option value="validated" {{ $order->status == 'validated' ? 'selected' : '' }}>Validée</option>
-                                            <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Livrée</option>
-                                            <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Annulée</option>
-                                        </select>
-                                        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-300">
-                                            <i class="fas fa-chevron-down text-[10px]"></i>
+                                <div x-data="{ open: false }" class="space-y-4">
+                                    <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="payment_status" value="{{ $order->payment_status }}">
+                                        <div class="relative max-w-[160px]">
+                                            <select name="status" onchange="this.form.submit()" 
+                                                    class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-4 text-xs font-bold text-slate-600 appearance-none cursor-pointer hover:bg-slate-100 transition-colors focus:ring-1 focus:ring-primary/20 shadow-sm">
+                                                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>En attente</option>
+                                                <option value="validated" {{ $order->status == 'validated' ? 'selected' : '' }}>Validée</option>
+                                                <option value="preparing" {{ $order->status == 'preparing' ? 'selected' : '' }}>En préparation</option>
+                                                <option value="shipping" {{ $order->status == 'shipping' ? 'selected' : '' }}>En livraison</option>
+                                                <option value="arriving" {{ $order->status == 'arriving' ? 'selected' : '' }}>Arrivée imminente</option>
+                                                <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Livrée</option>
+                                                <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Annulée</option>
+                                            </select>
                                         </div>
+                                    </form>
+
+                                    <!-- Tracking Info Toggle -->
+                                    <button @click="open = !open" class="text-[9px] font-black uppercase text-primary tracking-widest hover:underline flex items-center gap-2">
+                                        <i class="fas fa-truck-fast"></i>
+                                        <span x-text="open ? 'Masquer détails' : 'Détails Livreur'"></span>
+                                    </button>
+
+                                    <div x-show="open" x-transition class="mt-4 p-4 bg-slate-50 rounded-2xl space-y-4 border border-slate-100">
+                                        <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST" class="space-y-3">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="{{ $order->status }}">
+                                            <input type="hidden" name="payment_status" value="{{ $order->payment_status }}">
+                                            
+                                            <div class="space-y-1">
+                                                <label class="text-[8px] font-black uppercase text-slate-400 tracking-widest pl-1">Nom Livreur</label>
+                                                <input type="text" name="delivery_person_name" value="{{ $order->delivery_person_name }}" placeholder="Ex: Modou" class="w-full bg-white border-none rounded-lg py-2 px-3 text-[10px] font-bold focus:ring-1 focus:ring-primary/20">
+                                            </div>
+                                            <div class="space-y-1">
+                                                <label class="text-[8px] font-black uppercase text-slate-400 tracking-widest pl-1">Tél Livreur</label>
+                                                <input type="text" name="delivery_person_phone" value="{{ $order->delivery_person_phone }}" placeholder="7x xxx xx xx" class="w-full bg-white border-none rounded-lg py-2 px-3 text-[10px] font-bold focus:ring-1 focus:ring-primary/20">
+                                            </div>
+                                            <div class="space-y-1">
+                                                <label class="text-[8px] font-black uppercase text-slate-400 tracking-widest pl-1">Délai (ETA)</label>
+                                                <input type="text" name="estimated_delivery_time" value="{{ $order->estimated_delivery_time }}" placeholder="Ex: 15-20 min" class="w-full bg-white border-none rounded-lg py-2 px-3 text-[10px] font-bold focus:ring-1 focus:ring-primary/20">
+                                            </div>
+                                            <button type="submit" class="w-full py-2 bg-slate-900 text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-primary transition-all">Enregistrer</button>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
                             </td>
                             <td class="p-8 text-right">
                                 <div class="flex justify-end gap-2">
