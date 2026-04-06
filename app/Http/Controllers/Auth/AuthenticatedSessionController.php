@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('admin.dashboard')->with('success', 'Connexion réussie administrateur !');
         }
 
-        return redirect()->intended(route('dashboard', absolute: false))->with('success', 'Connexion réussie !');
+        return redirect()->intended(route('home', absolute: false))->with('success', 'Connexion réussie !');
     }
 
     /**
