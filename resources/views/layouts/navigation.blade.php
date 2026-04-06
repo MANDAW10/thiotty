@@ -70,11 +70,6 @@
                     <span>Dakar, Sénégal</span>
                 </div>
                 
-                <!-- Notifications (Hidden on extra small) -->
-                <button class="hidden sm:block relative p-2 text-slate-500 hover:text-primary transition-colors">
-                    <i class="fas fa-bell text-xl"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                </button>
 
                 <!-- Settings (Hidden on mobile) -->
                 <button @click="showSettings = true" class="hidden sm:block p-2 text-slate-500 hover:text-primary transition-colors hover:rotate-90 transition-transform duration-500">
@@ -227,13 +222,6 @@
                         </div>
                         <span x-show="wishlistCount > 0" x-text="wishlistCount" class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-black"></span>
                     </a>
-                    <button class="w-full flex items-center justify-between p-4 rounded-2xl text-slate-600 hover:bg-slate-50 font-bold transition-all">
-                        <div class="flex items-center gap-4">
-                            <i class="fas fa-bell w-5"></i>
-                            <span>Notifications</span>
-                        </div>
-                        <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-                    </button>
                     <button @click="showMobileMenu = false; showSettings = true" class="w-full flex items-center gap-4 p-4 rounded-2xl text-slate-600 hover:bg-slate-50 font-bold transition-all">
                         <i class="fas fa-palette w-5"></i>
                         <span>Réglages Thème</span>
