@@ -79,12 +79,12 @@
     }
 
     /* Primary Button */
-    .btn-lahad {
+    .btn-thiotty {
         background-color: var(--primary);
         @apply px-8 py-3 text-white font-bold rounded-xl transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2;
         box-shadow: var(--shadow-main);
     }
-    .btn-lahad-outline {
+    .btn-thiotty-outline {
         border-color: var(--border-main);
         color: var(--text-main);
         @apply px-8 py-3 border-2 font-bold rounded-xl transition-all hover:border-[var(--primary)] hover:text-[var(--primary)] active:scale-95 flex items-center justify-center gap-2;
@@ -105,7 +105,7 @@
     }
 
     /* Product Card */
-    .product-card-lahad {
+    .product-card-thiotty {
         background-color: var(--bg-surface);
         border-color: var(--border-main);
         @apply rounded-[32px] overflow-hidden border transition-all hover:shadow-2xl hover:-translate-y-1;
@@ -121,14 +121,14 @@
     }
 
     /* Custom Navigation Link */
-    .nav-link-lahad {
+    .nav-link-thiotty {
         color: var(--text-muted);
         @apply text-sm font-semibold hover:text-[var(--primary)] transition-colors relative;
     }
-    .nav-link-lahad.active {
+    .nav-link-thiotty.active {
         color: var(--primary);
     }
-    .nav-link-lahad.active::after {
+    .nav-link-thiotty.active::after {
         content: '';
         background-color: var(--primary);
         @apply absolute -bottom-3 left-0 right-0 h-1 rounded-full;

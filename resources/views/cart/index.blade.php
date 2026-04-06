@@ -92,7 +92,7 @@
                             </div>
  
                             <div class="space-y-4">
-                                <a href="{{ route('checkout.index') }}" class="btn-lahad w-full py-4 md:py-5 text-base md:text-lg">
+                                <a href="{{ route('checkout.index') }}" class="btn-thiotty w-full py-4 md:py-5 text-base md:text-lg">
                                     Valider la commande
                                 </a>
                                 <a href="{{ route('shop.index') }}" class="flex items-center justify-center gap-2 text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">
@@ -132,7 +132,7 @@
                     <p class="text-slate-500 text-sm mb-12 max-w-xs mx-auto leading-relaxed">
                         Il semble que vous n'ayez pas encore ajouté de délicieux produits à votre sélection.
                     </p>
-                    <a href="{{ route('shop.index') }}" class="btn-lahad inline-flex px-12 py-5">
+                    <a href="{{ route('shop.index') }}" class="btn-thiotty inline-flex px-12 py-5">
                         Découvrir nos produits
                     </a>
                 </div>

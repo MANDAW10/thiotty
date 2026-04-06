@@ -6,7 +6,7 @@
     </div>
     @if(!$minimal)
         <div class="flex flex-col">
-            <span class="text-xl font-black text-primary leading-none uppercase tracking-tighter">Lahad</span>
+            <span class="text-xl font-black text-primary leading-none uppercase tracking-tighter">Thiotty</span>
             <span class="text-[10px] font-black text-slate-400 leading-none uppercase tracking-[0.3em] mt-1">Enterprise</span>
         </div>
     @endif

@@ -9,7 +9,7 @@
             </nav>
         </div>
         <div class="flex gap-4">
-            <a href="{{ route('admin.products.create') }}" class="btn-lahad py-3 px-6 text-sm">
+            <a href="{{ route('admin.products.create') }}" class="btn-thiotty py-3 px-6 text-sm">
                 <i class="fas fa-plus mr-2 text-xs"></i> Nouveau Produit
             </a>
         </div>

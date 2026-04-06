@@ -22,7 +22,7 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <button type="submit" class="btn-lahad w-full py-5 text-[10px] sm:text-sm shadow-xl shadow-primary/10 whitespace-normal leading-relaxed px-4">
+        <button type="submit" class="btn-thiotty w-full py-5 text-[10px] sm:text-sm shadow-xl shadow-primary/10 whitespace-normal leading-relaxed px-4">
             Envoyer le lien de réinitialisation
         </button>
 

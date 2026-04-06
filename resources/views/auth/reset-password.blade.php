@@ -41,7 +41,7 @@
         </div>
 
         <div class="pt-2">
-            <button type="submit" class="btn-lahad w-full py-5 text-lg shadow-xl shadow-primary/10">
+            <button type="submit" class="btn-thiotty w-full py-5 text-lg shadow-xl shadow-primary/10">
                 Réinitialiser le mot de passe
             </button>
         </div>

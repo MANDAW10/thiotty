@@ -30,7 +30,7 @@
             </div>
 
             <div class="pt-6">
-                <button type="submit" class="btn-lahad w-full py-4 shadow-xl shadow-primary/20">
+                <button type="submit" class="btn-thiotty w-full py-4 shadow-xl shadow-primary/20">
                     Enregistrer les Modifications
                 </button>
             </div>

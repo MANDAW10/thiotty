@@ -39,7 +39,7 @@
                                         <i class="fas fa-wallet mr-2 opacity-50"></i>
                                         Paiement: <span class="text-slate-900">{{ $order->payment_status == 'paid' ? 'Payé' : 'À la livraison' }}</span>
                                     </div>
-                                    <a href="https://wa.me/221773004050" class="btn-lahad-outline py-3 px-6 text-xs">
+                                    <a href="https://wa.me/221773004050" class="btn-thiotty-outline py-3 px-6 text-xs">
                                         <i class="fab fa-whatsapp mr-2"></i> Support
                                     </a>
                                 </div>
@@ -90,9 +90,9 @@
                     </div>
                     <h2 class="text-2xl font-black text-slate-900 mb-4">Aucune commande trouvée</h2>
                     <p class="text-slate-500 text-sm mb-12 max-w-xs mx-auto leading-relaxed">
-                        Vous n'avez pas encore passé de commande chez Lahad Enterprise.
+                        Vous n'avez pas encore passé de commande chez Thiotty Enterprise.
                     </p>
-                    <a href="{{ route('shop.index') }}" class="btn-lahad inline-flex px-12 py-5">
+                    <a href="{{ route('shop.index') }}" class="btn-thiotty inline-flex px-12 py-5">
                         Faire ma première commande
                     </a>
                 </div>

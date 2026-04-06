@@ -104,7 +104,7 @@
         </div>
 
         <div class="pt-4">
-            <button type="submit" class="btn-lahad w-full py-4 text-base shadow-xl shadow-primary/20 relative overflow-hidden group" :disabled="loading">
+            <button type="submit" class="btn-thiotty w-full py-4 text-base shadow-xl shadow-primary/20 relative overflow-hidden group" :disabled="loading">
                 <span x-show="!loading" class="flex items-center justify-center gap-3">
                     S'inscrire <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                 </span>

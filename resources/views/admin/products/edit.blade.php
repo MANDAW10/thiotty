@@ -90,7 +90,7 @@
             <div class="bg-slate-900 p-8 rounded-[40px] shadow-2xl shadow-primary/20">
                 <p class="text-[10px] font-black text-primary uppercase tracking-widest mb-6">Mise à jour</p>
                 <div class="space-y-4">
-                    <button type="submit" class="btn-lahad w-full py-4 shadow-none">
+                    <button type="submit" class="btn-thiotty w-full py-4 shadow-none">
                         Enregistrer les modifications
                     </button>
                     <a href="{{ route('admin.products.index') }}" class="w-full py-4 flex items-center justify-center text-xs font-black text-slate-400 uppercase tracking-widest hover:text-white transition-colors">

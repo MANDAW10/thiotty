@@ -107,7 +107,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-lahad w-full py-6 text-xl shadow-xl shadow-primary/20">
+                        <button type="submit" class="btn-thiotty w-full py-6 text-xl shadow-xl shadow-primary/20">
                             Confirmer pour <span x-text="number_format(subtotal + deliveryFee) + ' CFA'"></span>
                         </button>
                     </form>
@@ -153,7 +153,7 @@
                             <div class="flex gap-4">
                                 <i class="fas fa-info-circle text-primary text-lg mt-0.5"></i>
                                 <p class="text-[9px] font-bold text-slate-500 leading-relaxed uppercase tracking-widest">
-                                    Un conseiller Lahad Enterprise vous contactera par WhatsApp pour confirmer l'heure exacte de passage.
+                                    Un conseiller Thiotty Enterprise vous contactera par WhatsApp pour confirmer l'heure exacte de passage.
                                 </p>
                             </div>
                         </div>

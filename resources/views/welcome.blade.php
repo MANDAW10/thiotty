@@ -21,10 +21,10 @@
                         Découvrez les meilleurs produits locaux. Viandes, lait frais, fromages artisanaux, yaourt et aliments pour bétail.
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <a href="{{ route('shop.index') }}" class="btn-lahad w-full sm:w-auto px-10 py-4">
+                        <a href="{{ route('shop.index') }}" class="btn-thiotty w-full sm:w-auto px-10 py-4">
                             Explorer les produits
                         </a>
-                        <a href="#" class="btn-lahad-outline w-full sm:w-auto px-10 py-4">
+                        <a href="#" class="btn-thiotty-outline w-full sm:w-auto px-10 py-4">
                             Nous contacter
                         </a>
                     </div>
@@ -124,7 +124,7 @@
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8">
                 @foreach($featuredProducts as $product)
-                    <div class="product-card-lahad group fade-in" style="animation-delay: {{ $loop->index * 0.1 }}s">
+                    <div class="product-card-thiotty group fade-in" style="animation-delay: {{ $loop->index * 0.1 }}s">
                         <div class="product-card-img">
                             <a href="{{ route('shop.product', $product->slug) }}">
                                 <img src="{{ $product->image_url }}" 

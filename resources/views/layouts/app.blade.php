@@ -18,16 +18,16 @@
         <!-- Theme Initialization Script -->
     <script>
         (function() {
-            const theme = localStorage.getItem('lahad-theme') || 'light';
-            let accent = localStorage.getItem('lahad-accent') || '#FF5722';
-            let accentRGB = localStorage.getItem('lahad-accent-rgb') || '255, 87, 34';
+            const theme = localStorage.getItem('thiotty-theme') || 'light';
+            let accent = localStorage.getItem('thiotty-accent') || '#FF5722';
+            let accentRGB = localStorage.getItem('thiotty-accent-rgb') || '255, 87, 34';
             
             // Migration for old primary color to new vibrant one
             if (accent === '#E65100') {
                 accent = '#FF5722';
                 accentRGB = '255, 87, 34';
-                localStorage.setItem('lahad-accent', accent);
-                localStorage.setItem('lahad-accent-rgb', accentRGB);
+                localStorage.setItem('thiotty-accent', accent);
+                localStorage.setItem('thiotty-accent-rgb', accentRGB);
             }
             
             if (theme === 'dark') {
@@ -174,7 +174,7 @@
                 <div class="container-custom">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-8">
                         <p class="text-sm text-slate-500">
-                            © {{ date('Y') }} Lahad Enterprise — {{ __('messages.footer_text') }}
+                            © {{ date('Y') }} Thiotty Enterprise — {{ __('messages.footer_text') }}
                         </p>
                         <div class="flex items-center gap-6">
                             <a href="#" class="text-slate-400 hover:text-primary transition-colors"><i class="fab fa-facebook-f"></i></a>

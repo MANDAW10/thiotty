@@ -2,10 +2,10 @@
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6">
         <div>
             <h1 class="text-2xl md:text-3xl font-black text-slate-900 mb-1">Tableau de Bord</h1>
-            <p class="text-[9px] md:text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Lahad Enterprise — Administration</p>
+            <p class="text-[9px] md:text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Thiotty Enterprise — Administration</p>
         </div>
         <div class="flex w-full sm:w-auto">
-            <a href="{{ route('admin.products.create') }}" class="btn-lahad w-full sm:w-auto py-3 px-6 text-xs text-center">
+            <a href="{{ route('admin.products.create') }}" class="btn-thiotty w-full sm:w-auto py-3 px-6 text-xs text-center">
                 <i class="fas fa-plus mr-2"></i> Nouveau Produit
             </a>
         </div>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="pt-4 border-t border-white/5">
                     <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Version de la plateforme</p>
-                    <p class="text-xs font-black mt-2">Lahad Enterprise v2.1.0 — <span class="text-green-500">Stable</span></p>
+                    <p class="text-xs font-black mt-2">Thiotty Enterprise v2.1.0 — <span class="text-green-500">Stable</span></p>
                 </div>
             </div>
         </div>

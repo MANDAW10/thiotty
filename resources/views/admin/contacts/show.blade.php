@@ -55,7 +55,7 @@
                         <p class="text-[9px] text-slate-500 font-bold max-w-[200px] leading-relaxed italic">
                             Note: Enregistrer la réponse marque le message comme "traité" dans votre historique.
                         </p>
-                        <button type="submit" class="btn-lahad py-4 px-12"> ENVOYER LA RÉPONSE </button>
+                        <button type="submit" class="btn-thiotty py-4 px-12"> ENVOYER LA RÉPONSE </button>
                     </div>
                 </form>
             </div>

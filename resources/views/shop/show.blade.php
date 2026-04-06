@@ -116,7 +116,7 @@
                                <div class="space-y-4">
                                    <form action="{{ route('cart.add', $product) }}" method="POST">
                                        @csrf
-                                       <button type="submit" class="w-full btn-lahad py-6 text-base tracking-widest shadow-2xl shadow-primary/20 flex items-center justify-center gap-4 group/btn">
+                                       <button type="submit" class="w-full btn-thiotty py-6 text-base tracking-widest shadow-2xl shadow-primary/20 flex items-center justify-center gap-4 group/btn">
                                            <span>Ajouter au panier</span>
                                            <i class="fas fa-shopping-basket transition-transform group-hover/btn:-translate-y-1"></i>
                                        </button>
@@ -171,7 +171,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         @foreach($relatedProducts as $related)
-                            <div class="product-card-lahad group bg-white p-4 rounded-[40px] border border-slate-50 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500">
+                            <div class="product-card-thiotty group bg-white p-4 rounded-[40px] border border-slate-50 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500">
                                 <div class="product-card-img h-80 rounded-[32px] overflow-hidden relative mb-6">
                                     <a href="{{ route('shop.product', $related->slug) }}">
                                         <img src="{{ $related->image_url }}" 

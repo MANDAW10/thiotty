@@ -9,7 +9,7 @@
             </nav>
         </div>
         <div class="flex gap-4">
-            <a href="{{ route('admin.gallery.create') }}" class="btn-lahad py-3 px-6 text-sm shadow-xl shadow-primary/20">
+            <a href="{{ route('admin.gallery.create') }}" class="btn-thiotty py-3 px-6 text-sm shadow-xl shadow-primary/20">
                 <i class="fas fa-plus mr-2 text-xs"></i> Ajouter une Image
             </a>
         </div>

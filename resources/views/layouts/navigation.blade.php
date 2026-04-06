@@ -6,13 +6,13 @@
     showResetForm: {{ (session('identity_verified') || session('reset_user_id') || $errors->has('password_reset_success') || $errors->has('reset_error')) ? 'true' : 'false' }},
     showMobileMenu: false,
     showSettings: false,
-    theme: localStorage.getItem('lahad-theme') || 'light',
-    accent: localStorage.getItem('lahad-accent') || '#E65100',
-    accentRGB: localStorage.getItem('lahad-accent-rgb') || '230, 81, 0',
+    theme: localStorage.getItem('thiotty-theme') || 'light',
+    accent: localStorage.getItem('thiotty-accent') || '#E65100',
+    accentRGB: localStorage.getItem('thiotty-accent-rgb') || '230, 81, 0',
     wishlistCount: {{ Auth::check() ? Auth::user()->wishlists()->count() : 0 }},
     toggleTheme() {
         this.theme = this.theme === 'light' ? 'dark' : 'light';
-        localStorage.setItem('lahad-theme', this.theme);
+        localStorage.setItem('thiotty-theme', this.theme);
         if (this.theme === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
@@ -22,8 +22,8 @@
     setAccent(color, rgb) {
         this.accent = color;
         this.accentRGB = rgb;
-        localStorage.setItem('lahad-accent', color);
-        localStorage.setItem('lahad-accent-rgb', rgb);
+        localStorage.setItem('thiotty-accent', color);
+    localStorage.setItem('thiotty-accent-rgb', rgb);
         document.documentElement.style.setProperty('--primary', color);
         document.documentElement.style.setProperty('--shadow-color', rgb);
     },
@@ -132,7 +132,7 @@
                         <button @click="showLogin = true" class="p-2 text-slate-500 hover:text-primary transition-colors">
                             <i class="fas fa-user-circle text-2xl"></i>
                         </button>
-                        <button @click="showRegister = true" class="hidden sm:block btn-lahad py-2 px-6 text-sm">
+                        <button @click="showRegister = true" class="hidden sm:block btn-thiotty py-2 px-6 text-sm">
                             {{ __('messages.register') }}
                         </button>
                     </div>
@@ -142,17 +142,17 @@
 
         <!-- Bottom Header: Navigation Links (Desktop Only) -->
         <div class="header-bottom hidden md:flex">
-            <a href="{{ route('home') }}" class="nav-link-lahad {{ request()->routeIs('home') ? 'active' : '' }}">{{ __('messages.home') }}</a>
-            <a href="{{ route('gallery') }}" class="nav-link-lahad {{ request()->routeIs('gallery') ? 'active' : '' }}">{{ __('messages.gallery') }}</a>
+            <a href="{{ route('home') }}" class="nav-link-thiotty {{ request()->routeIs('home') ? 'active' : '' }}">{{ __('messages.home') }}</a>
+            <a href="{{ route('gallery') }}" class="nav-link-thiotty {{ request()->routeIs('gallery') ? 'active' : '' }}">{{ __('messages.gallery') }}</a>
             @auth
                 @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link-lahad text-primary border-primary">Administration</a>
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link-thiotty text-primary border-primary">Administration</a>
                 @endif
-                <a href="{{ route('orders.index') }}" class="nav-link-lahad {{ request()->routeIs('orders.index') ? 'active' : '' }}">{{ __('messages.my_orders') }}</a>
-                <a href="javascript:void(0)" @click="showProfile = true" class="nav-link-lahad {{ request()->routeIs('profile.edit') ? 'active' : '' }}">{{ __('messages.profile') }}</a>
+                <a href="{{ route('orders.index') }}" class="nav-link-thiotty {{ request()->routeIs('orders.index') ? 'active' : '' }}">{{ __('messages.my_orders') }}</a>
+                <a href="javascript:void(0)" @click="showProfile = true" class="nav-link-thiotty {{ request()->routeIs('profile.edit') ? 'active' : '' }}">{{ __('messages.profile') }}</a>
             @endauth
-            <a href="{{ route('shop.index') }}" class="nav-link-lahad {{ request()->routeIs('shop.index') ? 'active' : '' }}">{{ __('messages.shop') }}</a>
-            <a href="{{ route('contact') }}" class="nav-link-lahad {{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('messages.contact') }}</a>
+            <a href="{{ route('shop.index') }}" class="nav-link-thiotty {{ request()->routeIs('shop.index') ? 'active' : '' }}">{{ __('messages.shop') }}</a>
+            <a href="{{ route('contact') }}" class="nav-link-thiotty {{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('messages.contact') }}</a>
         </div>
     </div>
 
@@ -256,7 +256,7 @@
                 @guest
                     <div class="grid grid-cols-2 gap-3">
                         <button @click="showMobileMenu = false; showLogin = true" class="py-3 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs uppercase tracking-widest hover:bg-slate-50 transition-all">Connexion</button>
-                        <button @click="showMobileMenu = false; showRegister = true" class="btn-lahad py-3 rounded-xl text-xs">Inscription</button>
+                        <button @click="showMobileMenu = false; showRegister = true" class="btn-thiotty py-3 rounded-xl text-xs">Inscription</button>
                     </div>
                 @else
                     <form method="POST" action="{{ route('logout') }}">
@@ -298,7 +298,7 @@
                     <i class="fas fa-user text-xl"></i>
                 </div>
                 <h2 class="text-2xl font-black text-slate-900 mb-1">Bienvenue</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Accédez à votre compte <span class="text-primary">Lahad</span></p>
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Accédez à votre compte <span class="text-primary font-black">Thiotty</span></p>
             </div>
 
             <form method="POST" action="{{ route('login') }}" class="space-y-6" @submit="loading = true">
@@ -328,7 +328,7 @@
                 </div>
 
                 <div class="pt-2">
-                    <button type="submit" class="btn-lahad w-full py-4 text-base shadow-xl shadow-primary/10 text-white relative overflow-hidden group" :disabled="loading">
+                    <button type="submit" class="btn-thiotty w-full py-4 text-base shadow-xl shadow-primary/10 text-white relative overflow-hidden group" :disabled="loading">
                         <span x-show="!loading">Se Connecter</span>
                         <span x-show="loading" class="flex items-center justify-center gap-3" style="display: none;">
                             <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
@@ -377,7 +377,7 @@
                     <i class="fas fa-user-plus text-xl"></i>
                 </div>
                 <h2 class="text-2xl font-black text-slate-900 mb-1">Inscription</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Rejoignez la <span class="text-primary text-xs ml-1">famille Lahad</span></p>
+                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Rejoignez la <span class="text-primary text-xs ml-1 font-black">famille Thiotty</span></p>
             </div>
 
             <form method="POST" action="{{ route('register') }}" class="space-y-4" @submit="loading = true">
@@ -433,7 +433,7 @@
                 </div>
 
                 <div class="pt-4">
-                    <button type="submit" class="btn-lahad w-full py-4 text-sm shadow-xl shadow-primary/10 text-white relative overflow-hidden group" :disabled="loading">
+                    <button type="submit" class="btn-thiotty w-full py-4 text-sm shadow-xl shadow-primary/10 text-white relative overflow-hidden group" :disabled="loading">
                         <span x-show="!loading">Continuer</span>
                         <span x-show="loading" class="flex items-center justify-center gap-3" style="display: none;">
                             <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
@@ -507,7 +507,7 @@
                 <x-input-error :messages="$errors->get('forgot_identity')" class="mt-1" />
 
                 <div class="pt-4">
-                    <button type="submit" class="btn-lahad w-full py-4 text-base shadow-xl shadow-primary/10 text-white">Vérifier mon identité</button>
+                    <button type="submit" class="btn-thiotty w-full py-4 text-base shadow-xl shadow-primary/10 text-white">Vérifier mon identité</button>
                 </div>
             </form>
 
@@ -555,7 +555,7 @@
                         <i class="fas fa-check-circle text-4xl mb-2 block"></i>
                         {{ session('password_reset_success') }}
                     </div>
-                    <button @click="showResetForm = false; showLogin = true" class="btn-lahad w-full py-4 text-white">Se connecter maintenant</button>
+                    <button @click="showResetForm = false; showLogin = true" class="btn-thiotty w-full py-4 text-white">Se connecter maintenant</button>
                 </div>
             @else
                 <form method="POST" action="{{ route('password.custom-reset') }}" class="space-y-4">
@@ -575,7 +575,7 @@
                     <x-input-error :messages="$errors->get('reset_error')" class="mt-1" />
 
                     <div class="pt-4">
-                        <button type="submit" class="btn-lahad w-full py-4 text-base shadow-xl shadow-primary/10 text-white">Réinitialiser le mot de passe</button>
+                        <button type="submit" class="btn-thiotty w-full py-4 text-base shadow-xl shadow-primary/10 text-white">Réinitialiser le mot de passe</button>
                     </div>
                 </form>
             @endif
@@ -715,7 +715,7 @@
             </div>
 
             <div class="mt-10 pt-6 border-t border-[var(--border-main)] text-center text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                Interface Lahad v2.5 ✨
+                Interface Thiotty v2.5 ✨
             </div>
         </div>
     </div>

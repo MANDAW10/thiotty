@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn-lahad w-full py-5 text-lg shadow-xl shadow-primary/20 relative overflow-hidden group" :disabled="loading">
+        <button type="submit" class="btn-thiotty w-full py-5 text-lg shadow-xl shadow-primary/20 relative overflow-hidden group" :disabled="loading">
             <span x-show="!loading" class="flex items-center justify-center gap-3">
                 Se Connecter <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
             </span>

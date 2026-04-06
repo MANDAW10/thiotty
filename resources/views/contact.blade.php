@@ -42,7 +42,7 @@
                         <h3 class="text-xl font-black text-slate-900 mb-4">Contact Direct</h3>
                         <div class="space-y-4">
                             <a href="tel:+221770000000" class="block text-slate-600 font-bold hover:text-primary transition-colors">+221 77 000 00 00</a>
-                            <a href="mailto:contact@lahadenterprise.com" class="block text-slate-600 font-bold hover:text-primary transition-colors">contact@lahadenterprise.com</a>
+                            <a href="mailto:contact@thiotty.sn" class="block text-slate-600 font-bold hover:text-primary transition-colors">contact@thiotty.sn</a>
                         </div>
                     </div>
 
@@ -98,7 +98,7 @@
                             </div>
 
                             <div class="pt-4">
-                                <button type="submit" class="btn-lahad px-12 py-6 text-lg shadow-xl shadow-primary/20">
+                                <button type="submit" class="btn-thiotty px-12 py-6 text-lg shadow-xl shadow-primary/20">
                                     Envoyer le message
                                 </button>
                             </div>

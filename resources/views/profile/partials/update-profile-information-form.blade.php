@@ -21,7 +21,7 @@
         </div>
 
         <div class="flex items-center gap-4 pt-2">
-            <button type="submit" class="btn-lahad py-3 px-8 text-sm shadow-lg shadow-primary/10 text-white">Mettre à jour</button>
+            <button type="submit" class="btn-thiotty py-3 px-8 text-sm shadow-lg shadow-primary/10 text-white">Mettre à jour</button>
 
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" class="text-xs font-bold text-green-600">

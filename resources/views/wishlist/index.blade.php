@@ -31,7 +31,7 @@
                 <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-10">
                     @foreach($wishlists as $wishlist)
                         @php $product = $wishlist->product; @endphp
-                        <div class="product-card-lahad group bg-white rounded-[40px] overflow-hidden" x-data="{ removed: false }" x-show="!removed" x-transition:leave="transition ease-in duration-300 transform scale-95 opacity-0">
+                        <div class="product-card-thiotty group bg-white rounded-[40px] overflow-hidden" x-data="{ removed: false }" x-show="!removed" x-transition:leave="transition ease-in duration-300 transform scale-95 opacity-0">
                             <div class="product-card-img h-64 relative overflow-hidden">
                                 <a href="{{ route('shop.product', $product->slug) }}">
                                     <img src="{{ $product->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=800&auto=format&fit=crop' }}" 
@@ -98,7 +98,7 @@
                     </div>
                     <h3 class="text-xl font-black text-slate-900 mb-2">Votre liste est vide</h3>
                     <p class="text-slate-400 font-medium mb-8">Vous n'avez pas encore ajouté de coups de coeur.</p>
-                    <a href="{{ route('shop.index') }}" class="btn-lahad px-10 py-4 inline-block">
+                    <a href="{{ route('shop.index') }}" class="btn-thiotty px-10 py-4 inline-block">
                         Explorer la boutique
                     </a>
                 </div>

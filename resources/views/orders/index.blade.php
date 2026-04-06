@@ -19,7 +19,7 @@
                     </div>
                     <h2 class="text-2xl font-black text-slate-900 mb-4">Aucune commande pour le moment.</h2>
                     <p class="text-slate-400 mb-12 max-w-sm mx-auto font-bold uppercase tracking-widest text-xs">Explorez notre boutique pour trouver votre bonheur.</p>
-                    <a href="{{ route('shop.index') }}" class="btn-lahad py-5 px-10">
+                    <a href="{{ route('shop.index') }}" class="btn-thiotty py-5 px-10">
                         Commencer mon Shopping
                     </a>
                 </div>
