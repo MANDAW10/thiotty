@@ -109,13 +109,4 @@
         </div>
     </div>
 
-    <!-- Map Section Mockup -->
-    <section class="h-[500px] bg-slate-200 relative overflow-hidden grayscale contrast-125 opacity-70">
-        <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover">
-        <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl shadow-2xl animate-pulse">
-                <i class="fas fa-map-marker-alt"></i>
-            </div>
-        </div>
-    </section>
 </x-app-layout>
