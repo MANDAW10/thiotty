@@ -67,6 +67,7 @@
                 $navLinks = [
                     ['route' => 'admin.dashboard', 'icon' => 'fa-th-large', 'label' => 'Dashboard', 'pattern' => 'admin.dashboard'],
                     ['route' => 'admin.products.index', 'icon' => 'fa-box', 'label' => 'Produits', 'pattern' => 'admin.products.*'],
+                    ['route' => 'admin.categories.index', 'icon' => 'fa-tags', 'label' => 'Catégories', 'pattern' => 'admin.categories.*'],
                     ['route' => 'admin.orders.index', 'icon' => 'fa-shopping-cart', 'label' => 'Commandes', 'pattern' => 'admin.orders.*'],
                     ['route' => 'admin.users.index', 'icon' => 'fa-users', 'label' => 'Utilisateurs', 'pattern' => 'admin.users.*'],
                     ['route' => 'admin.zones.index', 'icon' => 'fa-truck', 'label' => 'Zones', 'pattern' => 'admin.zones.*'],
