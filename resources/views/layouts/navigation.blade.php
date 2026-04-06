@@ -97,11 +97,6 @@
                     </span>
                 </a>
 
-                <!-- Language Switcher (Hidden on mobile) -->
-                <div class="hidden sm:flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
-                    <a href="{{ route('language.switch', 'en') }}" class="w-8 h-8 flex items-center justify-center rounded-xl text-[10px] font-black transition-all {{ app()->getLocale() == 'en' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-primary hover:bg-white' }}">EN</a>
-                    <a href="{{ route('language.switch', 'fr') }}" class="w-8 h-8 flex items-center justify-center rounded-xl text-[10px] font-black transition-all {{ app()->getLocale() == 'fr' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-primary hover:bg-white' }}">FR</a>
-                </div>
 
                 <!-- User Profile / Inscription -->
                 @auth
@@ -243,12 +238,6 @@
                         <i class="fas fa-palette w-5"></i>
                         <span>Réglages Thème</span>
                     </button>
-                    <!-- Mobile Language Selection -->
-                    <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl mt-4">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex-1">Langue / Language</p>
-                        <a href="{{ route('language.switch', 'en') }}" class="w-10 h-10 flex items-center justify-center rounded-xl text-[10px] font-black transition-all {{ app()->getLocale() == 'en' ? 'bg-primary text-white' : 'bg-white text-slate-400 border border-slate-100' }}">EN</a>
-                        <a href="{{ route('language.switch', 'fr') }}" class="w-10 h-10 flex items-center justify-center rounded-xl text-[10px] font-black transition-all {{ app()->getLocale() == 'fr' ? 'bg-primary text-white' : 'bg-white text-slate-400 border border-slate-100' }}">FR</a>
-                    </div>
                 </div>
             </nav>
 
