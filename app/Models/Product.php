@@ -41,19 +41,19 @@ class Product extends Model
                     'miel' => 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800',
                 ];
 
-                // Check for local image in storage/app/public/products/
+                // Check for local image in public/img/products/
                 if ($this->image) {
-                    $localPath = 'products/' . $this->image;
+                    $localPath = 'img/products/' . $this->image;
                     
-                    // Try exact match
-                    if (Storage::disk('public')->exists($localPath)) {
-                        return Storage::disk('public')->url($localPath);
+                    // Try exact match in the public directory
+                    if (file_exists(public_path($localPath))) {
+                        return asset($localPath);
                     }
                     
                     // Try .png version if .jpg was specified (for our AI generated ones)
-                    $pngPath = 'products/' . str_replace('.jpg', '.png', $this->image);
-                    if (Storage::disk('public')->exists($pngPath)) {
-                        return Storage::disk('public')->url($pngPath);
+                    $pngPath = str_replace('.jpg', '.png', $localPath);
+                    if (file_exists(public_path($pngPath))) {
+                        return asset($pngPath);
                     }
                 }
 

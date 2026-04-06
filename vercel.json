@@ -19,7 +19,7 @@
             "dest": "/public/build/$1"
         },
         {
-            "src": "/(css|js|images|vendor|favicon.ico|robots.txt|manifest.json)/(.*)",
+            "src": "/(css|js|img|images|vendor|favicon.ico|robots.txt|manifest.json)/(.*)",
             "dest": "/public/$1/$2"
         },
         {

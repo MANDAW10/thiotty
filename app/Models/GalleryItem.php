@@ -18,17 +18,17 @@ class GalleryItem extends Model
         return Attribute::make(
             get: function () {
                 if ($this->image) {
-                    $localPath = 'gallery/' . $this->image;
+                    $localPath = 'img/gallery/' . $this->image;
                     
-                    // Try exact match
-                    if (Storage::disk('public')->exists($localPath)) {
-                        return Storage::disk('public')->url($localPath);
+                    // Try exact match in public directory
+                    if (file_exists(public_path($localPath))) {
+                        return asset($localPath);
                     }
                     
-                    // Try .png version if .jpg was specified
-                    $pngPath = 'gallery/' . str_replace('.jpg', '.png', $this->image);
-                    if (Storage::disk('public')->exists($pngPath)) {
-                        return Storage::disk('public')->url($pngPath);
+                    // Try .png version if .jpg was specified (for our AI generated ones)
+                    $pngPath = str_replace('.jpg', '.png', $localPath);
+                    if (file_exists(public_path($pngPath))) {
+                        return asset($pngPath);
                     }
                     
                     // If it's a full URL, return it
