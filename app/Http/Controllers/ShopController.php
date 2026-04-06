@@ -17,10 +17,34 @@ class ShopController extends Controller
         return view('welcome', compact('categories', 'featuredProducts', 'recentProducts'));
     }
 
-    public function shop()
+    public function shop(Request $request)
     {
-        $products = Product::latest()->paginate(12);
-        $categories = Category::all();
+        $query = Product::query();
+
+        // Filter by Category
+        if ($request->has('category') && $request->category != 'all') {
+            $query->whereHas('category', function($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
+        }
+
+        // Filter by Price Range
+        if ($request->has('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->has('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'latest');
+        if ($sort == 'price_asc') $query->orderBy('price', 'asc');
+        elseif ($sort == 'price_desc') $query->orderBy('price', 'desc');
+        else $query->latest();
+
+        $products = $query->paginate(12)->withQueryString();
+        $categories = Category::withCount('products')->get();
+        
         return view('shop.index', compact('products', 'categories'));
     }
 

@@ -14,84 +14,142 @@
         </div>
     </header>
 
-    <div class="py-12 lg:py-20">
+    <div class="py-12 lg:py-24 bg-white overflow-hidden">
         <div class="container-custom">
-            <div class="grid lg:grid-cols-2 gap-16 items-start">
-                <!-- Product Gallery -->
-                <div class="fade-in">
-                    <div class="aspect-square rounded-[40px] overflow-hidden bg-slate-50 border border-slate-100 group">
-                        <img src="{{ $product->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=1200&auto=format&fit=crop' }}" 
-                             alt="{{ $product->name }}" 
-                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+                
+                <!-- Product Gallery Section (Col 1-7) -->
+                <div class="lg:col-span-7 space-y-8 animate-fade-in-up">
+                    <div class="relative group">
+                        <!-- Main Image with "Glass" frame effect -->
+                        <div class="aspect-[4/5] md:aspect-square rounded-[48px] overflow-hidden bg-slate-50 border-8 border-white shadow-2xl shadow-slate-200/50 transition-all duration-700 hover:shadow-primary/5">
+                            <img src="{{ $product->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=1200&auto=format&fit=crop' }}" 
+                                 alt="{{ $product->name }}" 
+                                 class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                        </div>
+                        
+                        <!-- Floating Badges -->
+                        <div class="absolute top-8 left-8 flex flex-col gap-3">
+                            <span class="px-5 py-2 bg-white/80 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg border border-white/50">
+                                {{ $product->category->name }}
+                            </span>
+                            @if($product->is_featured)
+                            <span class="px-5 py-2 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-primary/20">
+                                Coup de ❤️
+                            </span>
+                            @endif
+                        </div>
+
+                        <!-- Zoom/Full Icon Hint -->
+                        <button class="absolute bottom-8 right-8 w-14 h-14 bg-white/60 backdrop-blur-md rounded-full flex items-center justify-center text-slate-900 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 shadow-xl border border-white/50">
+                            <i class="fas fa-expand-alt"></i>
+                        </button>
+                    </div>
+
+                    <!-- Thumbnails / Features grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-[#F8F9FA] p-6 rounded-[32px] border border-white shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-primary mb-4">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Qualité</p>
+                            <p class="text-xs font-black text-slate-900">100% Naturel</p>
+                        </div>
+                        <div class="bg-[#F8F9FA] p-6 rounded-[32px] border border-white shadow-sm hover:shadow-md transition-shadow delay-75">
+                            <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-primary mb-4">
+                                <i class="fas fa-truck-fast"></i>
+                            </div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Livraison</p>
+                            <p class="text-xs font-black text-slate-900">Express 24h</p>
+                        </div>
+                        <div class="bg-[#F8F9FA] p-6 rounded-[32px] border border-white shadow-sm hover:shadow-md transition-shadow delay-150">
+                            <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-primary mb-4">
+                                <i class="fas fa-map-location-dot"></i>
+                            </div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Origine</p>
+                            <p class="text-xs font-black text-slate-900">{{ $product->location ?: 'Sénégal' }}</p>
+                        </div>
+                        <div class="bg-[#F8F9FA] p-6 rounded-[32px] border border-white shadow-sm hover:shadow-md transition-shadow delay-200">
+                            <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-primary mb-4">
+                                <i class="fas fa-shield-check"></i>
+                            </div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Paiement</p>
+                            <p class="text-xs font-black text-slate-900">Sécurisé</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Product Info -->
-                <div class="fade-in" style="animation-delay: 0.1s">
-                    <div class="space-y-10">
-                        <div>
-                            <div class="flex items-center gap-4 mb-6">
-                                <span class="px-4 py-1.5 bg-secondary/10 text-secondary text-[10px] font-black uppercase tracking-widest rounded-lg">
-                                    {{ $product->category->name }}
-                                </span>
-                                <div class="flex items-center gap-1 text-sm text-amber-500 font-bold">
+                <!-- Product Info & Buying Section (Col 8-12) -->
+                <div class="lg:col-span-5 sticky top-32 animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="space-y-12">
+                        <!-- Title & Rating -->
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-3 bg-slate-50 w-fit px-4 py-2 rounded-full border border-slate-100">
+                                <span class="flex items-center gap-1 text-amber-500 font-black text-[10px]">
                                     <i class="fas fa-star"></i>
-                                    <span>{{ number_format($product->rating ?: 4.8, 1) }}</span>
-                                    <span class="text-slate-300 font-medium ml-1">(24 avis)</span>
-                                </div>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </span>
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">4.9 (12 avis)</span>
                             </div>
                             
-                            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-4 sm:mb-6">{{ $product->name }}</h1>
-                            
-                            <div class="flex items-center gap-4 text-sm font-semibold text-slate-500">
-                                <i class="fas fa-map-marker-alt text-primary"></i>
-                                <span>Origine : {{ $product->location ?: 'Dakar, Sénégal' }}</span>
+                            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 leading-[1.1] tracking-tighter">
+                                {{ $product->name }}<span class="text-primary italic">.</span>
+                            </h1>
+                        </div>
+
+                        <!-- Price Section with Glass Effect -->
+                        <div class="relative group">
+                           <div class="absolute inset-0 bg-primary/20 blur-[60px] opacity-20 -z-10 group-hover:opacity-40 transition-opacity"></div>
+                           <div class="bg-white/40 backdrop-blur-xl border border-white rounded-[40px] p-8 md:p-12 shadow-xl">
+                               <div class="flex items-baseline gap-2 mb-8">
+                                   <span class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter">{{ number_format($product->price, 0, ',', ' ') }}</span>
+                                   <span class="text-xl font-black text-primary uppercase italic">CFA</span>
+                               </div>
+
+                               <p class="text-slate-500 text-lg leading-relaxed mb-10 font-medium">
+                                   {{ $product->description ?: 'Ce produit exceptionnel est sélectionné avec soin par nos experts pour vous garantir une fraîcheur et une qualité inégalée.' }}
+                               </p>
+
+                               <div class="space-y-4">
+                                   <form action="{{ route('cart.add', $product) }}" method="POST">
+                                       @csrf
+                                       <button type="submit" class="w-full btn-lahad py-6 text-base tracking-widest shadow-2xl shadow-primary/20 flex items-center justify-center gap-4 group/btn">
+                                           <span>Ajouter au panier</span>
+                                           <i class="fas fa-shopping-basket transition-transform group-hover/btn:-translate-y-1"></i>
+                                       </button>
+                                   </form>
+                                   
+                                   <div class="grid grid-cols-2 gap-4">
+                                       <button @click="$dispatch('wishlist-toggle', { id: {{ $product->id }} })" class="flex items-center justify-center gap-3 py-4 bg-slate-50 hover:bg-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-600 transition-colors">
+                                            <i class="far fa-heart text-base"></i> Favoris
+                                       </button>
+                                       <a href="https://wa.me/221783577431?text={{ urlencode('Bonjour, je souhaite commander : ' . $product->name) }}" target="_blank" class="flex items-center justify-center gap-3 py-4 bg-[#25D366]/5 hover:bg-[#25D366]/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-[#128C7E] transition-colors">
+                                            <i class="fab fa-whatsapp text-base"></i> WhatsApp
+                                       </a>
+                                   </div>
+                               </div>
+
+                               @if($product->stock > 0 && $product->stock < 5)
+                               <div class="mt-8 flex items-center gap-3 text-red-500 font-black text-[10px] uppercase tracking-widest animate-pulse">
+                                   <i class="fas fa-fire-flame-curved"></i>
+                                   Plus que {{ $product->stock }} articles disponibles !
+                               </div>
+                               @endif
+                           </div>
+                        </div>
+
+                        <!-- Mini Trust Row -->
+                        <div class="flex items-center justify-between px-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/10"></div>
+                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">En Stock</span>
                             </div>
-                        </div>
-
-                        <div class="text-4xl font-black text-primary">
-                            {{ number_format($product->price, 0, ',', ' ') }} 
-                            <span class="text-lg text-primary/60 font-bold ml-1 uppercase">CFA</span>
-                        </div>
-
-                        <div class="prose prose-slate prose-lg text-slate-500 max-w-none">
-                            <p>{{ $product->description }}</p>
-                        </div>
-
-                        <!-- Stats/Features -->
-                        <div class="grid grid-cols-2 gap-6 p-8 bg-slate-50 rounded-3xl">
-                            <div class="space-y-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Stock disponible</p>
-                                <p class="text-xl font-bold text-slate-900">{{ $product->stock }} Unités</p>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Livraison</p>
-                                <p class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                    <i class="fas fa-truck-fast text-primary"></i> 24h - 48h
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <form action="{{ route('cart.add', $product) }}" method="POST" class="flex-1">
-                                @csrf
-                                <button type="submit" class="w-full btn-lahad py-5 text-lg">
-                                    Ajouter au panier <i class="fas fa-shopping-basket ml-2"></i>
-                                </button>
-                            </form>
-                            <a href="https://wa.me/221773004050" class="btn-lahad-outline py-5 px-8">
-                                <i class="fab fa-whatsapp text-2xl text-[#25D366]"></i>
-                            </a>
-                        </div>
-
-                        <!-- Payment Trust Badge -->
-                        <div class="mt-8 flex items-center gap-4 p-5 bg-primary/5 rounded-2xl border border-primary/10">
-                            <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-primary">
-                                <i class="fas fa-shield-halved"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-primary mb-0.5">Paiement 100% Sécurisé</p>
-                                <p class="text-xs font-bold text-slate-700">Règlement en espèces à la livraison uniquement.</p>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-lock text-[9px] text-slate-300"></i>
+                                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">SSL Sécurisé</span>
                             </div>
                         </div>
                     </div>
@@ -100,47 +158,55 @@
 
             <!-- Related Products -->
             @if($relatedProducts->count() > 0)
-                <div class="mt-32 pt-20 border-t border-slate-100">
-                    <div class="flex items-center justify-between mb-12">
-                        <h2 class="text-2xl font-black text-slate-900">Articles similaires</h2>
-                        <a href="{{ route('shop.index') }}" class="text-sm font-bold text-primary hover:underline">Voir tout le catalogue</a>
+                <div class="mt-40 pt-24 border-t border-slate-50">
+                    <div class="flex items-end justify-between mb-16">
+                        <div class="space-y-4">
+                            <p class="text-[10px] font-black text-primary uppercase tracking-[0.4em] leading-none">Inspiration.</p>
+                            <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">Vous aimerez <span class="text-primary italic">aussi</span>.</h2>
+                        </div>
+                        <a href="{{ route('shop.index') }}" class="hidden md:flex items-center gap-3 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors group">
+                            Voir le catalogue <i class="fas fa-chevron-right text-[8px] group-hover:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         @foreach($relatedProducts as $related)
-                            <div class="product-card-lahad group">
-                                <div class="product-card-img">
+                            <div class="product-card-lahad group bg-white p-4 rounded-[40px] border border-slate-50 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500">
+                                <div class="product-card-img h-80 rounded-[32px] overflow-hidden relative mb-6">
                                     <a href="{{ route('shop.product', $related->slug) }}">
                                         <img src="{{ $related->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=800&auto=format&fit=crop' }}" 
                                              alt="{{ $related->name }}" 
                                              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                     </a>
-                                    <form action="{{ route('cart.add', $related) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="product-card-btn-add">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                    </form>
+                                    
+                                    <div class="absolute top-4 right-4 translate-x-12 group-hover:translate-x-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
+                                         <form action="{{ route('cart.add', $related) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all transform active:scale-90">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <div class="absolute bottom-4 left-4 bg-white/60 backdrop-blur-md px-4 py-1.5 rounded-full text-[9px] font-black uppercase text-slate-900 border border-white/50">
+                                        {{ $related->category->name }}
+                                    </div>
                                 </div>
-                                <div class="p-6">
+                                
+                                <div class="px-2 pb-2">
                                     <a href="{{ route('shop.product', $related->slug) }}">
-                                        <h3 class="text-lg font-bold text-slate-900 mb-3 truncate hover:text-primary transition-colors">
+                                        <h3 class="text-xl font-black text-slate-900 mb-2 truncate group-hover:text-primary transition-colors tracking-tighter">
                                             {{ $related->name }}
                                         </h3>
                                     </a>
-                                    <div class="flex items-center justify-between mb-4">
-                                        <div class="flex items-center gap-2 text-xs text-slate-400 font-bold uppercase tracking-widest">
-                                            <i class="fas fa-map-marker-alt text-primary"></i>
-                                            <span>{{ $related->location ?: 'Dakar' }}</span>
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-lg font-black text-slate-900 tracking-tighter">
+                                            {{ number_format($related->price, 0, ',', ' ') }} <small class="text-[10px] italic opacity-30 font-black ml-1">CFA</small>
                                         </div>
-                                        <div class="flex items-center gap-1 text-xs text-amber-500 font-bold">
-                                            <i class="fas fa-star text-[10px]"></i>
-                                            <span>{{ number_format($related->rating ?: 4.8, 1) }}</span>
+                                        <div class="flex items-center gap-1 text-[10px] text-amber-500 font-black uppercase tracking-tighter">
+                                            <i class="fas fa-star text-[9px]"></i>
+                                            <span>4.9</span>
                                         </div>
-                                    </div>
-                                    <div class="text-2xl font-black text-primary">
-                                        {{ number_format($related->price, 0, ',', ' ') }} 
-                                        <span class="text-xs text-primary/60 font-bold ml-1 uppercase">CFA</span>
                                     </div>
                                 </div>
                             </div>

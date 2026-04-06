@@ -119,7 +119,7 @@
                             @if(Auth::user()->is_admin)
                                 <x-dropdown-link :href="route('admin.dashboard')" class="text-primary font-black">Administration</x-dropdown-link>
                             @endif
-                            <x-dropdown-link :href="route('orders.history')">{{ __('messages.my_orders') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('orders.index')">{{ __('messages.my_orders') }}</x-dropdown-link>
                             <div class="border-t border-slate-50"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -148,7 +148,7 @@
                 @if(Auth::user()->is_admin)
                     <a href="{{ route('admin.dashboard') }}" class="nav-link-lahad text-primary border-primary">Administration</a>
                 @endif
-                <a href="{{ route('orders.history') }}" class="nav-link-lahad {{ request()->routeIs('orders.history') ? 'active' : '' }}">{{ __('messages.my_orders') }}</a>
+                <a href="{{ route('orders.index') }}" class="nav-link-lahad {{ request()->routeIs('orders.index') ? 'active' : '' }}">{{ __('messages.my_orders') }}</a>
                 <a href="javascript:void(0)" @click="showProfile = true" class="nav-link-lahad {{ request()->routeIs('profile.edit') ? 'active' : '' }}">{{ __('messages.profile') }}</a>
             @endauth
             <a href="{{ route('shop.index') }}" class="nav-link-lahad {{ request()->routeIs('shop.index') ? 'active' : '' }}">{{ __('messages.shop') }}</a>
@@ -208,7 +208,7 @@
                             <span>Administration</span>
                         </a>
                     @endif
-                    <a href="{{ route('orders.history') }}" class="flex items-center gap-4 p-4 rounded-2xl {{ request()->routeIs('orders.history') ? 'bg-primary/5 text-primary' : 'text-slate-600 hover:bg-slate-50' }} font-bold transition-all">
+                    <a href="{{ route('orders.index') }}" class="flex items-center gap-4 p-4 rounded-2xl {{ request()->routeIs('orders.index') ? 'bg-primary/5 text-primary' : 'text-slate-600 hover:bg-slate-50' }} font-bold transition-all">
                         <i class="fas fa-box w-5"></i>
                         <span>Mes Commandes</span>
                     </a>

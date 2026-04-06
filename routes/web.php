@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\PasswordRecoveryController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
@@ -76,7 +77,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // User Order History
-    Route::get('/my-orders', [CheckoutController::class, 'history'])->name('orders.history');
+    Route::get('/my-orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/my-orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
     // Wishlist Routes
     Route::get('/favoris', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
