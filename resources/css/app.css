@@ -190,3 +190,12 @@
 .animate-marquee:hover {
     animation-play-state: paused;
 }
+
+/* Delivery Truck Animation */
+@keyframes drive {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100vw); }
+}
+.animate-delivery {
+    animation: drive 20s linear infinite;
+}
