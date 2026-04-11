@@ -121,7 +121,7 @@
             <div class="grid lg:grid-cols-2 gap-24 items-center">
                 <div class="relative order-2 lg:order-1">
                     <div class="relative z-10 rounded-[60px] overflow-hidden shadow-2xl shadow-black/50 aspect-[4/5]">
-                        <img src="https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Notre Passion">
+                        <img src="https://images.unsplash.com/photo-1629904853716-f0bc54ea4813?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Notre Passion">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
                     </div>
                     <!-- Floating Stat Card -->
