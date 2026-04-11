@@ -71,6 +71,13 @@
                     <i class="fas fa-map-marker-alt text-primary"></i>
                     <span>Dakar, Sénégal</span>
                 </div>
+
+                <!-- Language Switcher Desktop -->
+                <div class="hidden md:flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-slate-400 border-l border-slate-100 pl-6 ml-2">
+                    <a href="{{ route('language.switch', 'fr') }}" class="{{ app()->getLocale() == 'fr' ? 'text-primary' : 'hover:text-primary transition-colors' }}">FR</a>
+                    <span class="text-slate-200">|</span>
+                    <a href="{{ route('language.switch', 'en') }}" class="{{ app()->getLocale() == 'en' ? 'text-primary' : 'hover:text-primary transition-colors' }}">EN</a>
+                </div>
                 
 
                 <!-- Settings (Theme) - Hidden on mobile, moved to drawer -->
@@ -226,6 +233,20 @@
                         <i class="fas fa-palette w-5 text-amber-500"></i>
                         <span>Personnalisation</span>
                     </button>
+
+                    <div class="mt-4 pt-4 border-t border-slate-50">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 px-4">Langues</p>
+                        <div class="grid grid-cols-2 gap-2 px-2">
+                            <a href="{{ route('language.switch', 'fr') }}" 
+                               class="flex items-center justify-center gap-3 p-3 rounded-xl border-2 transition-all font-bold text-xs {{ app()->getLocale() == 'fr' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-50 text-slate-500 hover:bg-slate-50' }}">
+                                <span class="text-base">🇫🇷</span> FR
+                            </a>
+                            <a href="{{ route('language.switch', 'en') }}" 
+                               class="flex items-center justify-center gap-3 p-3 rounded-xl border-2 transition-all font-bold text-xs {{ app()->getLocale() == 'en' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-50 text-slate-500 hover:bg-slate-50' }}">
+                                <span class="text-base">🇬🇧</span> EN
+                            </a>
+                        </div>
+                    </div>
                  </div>
             </nav>
 
