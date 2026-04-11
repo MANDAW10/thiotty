@@ -1,316 +1,250 @@
 <x-app-layout>
-    <!-- Hero Section -->
-    <section class="py-12 lg:py-20 overflow-hidden">
-        <div class="container-custom relative z-10 py-6 lg:py-0">
-            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                <div class="fade-in text-center lg:text-left">
-                    <div class="inline-flex items-center gap-3 px-4 py-2 bg-primary/5 rounded-full mb-6 lg:mb-8">
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                        </span>
-                        <span class="text-[10px] font-black text-primary uppercase tracking-widest leading-none">Agriculture 4.0 Sénégal</span>
-                    </div>
-                    
-                    <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-6 lg:mb-8">
-                        L'Excellence <br class="hidden lg:block">
-                        <span class="text-primary italic-font">Agricole</span> Au <br class="hidden lg:block">
-                        Sénégal.
-                    </h1>
-                    <p class="text-base sm:text-lg text-slate-500 mb-8 lg:mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                        Découvrez les meilleurs produits locaux. Viandes, lait frais, fromages artisanaux, yaourt et aliments pour bétail.
-                    </p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <a href="{{ route('shop.index') }}" class="btn-thiotty w-full sm:w-auto px-10 py-4">
-                            Explorer les produits
-                        </a>
-                        <a href="#" class="btn-thiotty-outline w-full sm:w-auto px-10 py-4">
-                            Nous contacter
-                        </a>
+    <!-- Immersive Cinematic Hero -->
+    <section class="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Parallax-ready feel -->
+        <div class="absolute inset-0 z-0">
+            <img src="{{ asset('img/banners/hero-main.png') }}" class="w-full h-full object-cover scale-105 animate-[slowZoom_20s_ease-in-out_infinite]" alt="Thiotty Cinematic Hero">
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/20 to-slate-900/60 transition-colors duration-1000"></div>
+        </div>
+
+        <div class="container-custom relative z-10 text-center">
+            <div class="max-w-4xl mx-auto flex flex-col items-center">
+                <!-- Premium Badge -->
+                <div class="fade-in mb-8">
+                    <div class="inline-flex items-center gap-3 px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
+                        <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(255,87,34,0.8)]"></span>
+                        <span class="text-[10px] sm:text-xs font-black text-white uppercase tracking-[0.3em]">L'Art de l'Agriculture Sénégalaise</span>
                     </div>
                 </div>
 
-                <!-- Hero Graphic: Location Card -->
-                <div class="fade-in group" style="animation-delay: 0.2s">
-                    <div class="relative bg-teal-50/50 rounded-[40px] aspect-[4/3] flex items-center justify-center border border-teal-100 overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent"></div>
-                        <div class="relative z-10 text-center">
-                            <div class="w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center mx-auto mb-4 text-primary animate-bounce">
-                                <i class="fas fa-map-marker-alt text-2xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-secondary mb-2">Où nous trouver</h3>
-                            <p class="text-slate-500 text-sm">Dakar, Sénégal</p>
-                        </div>
-                        
-                        <!-- Abstract shapes for flair -->
-                        <div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
-                        <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-secondary/5 rounded-full blur-3xl"></div>
-                    </div>
+                <h1 class="fade-in text-5xl sm:text-7xl md:text-8xl font-black text-white leading-tight mb-8 serif-heading drop-shadow-2xl">
+                    L'Excellence <br class="hidden md:block">
+                    <span class="italic-font text-primary">Signature</span>
+                </h1>
+
+                <p class="fade-in text-lg sm:text-xl text-white/90 font-medium mb-12 max-w-2xl leading-relaxed drop-shadow-lg" style="animation-delay: 0.2s">
+                    De nos pâturages à votre table. Découvrez la pureté des produits Thiotty, façonnés par la passion et l'innovation.
+                </p>
+
+                <div class="fade-in flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto" style="animation-delay: 0.4s">
+                    <a href="{{ route('shop.index') }}" class="btn-thiotty w-full sm:w-auto px-12 py-5 text-sm uppercase tracking-[0.2em]">
+                        Explorer la Collection
+                    </a>
+                    <a href="#categories" class="px-12 py-5 text-white text-sm font-black uppercase tracking-[0.2em] bg-white/5 backdrop-blur-md border border-white/20 rounded-xl hover:bg-white hover:text-slate-900 transition-all active:scale-95">
+                        Découvrir les Univers
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-white/40 animate-bounce">
+            <span class="text-[10px] font-black uppercase tracking-widest">Scroll</span>
+            <div class="w-px h-12 bg-gradient-to-b from-white/40 to-transparent"></div>
+        </div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="py-16 bg-slate-50/30">
+    <!-- Luxury Category Grid (The Lookbook) -->
+    <section id="categories" class="py-24 bg-white">
         <div class="container-custom">
-            <div class="flex items-center justify-between mb-10">
-                <h2 class="text-2xl font-black text-slate-900">Catégories</h2>
-                <div class="h-1 w-20 bg-secondary rounded-full"></div>
+            <div class="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+                <div class="max-w-xl">
+                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-4">Nos Univers</h2>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight serif-heading">
+                        Parcourez nos <span class="italic-font">terroirs</span> d'exception.
+                    </h3>
+                </div>
+                <div class="mb-2">
+                    <div class="h-1 w-24 bg-primary/20 rounded-full"></div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @php
+                    // Custom image mapping for categories if icons/images are not enough
+                    $catImages = [
+                        'élevage' => 'https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=1000&auto=format&fit=crop',
+                        'terroir' => 'https://images.unsplash.com/photo-1533614767277-33116314389f?q=80&w=1000&auto=format&fit=crop',
+                        'poulets' => 'https://images.unsplash.com/photo-1518492104633-c3ed9e7a7be7?q=80&w=1000&auto=format&fit=crop',
+                        'lait' => 'https://images.unsplash.com/photo-1550583724-1d552d4adad2?q=80&w=1000&auto=format&fit=crop'
+                    ];
+                @endphp
+
                 @foreach($categories as $cat)
-                    <a href="{{ route('shop.category', $cat->slug) }}" class="category-card group fade-in" style="animation-delay: {{ $loop->index * 0.05 }}s">
-                        <div class="category-icon">
-                            <i class="{{ $cat->icon }} text-2xl"></i>
+                    <a href="{{ route('shop.category', $cat->slug) }}" 
+                       class="group relative h-[450px] rounded-[40px] overflow-hidden shadow-2xl shadow-slate-200/50 hover-glare transition-all flex flex-col justify-end p-10">
+                        <img src="{{ $cat->image ? asset('storage/' . $cat->image) : ($catImages[strtolower($cat->name)] ?? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop') }}" 
+                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="{{ $cat->name }}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                        
+                        <div class="relative z-10 transform transition-transform duration-500 group-hover:-translate-y-4">
+                            <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center text-white mb-6 border border-white/20">
+                                <i class="{{ $cat->icon }} text-xl"></i>
+                            </div>
+                            <h4 class="text-3xl font-black text-white serif-heading mb-2">{{ $cat->name }}</h4>
+                            <div class="flex items-center gap-3">
+                                <span class="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Découvrir la gamme</span>
+                                <div class="w-8 h-[1px] bg-primary group-hover:w-16 transition-all duration-500"></div>
+                            </div>
                         </div>
-                        <p class="text-xs font-black text-slate-900 leading-tight uppercase tracking-widest">{{ $cat->name }}</p>
                     </a>
                 @endforeach
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="py-12 border-y border-slate-100 bg-white">
-        <div class="container-custom">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <!-- Feature 1: Payment -->
-                <div class="flex items-center gap-6 group">
-                    <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
-                        <i class="fas fa-hand-holding-dollar text-xl"></i>
+    <!-- The Thiotty Heritage (Storytelling) -->
+    <section class="py-32 bg-slate-900 text-white overflow-hidden relative">
+        <!-- Abstract Decoration -->
+        <div class="absolute -top-64 -right-64 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-64 -left-64 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px]"></div>
+
+        <div class="container-custom relative z-10">
+            <div class="grid lg:grid-cols-2 gap-24 items-center">
+                <div class="relative order-2 lg:order-1">
+                    <div class="relative z-10 rounded-[60px] overflow-hidden shadow-2xl shadow-black/50 aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Notre Passion">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
                     </div>
-                    <div>
-                        <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">Paiement à la Livraison</h4>
-                        <p class="text-xs text-slate-500 font-medium">Commandez l'esprit tranquille, payez à réception.</p>
+                    <!-- Floating Stat Card -->
+                    <div class="absolute -bottom-10 -right-10 md:right-10 bg-white p-10 rounded-[40px] shadow-2xl text-slate-900 border border-slate-100 hidden sm:block">
+                        <p class="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-2">Impact Local</p>
+                        <h4 class="text-4xl font-black serif-heading">+500</h4>
+                        <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest">Producteurs Partenaires</p>
                     </div>
                 </div>
 
-                <!-- Feature 2: Delivery -->
-                <div class="flex items-center gap-6 group">
-                    <div class="w-14 h-14 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
-                        <i class="fas fa-truck-fast text-xl"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">Livraison Express</h4>
-                        <p class="text-xs text-slate-500 font-medium">Vos produits livrés chez vous en 24h à Dakar.</p>
-                    </div>
-                </div>
-
-                <!-- Feature 3: Quality -->
-                <div class="flex items-center gap-6 group">
-                    <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110">
-                        <i class="fas fa-award text-xl"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">Qualité Bio & Fraiche</h4>
-                        <p class="text-xs text-slate-500 font-medium">Des produits direct du producteur au client.</p>
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-6">Notre Héritage</h2>
+                    <h3 class="text-5xl md:text-6xl font-black mb-10 leading-tight serif-heading">
+                        La passion de la terre, <br>
+                        <span class="italic-font text-primary">réinventée.</span>
+                    </h3>
+                    <p class="text-lg text-slate-400 font-medium leading-relaxed mb-12">
+                        Depuis notre création, Thiotty Enterprise s'engage à transformer le paysage agricole sénégalais. En alliant savoir-faire ancestral et technologies de pointe, nous vous offrons le meilleur du terroir, sans compromis sur l'excellence.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-12">
+                        <div>
+                            <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-primary mb-6 border border-white/10">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                            <h4 class="text-sm font-black uppercase tracking-widest mb-3">Qualité Certifiée</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed font-bold">Protocoles de santé et d'hygiène stricts pour chaque produit.</p>
+                        </div>
+                        <div>
+                            <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-primary mb-6 border border-white/10">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h4 class="text-sm font-black uppercase tracking-widest mb-3">100% Naturel</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed font-bold">Produits directs du producteur, garantis sans additifs chimiques.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Featured Products -->
-    <section class="py-20">
+    <!-- Curated Product Gallery -->
+    <section class="py-32 bg-slate-50/50">
         <div class="container-custom">
-            <div class="flex items-center justify-between mb-12">
-                <h2 class="text-2xl font-black text-slate-900">Produits à proximité</h2>
-                <a href="{{ route('shop.index') }}" class="px-6 py-2 border-2 border-secondary/20 text-secondary text-sm font-bold rounded-lg hover:bg-secondary hover:text-white transition-all">
-                    Voir tout
+            <div class="flex flex-col md:flex-row items-center justify-between mb-20 gap-8">
+                <div class="text-center md:text-left">
+                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-4">La Sélection</h2>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 serif-heading">Récoltes du <span class="italic-font">Moment</span></h3>
+                </div>
+                <a href="{{ route('shop.index') }}" class="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] text-slate-900 hover:text-primary transition-all">
+                    Voir toute la collection
+                    <i class="fas fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                 @foreach($featuredProducts as $product)
-                    <div class="product-card-thiotty group fade-in" style="animation-delay: {{ $loop->index * 0.1 }}s">
-                        <div class="product-card-img">
-                            <a href="{{ route('shop.product', $product->slug) }}">
-                                <img src="{{ $product->image_url }}" 
-                                     alt="{{ $product->name }}" 
-                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                            </a>
+                    <div class="bg-white rounded-[48px] p-4 border border-slate-100 shadow-xl shadow-slate-200/50 group hover:-translate-y-2 transition-all duration-500">
+                        <div class="aspect-[4/5] rounded-[40px] overflow-hidden relative mb-8">
+                            <img src="{{ $product->image_url }}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="{{ $product->name }}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
                             
-                            <!-- Big Heart Wishlist Icon -->
-                            <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-20" x-data="{ 
-                                isFavorited: {{ (Auth::check() && $product->isFavoritedBy(Auth::user())) ? 'true' : 'false' }},
-                                async toggleFavorite() {
-                                    @if(!Auth::check())
-                                        this.$dispatch('open-login');
-                                        return;
-                                    @endif
-                                    try {
-                                        const response = await fetch('{{ route('wishlist.toggle', $product) }}', {
-                                            method: 'POST',
-                                            headers: {
-                                                'X-CSRF-TOKEN': document.querySelector('meta[name=&quot;csrf-token&quot;]').getAttribute('content'),
-                                                'Accept': 'application/json'
-                                            }
-                                        });
-                                        const data = await response.json();
-                                        if (data.status) {
-                                            this.isFavorited = data.status === 'added';
-                                            window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { count: data.count } }));
-                                        }
-                                    } catch (e) {
-                                        console.error('Error toggling favorite', e);
-                                    }
-                                }
-                            }">
-                                <button @click.prevent="toggleFavorite()" 
-                                        :class="isFavorited ? 'bg-white text-primary shadow-lg' : 'bg-white/80 text-slate-400 hover:text-primary'"
-                                        class="w-10 h-10 sm:w-8 sm:h-8 rounded-full backdrop-blur-sm flex items-center justify-center transition-all shadow-sm group/heart">
-                                    <i class="text-xs sm:text-[10px]" :class="isFavorited ? 'fas fa-heart scale-125' : 'far fa-heart group-hover/heart:scale-110 transition-transform'"></i>
+                            <!-- Premium Wishlist -->
+                            <div class="absolute top-6 right-6" x-data="{ isFavorited: false }">
+                                <button @click.prevent="isFavorited = !isFavorited" 
+                                        :class="isFavorited ? 'bg-primary text-white' : 'bg-white/80 text-primary backdrop-blur-md'"
+                                        class="w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-lg active:scale-90">
+                                    <i :class="isFavorited ? 'fas fa-heart' : 'far fa-heart'"></i>
                                 </button>
                             </div>
-
-                            <!-- Desktop Floating Button (Hidden on Mobile) -->
-                            <form action="{{ route('cart.add', $product) }}" method="POST" class="hidden sm:block">
-                                @csrf
-                                <button type="submit" class="product-card-btn-add">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </form>
                         </div>
-                        
-                        <div class="p-4 sm:p-6">
-                            <a href="{{ route('shop.product', $product->slug) }}">
-                                <h3 class="text-base sm:text-lg font-black text-slate-900 mb-2 sm:mb-3 line-clamp-2 hover:text-primary transition-colors min-h-[3rem] sm:min-h-0">
-                                    {{ $product->name }}
-                                </h3>
-                            </a>
+
+                        <div class="px-4 pb-4">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">{{ $product->category->name }}</p>
+                            <h4 class="text-xl font-black text-slate-900 mb-4 line-clamp-1 serif-heading">{{ $product->name }}</h4>
                             
-                            <!-- Secondary Info (Hidden on Mobile) -->
-                            <div class="hidden sm:flex items-center justify-between mb-4">
-                                <div class="flex items-center gap-2 text-xs text-slate-400 font-bold uppercase tracking-widest">
-                                    <i class="fas fa-map-marker-alt text-primary"></i>
-                                    <span>{{ $product->location ?: 'Dakar' }}</span>
+                            <div class="flex items-center justify-between">
+                                <div class="text-xl font-black text-primary">
+                                    {{ number_format($product->price, 0, ',', ' ') }} 
+                                    <span class="text-[10px] uppercase font-bold text-primary/60">CFA</span>
                                 </div>
-                                <div class="flex items-center gap-1 text-xs text-amber-500 font-bold">
-                                    <i class="fas fa-star text-[10px]"></i>
-                                    <span>{{ number_format($product->rating ?: 4.8, 1) }}</span>
-                                </div>
+                                <form action="{{ route('cart.add', $product) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-10 h-10 bg-slate-900 text-white rounded-xl shadow-xl flex items-center justify-center hover:bg-primary transition-all active:scale-90">
+                                        <i class="fas fa-plus text-xs"></i>
+                                    </button>
+                                </form>
                             </div>
-
-                            <div class="text-xl sm:text-2xl font-black text-primary mb-5 sm:mb-0">
-                                {{ number_format($product->price, 0, ',', ' ') }} 
-                                <span class="text-[10px] sm:text-xs text-primary/60 font-bold ml-1 uppercase">CFA</span>
-                            </div>
-
-                            <!-- Mobile Action Button (Hidden on Desktop) -->
-                            <form action="{{ route('cart.add', $product) }}" method="POST" class="sm:hidden mt-4">
-                                @csrf
-                                <button type="submit" class="w-full bg-primary/5 hover:bg-primary text-primary hover:text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2 border border-primary/10">
-                                    <i class="fas fa-shopping-basket"></i> Ajouter
-                                </button>
-                            </form>
                         </div>
                     </div>
                 @endforeach
             </div>
         </div>
-    <!-- Testimonials Section -->
-    <section class="py-24 bg-slate-50/50 overflow-hidden">
+    </section>
+
+    <!-- Refined Testimonials Section -->
+    <section class="py-24 bg-white overflow-hidden">
         <div class="container-custom">
             <div class="text-center mb-16">
-                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-primary mb-4">Avis Clients</h2>
-                <h3 class="text-4xl md:text-5xl font-black text-slate-900">La Voix de nos <span class="italic-font text-primary underline decoration-primary/20 underline-offset-8">Clients</span></h3>
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-primary mb-4">Distinction Thiotty</h2>
+                <h3 class="text-4xl md:text-5xl font-black text-slate-900 serif-heading">La Confiance de <span class="italic-font underline decoration-primary/20 underline-offset-8">nos Clients</span></h3>
             </div>
 
-            <!-- Infinite Auto-Scroll Marquee -->
-            <div class="relative mt-4">
+            <div class="relative">
                 <div class="flex animate-marquee py-12">
                     @php
                         $testimonials = [
-                            [
-                                'name' => 'Pape Mandaw Dieng',
-                                'role' => 'Éleveur Professionnel',
-                                'text' => 'Une plateforme révolutionnaire pour nous ! La qualité du bétail est tout simplement exceptionnelle. Thiotty est devenu mon partenaire numéro 1.',
-                                'stars' => 5
-                            ],
-                            [
-                                'name' => 'Abdou Lahad Geuye',
-                                'role' => 'Client Fidèle',
-                                'text' => 'Le lait frais livré directement à domicile au petit matin... Un pur bonheur pour toute la famille. Service et qualité irréprochables.',
-                                'stars' => 5
-                            ],
-                            [
-                                'name' => 'Fallou Geuye',
-                                'role' => 'Entrepreneur Agricole',
-                                'text' => 'Enfin une solution sérieuse pour l\'achat d\'aliments de bétail. Les prix sont compétitifs et la livraison est toujours ponctuelle.',
-                                'stars' => 5
-                            ],
-                            [
-                                'name' => 'Khoudosse Geuye',
-                                'role' => 'Particulier',
-                                'text' => 'Très impressionné par le professionnalisme de l\'équipe. Les produits sont authentiques et le service client est toujours à l\'écoute.',
-                                'stars' => 5
-                            ]
+                            ['name' => 'Pape Mandaw Dieng', 'role' => 'Éleveur Pro', 'text' => "L'excellence Thiotty est sans pareille. La qualité du bétail transforme mon exploitation au quotidien."],
+                            ['name' => 'Abdou Lahad Geuye', 'role' => 'Gastronome', 'text' => "Un goût authentique retrouvé. Le lait frais de Thiotty est devenu un incontournable de mon petit-déjeuner."],
+                            ['name' => 'Fatou Fall', 'role' => 'Restauratrice', 'text' => "Nos clients redemandent de la volaille Thiotty. La fraîcheur et la tendreté sont toujours au rendez-vous."]
                         ];
                     @endphp
 
-                    <!-- First Set -->
-                    @foreach($testimonials as $t)
-                        <div class="flex-none w-[320px] md:w-[400px]">
-                            <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 h-full flex flex-col group hover:-translate-y-2 transition-all duration-500">
-                                <div class="flex gap-1 mb-6 text-amber-400">
-                                    @for($i = 0; $i < $t['stars']; $i++)
-                                        <i class="fas fa-star text-xs"></i>
-                                    @endfor
+                    @foreach(array_merge($testimonials, $testimonials) as $t)
+                        <div class="flex-none w-[450px]">
+                            <div class="bg-slate-50 p-12 rounded-[50px] border border-slate-100 flex flex-col h-full group hover:bg-white hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500">
+                                <div class="flex gap-1 mb-8 text-amber-500">
+                                    <i class="fas fa-star text-[10px]"></i><i class="fas fa-star text-[10px]"></i><i class="fas fa-star text-[10px]"></i><i class="fas fa-star text-[10px]"></i><i class="fas fa-star text-[10px]"></i>
                                 </div>
-                                
-                                <p class="text-slate-600 font-medium leading-relaxed mb-10 flex-1 italic">
-                                    "{{ $t['text'] }}"
-                                </p>
-
-                                <div class="flex items-center gap-4 pt-6 border-t border-slate-50">
-                                    <div class="w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-primary/5">
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=E65100&color=fff&bold=true" 
-                                             class="w-full h-full object-cover">
+                                <p class="text-slate-600 font-medium italic leading-relaxed text-lg mb-10">"{{ $t['text'] }}"</p>
+                                <div class="flex items-center gap-4 pt-8 border-t border-slate-200 mt-auto">
+                                    <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center font-black text-primary text-xl">
+                                        {{ substr($t['name'], 0, 1) }}
                                     </div>
                                     <div>
-                                        <h4 class="font-black text-slate-900 uppercase tracking-widest text-xs">{{ $t['name'] }}</h4>
-                                        <p class="text-[10px] font-bold text-primary mt-1">{{ $t['role'] }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-
-                    <!-- Duplicate Set for Seamless Loop -->
-                    @foreach($testimonials as $t)
-                        <div class="flex-none w-[320px] md:w-[400px]">
-                            <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 h-full flex flex-col group hover:-translate-y-2 transition-all duration-500">
-                                <div class="flex gap-1 mb-6 text-amber-400">
-                                    @for($i = 0; $i < $t['stars']; $i++)
-                                        <i class="fas fa-star text-xs"></i>
-                                    @endfor
-                                </div>
-                                
-                                <p class="text-slate-600 font-medium leading-relaxed mb-10 flex-1 italic">
-                                    "{{ $t['text'] }}"
-                                </p>
-
-                                <div class="flex items-center gap-4 pt-6 border-t border-slate-50">
-                                    <div class="w-14 h-14 rounded-2xl overflow-hidden ring-4 ring-primary/5">
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($t['name']) }}&background=E65100&color=fff&bold=true" 
-                                             class="w-full h-full object-cover">
-                                    </div>
-                                    <div>
-                                        <h4 class="font-black text-slate-900 uppercase tracking-widest text-xs">{{ $t['name'] }}</h4>
-                                        <p class="text-[10px] font-bold text-primary mt-1">{{ $t['role'] }}</p>
+                                        <h4 class="font-black text-slate-900 text-sm uppercase tracking-widest">{{ $t['name'] }}</h4>
+                                        <p class="text-[10px] font-bold text-primary uppercase mt-1">{{ $t['role'] }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
-
-                <!-- Gradient Fade Edges -->
-                <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-50/50 to-transparent z-10 pointer-events-none"></div>
-                <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-50/50 to-transparent z-10 pointer-events-none"></div>
             </div>
         </div>
     </section>
+
+    <style>
+        @keyframes slowZoom {
+            0%, 100% { transform: scale(1.05); }
+            50% { transform: scale(1.15); }
+        }
+    </style>
 </x-app-layout>

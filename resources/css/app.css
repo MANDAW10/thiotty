@@ -47,6 +47,15 @@
         @apply font-sans antialiased transition-colors duration-300 overflow-x-hidden;
         font-family: 'Outfit', sans-serif;
     }
+
+    .italic-font {
+        font-family: 'Playfair Display', serif;
+        @apply italic font-medium;
+    }
+
+    .serif-heading {
+        font-family: 'Playfair Display', serif;
+    }
 }
 
 @layer components {
@@ -138,6 +147,30 @@
     ::selection { 
         background-color: var(--primary);
         color: white;
+    }
+
+    /* Luxury UI Helpers */
+    .glass-panel-thiotty {
+        @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-2xl;
+    }
+
+    .luxury-mask {
+        @apply relative overflow-hidden;
+    }
+    .luxury-mask::after {
+        content: '';
+        @apply absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent pointer-events-none;
+    }
+
+    .hover-glare {
+        @apply relative overflow-hidden;
+    }
+    .hover-glare::after {
+        content: '';
+        @apply absolute -inset-full bg-gradient-to-r from-transparent via-white/10 to-transparent -rotate-45 transition-all duration-700 pointer-events-none;
+    }
+    .hover-glare:hover::after {
+        @apply translate-x-full translate-y-full;
     }
 }
 
