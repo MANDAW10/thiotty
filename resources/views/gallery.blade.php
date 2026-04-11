@@ -38,39 +38,43 @@
         <section class="py-20 lg:py-32 bg-[#FDFDFD]">
             <div class="container-custom">
                 <!-- Filter Tabs -->
-                <div class="flex flex-wrap justify-center gap-4 mb-20">
-                    <button class="px-8 py-3 rounded-2xl bg-primary text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/20 transition-transform active:scale-95">Tout</button>
-                    <button class="px-8 py-3 rounded-2xl bg-white border border-slate-100 text-slate-400 hover:text-primary hover:border-primary/20 font-black text-xs uppercase tracking-widest transition-all">Élevage</button>
-                    <button class="px-8 py-3 rounded-2xl bg-white border border-slate-100 text-slate-400 hover:text-primary hover:border-primary/20 font-black text-xs uppercase tracking-widest transition-all">Terroir</button>
-                    <button class="px-8 py-3 rounded-2xl bg-white border border-slate-100 text-slate-400 hover:text-primary hover:border-primary/20 font-black text-xs uppercase tracking-widest transition-all">Culture</button>
+                <div class="flex flex-wrap justify-center gap-4 mb-20 animate-fade-in-up">
+                    <button class="px-8 py-3 rounded-2xl bg-primary text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-primary/20 transition-transform active:scale-95">Tout</button>
+                    <button class="px-8 py-3 rounded-2xl bg-white border border-slate-100 text-slate-400 hover:text-primary hover:border-primary/20 font-black text-[10px] uppercase tracking-[0.2em] transition-all">Élevage</button>
+                    <button class="px-8 py-3 rounded-2xl bg-white border border-slate-100 text-slate-400 hover:text-primary hover:border-primary/20 font-black text-[10px] uppercase tracking-[0.2em] transition-all">Terroir</button>
+                    <button class="px-8 py-3 rounded-2xl bg-white border border-slate-100 text-slate-400 hover:text-primary hover:border-primary/20 font-black text-[10px] uppercase tracking-[0.2em] transition-all">Culture</button>
                 </div>
 
-                <div class="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
                     @forelse($items as $item)
-                        <!-- Dynamic Image -->
+                        <!-- Flagship Gallery Card -->
                         <div @click="openLightbox('{{ $item->image_url }}', '{{ $item->title }}', '{{ $item->description }}')" 
-                             class="fade-in group relative overflow-hidden rounded-[40px] bg-slate-100 shadow-sm hover:shadow-2xl transition-all duration-700 cursor-zoom-in" 
+                             class="group cursor-zoom-in fade-in" 
                              style="animation-delay: {{ $loop->index * 0.1 }}s">
                             
-                            <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full transition-transform duration-[2000ms] group-hover:scale-110">
-                            
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-10 text-left">
-                                <span class="text-[9px] font-black text-primary uppercase tracking-widest mb-3 leading-none">{{ $item->category }}</span>
-                                <h4 class="text-white text-2xl font-black mb-2 leading-tight tracking-tighter">{{ $item->title }}</h4>
-                                @if($item->description)
-                                    <p class="text-white/60 text-sm font-medium line-clamp-2 leading-relaxed">{{ $item->description }}</p>
-                                @endif
+                            <div class="bg-white rounded-[40px] md:rounded-[48px] p-2 pb-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-slate-50">
+                                <!-- Image Container -->
+                                <div class="relative aspect-[4/5] overflow-hidden rounded-[32px] md:rounded-[40px] bg-slate-50">
+                                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-colors duration-500"></div>
+                                </div>
                                 
-                                <div class="mt-6 flex items-center gap-2 text-[8px] font-black text-white uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 delay-100">
-                                    <i class="fas fa-expand-alt text-primary"></i> Voir en grand
+                                <!-- Content -->
+                                <div class="px-6 pt-8 pb-2 text-left">
+                                    <span class="text-[9px] font-black text-[#FF6B35] uppercase tracking-[3px] mb-3 block">{{ $item->category }}</span>
+                                    <h4 class="text-slate-900 text-xl md:text-2xl font-black leading-tight tracking-tight serif-font mb-4 transition-colors group-hover:text-primary">{{ $item->title }}</h4>
+                                    
+                                    <div class="flex items-center gap-2 text-[8px] font-black text-slate-300 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                                        Voir l'histoire <i class="fas fa-arrow-right text-[10px]"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     @empty
                         <!-- Placeholder if empty -->
-                        <div class="col-span-full py-32 text-center bg-slate-50 rounded-[48px] border-2 border-dashed border-slate-200">
-                            <i class="fas fa-camera-retro text-4xl text-slate-200 mb-6"></i>
-                            <p class="text-slate-400 font-black uppercase tracking-widest text-[10px]">L'album est en cours de préparation...</p>
+                        <div class="col-span-full py-32 text-center bg-white rounded-[64px] border-2 border-dashed border-slate-100">
+                            <i class="fas fa-camera-retro text-4xl text-slate-100 mb-6"></i>
+                            <p class="text-slate-300 font-black uppercase tracking-widest text-[10px]">L'album est en cours de préparation...</p>
                         </div>
                     @endforelse
                 </div>
@@ -125,15 +129,31 @@
 
     <!-- Custom CSS for Masonry and Animations -->
     <style>
+        .serif-font { font-family: 'Playfair Display', serif; }
         .italic-font { font-family: 'Outfit', sans-serif; font-style: italic; }
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; }
+        
+        .fade-in { 
+            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+            opacity: 0; 
+        }
+        
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .columns-1 { column-count: 1; }
-        @media (min-width: 640px) { .columns-2 { column-count: 2; } }
-        @media (min-width: 1024px) { .columns-3 { column-count: 3; } }
-        .columns-1 img, .columns-2 img, .columns-3 img { break-inside: avoid; margin-bottom: 2rem; }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Hover Effect for Cards */
+        .group:hover .serif-font {
+            color: var(--primary);
+        }
     </style>
 </x-app-layout>
