@@ -42,7 +42,7 @@
         @endif
     }
 }" @add-toast.window="addToast($event.detail.message, $event.detail.type)"
-class="fixed top-6 right-6 z-[9999] flex flex-col gap-4 w-full max-w-[380px] pointer-events-none">
+class="fixed top-6 right-6 md:top-6 md:right-6 bottom-6 left-4 right-4 md:bottom-auto md:left-auto z-[9999] flex flex-col gap-4 w-full md:max-w-[380px] pointer-events-none transition-all duration-500">
     
     <template x-for="toast in toasts" :key="toast.id">
         <div x-show="toast.show"
