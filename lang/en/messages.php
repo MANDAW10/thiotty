@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'welcome' => 'Welcome to Lahad Enterprise',
+    'welcome' => 'Welcome to Thiotty Enterprise',
     'home' => 'Home',
     'shop' => 'Products',
     'gallery' => 'Gallery',
@@ -13,9 +13,9 @@ return [
     'login' => 'Login',
     'register' => 'Register',
     'search_placeholder' => 'Search products, categories...',
-    'assistant_name' => 'Lahad Assistant',
+    'assistant_name' => 'Thiotty Assistant',
     'assistant_online' => 'Online',
-    'assistant_greeting' => 'Hello! Welcome to Lahad Enterprise. How can I help you today?',
+    'assistant_greeting' => 'Hello! Welcome to Thiotty Enterprise. How can I help you today?',
     'quick_actions' => 'Quick Actions',
     'track_order' => 'Track my order',
     'our_products' => 'Our products',

@@ -4,7 +4,7 @@
             <i class="fas fa-user text-2xl"></i>
         </div>
         <h2 class="text-3xl font-black text-slate-900 mb-2">Bienvenue</h2>
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Accédez à votre compte <span class="text-primary">Lahad</span></p>
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Accédez à votre compte <span class="text-primary">Thiotty</span></p>
     </div>
 
     <!-- Session Status -->

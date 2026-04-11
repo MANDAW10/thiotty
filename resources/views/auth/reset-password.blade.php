@@ -4,7 +4,7 @@
             <i class="fas fa-key text-2xl"></i>
         </div>
         <h2 class="text-3xl font-black text-slate-900 mb-2">Nouveau mot de passe</h2>
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Sécurisez votre compte <span class="text-primary">Lahad</span></p>
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Sécurisez votre compte <span class="text-primary">Thiotty</span></p>
     </div>
 
     <form method="POST" action="{{ route('password.store') }}" class="space-y-6">

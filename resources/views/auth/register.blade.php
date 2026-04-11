@@ -4,7 +4,7 @@
             <i class="fas fa-user-plus text-2xl"></i>
         </div>
         <h2 class="text-3xl font-black text-slate-900 mb-2">Inscription</h2>
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Rejoignez la <span class="text-primary">famille Lahad</span></p>
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Rejoignez la <span class="text-primary">famille Thiotty</span></p>
     </div>
 
     <form method="POST" action="{{ route('register') }}" class="space-y-4" x-data="{ show: false, showConfirm: false, loading: false, 

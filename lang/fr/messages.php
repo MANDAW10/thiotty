@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'welcome' => 'Bienvenue chez Lahad Enterprise',
+    'welcome' => 'Bienvenue chez Thiotty Enterprise',
     'home' => 'Accueil',
     'shop' => 'Produits',
     'gallery' => 'Galerie',
@@ -13,9 +13,9 @@ return [
     'login' => 'Connexion',
     'register' => 'Inscription',
     'search_placeholder' => 'Rechercher des produits, catégories...',
-    'assistant_name' => 'Assistant Lahad',
+    'assistant_name' => 'Assistant Thiotty',
     'assistant_online' => 'En ligne',
-    'assistant_greeting' => 'Bonjour ! Bienvenue chez Lahad Enterprise. Comment puis-je vous aider aujourd\'hui ?',
+    'assistant_greeting' => 'Bonjour ! Bienvenue chez Thiotty Enterprise. Comment puis-je vous aider aujourd\'hui ?',
     'quick_actions' => 'Actions rapides',
     'track_order' => 'Suivre ma commande',
     'our_products' => 'Nos produits',
