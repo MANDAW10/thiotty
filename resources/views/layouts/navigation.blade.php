@@ -167,9 +167,9 @@
              x-transition:leave="transition ease-in duration-200 transform"
              x-transition:leave-start="translate-x-0"
              x-transition:leave-end="-translate-x-full"
-             class="absolute inset-y-0 left-0 w-[280px] bg-white shadow-2xl flex flex-col">
+             class="absolute inset-y-0 left-0 w-[280px] bg-white dark:bg-[var(--bg-surface)] shadow-2xl flex flex-col border-r dark:border-white/5">
             
-            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+            <div class="p-6 border-b border-slate-50 dark:border-white/5 flex justify-between items-center">
                 <x-application-logo class="h-8 w-auto" />
                 <button @click="showMobileMenu = false" class="text-slate-400 hover:text-primary transition-colors">
                     <i class="fas fa-times text-xl"></i>

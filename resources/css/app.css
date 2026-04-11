@@ -26,18 +26,18 @@
 
 /* Dark Mode Overrides (Explicit) */
 .dark {
-    --bg-page: #050505; /* Deep Obsidian */
-    --bg-surface: #0D0D10; /* Midnight Onyx */
-    --bg-muted: #16161A; /* Stealth Slate */
+    --bg-page: #0B0E14; /* Midnight Slate Deep */
+    --bg-surface: #111827; /* Royal Navy Slate */
+    --bg-muted: #1F2937; /* Tactical Slate */
     
     --text-main: #F1F5F9;
-    --text-muted: #64748B;
-    --text-inverse: #050505;
+    --text-muted: #94A3B8;
+    --text-inverse: #0B0E14;
     
-    --border-main: rgba(255, 255, 255, 0.06);
-    --border-light: rgba(255, 255, 255, 0.03);
+    --border-main: rgba(255, 255, 255, 0.08); /* More visible on Slate */
+    --border-light: rgba(255, 255, 255, 0.04);
 
-    --shadow-main: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+    --shadow-main: 0 40px 80px -20px rgba(0, 0, 0, 0.6);
 }
 
 @layer base {

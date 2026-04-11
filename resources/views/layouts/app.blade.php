@@ -52,7 +52,7 @@
             }
         </style>
     </head>
-    <body class="font-sans antialiased text-slate-900 bg-[#FDFDFD]">
+    <body class="font-sans antialiased text-slate-900 dark:text-slate-100 bg-[var(--bg-page)] transition-colors duration-500">
         <!-- Global Toast Notifications -->
         <x-toast-notifications />
 
@@ -94,7 +94,7 @@
                target="_blank" 
                class="fixed bottom-20 right-4 sm:bottom-28 sm:right-8 z-50 w-12 h-12 sm:w-16 sm:h-16 bg-[#25D366] text-white rounded-[18px] sm:rounded-[24px] shadow-2xl flex items-center justify-center transition-all transform hover:scale-110 active:scale-95 border-[3px] sm:border-4 border-white group">
                 <i class="fab fa-whatsapp text-2xl sm:text-3xl"></i>
-                <div class="absolute right-full mr-4 bg-white px-4 py-2 rounded-xl shadow-xl border border-slate-50 text-slate-800 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
+                <div class="absolute right-full mr-4 bg-white dark:bg-[var(--bg-surface)] px-4 py-2 rounded-xl shadow-xl border border-slate-50 dark:border-white/5 text-slate-800 dark:text-slate-200 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
                     WhatsApp
                 </div>
             </a>
@@ -134,7 +134,7 @@
                      x-transition:leave="transition ease-in duration-200 transform"
                      x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                      x-transition:leave-end="opacity-0 scale-95 translate-y-10"
-                     class="absolute bottom-16 sm:bottom-20 right-0 w-[calc(100vw-2rem)] sm:w-[350px] bg-white rounded-[32px] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[70vh] sm:max-h-[500px]"
+                     class="absolute bottom-16 sm:bottom-20 right-0 w-[calc(100vw-2rem)] sm:w-[350px] bg-white dark:bg-[var(--bg-surface)] rounded-[32px] shadow-2xl border border-slate-100 dark:border-white/5 overflow-hidden flex flex-col max-h-[70vh] sm:max-h-[500px]"
                      style="display: none;">
                     
                     <!-- Header -->
@@ -157,7 +157,7 @@
                     <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4 bg-slate-50/50 custom-scrollbar">
                         <template x-for="msg in messages">
                             <div :class="msg.role === 'bot' ? 'flex justify-start' : 'flex justify-end'">
-                                <div :class="msg.role === 'bot' ? 'bg-white text-slate-800 rounded-2xl rounded-tl-none shadow-sm border border-slate-100' : 'bg-primary text-white rounded-2xl rounded-tr-none shadow-md'" 
+                                <div :class="msg.role === 'bot' ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-white/5' : 'bg-primary text-white rounded-2xl rounded-tr-none shadow-md'" 
                                      class="max-w-[85%] p-3 text-xs font-bold leading-relaxed"
                                      x-text="msg.text">
                                 </div>
@@ -166,12 +166,12 @@
                     </div>
 
                     <!-- Actions -->
-                    <div class="p-4 bg-white border-t border-slate-50 space-y-2">
+                    <div class="p-4 bg-white dark:bg-[var(--bg-surface)] border-t border-slate-50 dark:border-white/5 space-y-2">
                         <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-2 mb-2">{{ __('messages.quick_actions') }}</p>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="action in quickActions">
                                 <button @click="handleAction(action.action)" 
-                                        class="bg-slate-50 hover:bg-primary/5 hover:text-primary border border-slate-100 text-slate-600 px-3 py-2 rounded-xl text-[9px] sm:text-[10px] font-black transition-all">
+                                        class="bg-slate-50 dark:bg-white/5 hover:bg-primary/5 hover:text-primary border border-slate-100 dark:border-white/5 text-slate-600 dark:text-slate-400 px-3 py-2 rounded-xl text-[9px] sm:text-[10px] font-black transition-all">
                                     <span x-text="action.label"></span>
                                 </button>
                             </template>
@@ -193,7 +193,7 @@
             </div>
 
             <!-- Footer -->
-            <footer class="bg-white border-t border-slate-100 py-12 mt-24">
+            <footer class="bg-white dark:bg-[var(--bg-surface)] border-t border-slate-100 dark:border-white/5 py-12 mt-24">
                 <div class="container-custom">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-8">
                         <p class="text-sm text-slate-500">
