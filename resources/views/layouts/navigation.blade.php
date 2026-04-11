@@ -583,9 +583,8 @@
                 <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100">
                     @include('profile.partials.update-password-form')
                 </div>
- </header>
-5 ✨
             </div>
         </div>
     </div>
+    @endauth
 </header>
