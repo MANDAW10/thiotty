@@ -36,12 +36,19 @@ class CartService
     public function add(Product $product, $quantity = 1)
     {
         if (Auth::check()) {
-            $cartItem = CartItem::updateOrCreate(
-                ['user_id' => Auth::id(), 'product_id' => $product->id],
-                ['quantity' => \Illuminate\Support\Facades\DB::raw("quantity + $quantity")]
-            );
-            // Re-fetch to get actual quantity if updateOrCreate used raw SQL
-            $cartItem->refresh();
+            $cartItem = CartItem::where('user_id', Auth::id())
+                ->where('product_id', $product->id)
+                ->first();
+
+            if ($cartItem) {
+                $cartItem->increment('quantity', $quantity);
+            } else {
+                CartItem::create([
+                    'user_id' => Auth::id(),
+                    'product_id' => $product->id,
+                    'quantity' => $quantity
+                ]);
+            }
         } else {
             $cart = Session::get('cart', []);
             $id = $product->id;
