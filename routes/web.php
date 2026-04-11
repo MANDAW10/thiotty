@@ -111,6 +111,7 @@ Route::middleware('auth')->group(function () {
     // Wishlist Routes
     Route::get('/favoris', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/favoris/toggle/{product}', [\App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::post('/favoris/clear', [\App\Http\Controllers\WishlistController::class, 'clear'])->name('wishlist.clear');
 });
 
 // Admin Routes

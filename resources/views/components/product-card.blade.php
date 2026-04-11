@@ -1,4 +1,4 @@
-@props(['product'])
+@props(['product', 'canRemove' => false])
 
 <div class="product-card group bg-white rounded-[48px] p-4 shadow-xl shadow-slate-200/50 border border-slate-50 transition-all duration-700 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/5">
     <!-- Image Header -->
@@ -8,6 +8,16 @@
                  alt="{{ $product->name }}" 
                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
         </a>
+
+        @if($canRemove)
+        <!-- Quick Remove Button (Wishlist Only) -->
+        <div class="absolute top-6 left-6 z-10" x-data="{ confirming: false }">
+            <button @click.prevent="toggle()" 
+                    class="w-8 h-8 rounded-full bg-slate-900/10 hover:bg-red-500 text-slate-900 hover:text-white backdrop-blur-md flex items-center justify-center transition-all shadow-sm hover:shadow-lg active:scale-95 group/remove">
+                <i class="fas fa-times text-[10px] group-hover/remove:rotate-90 transition-transform duration-300"></i>
+            </button>
+        </div>
+        @endif
         
         <!-- Wishlist Button -->
         <div class="absolute top-6 right-6" x-data="{ 

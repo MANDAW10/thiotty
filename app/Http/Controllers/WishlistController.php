@@ -42,4 +42,19 @@ class WishlistController extends Controller
             'count' => $user->wishlists()->count(),
         ]);
     }
+
+    public function clear()
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'unauthenticated'], 401);
+        }
+
+        Auth::user()->wishlists()->delete();
+
+        return response()->json([
+            'status' => 'cleared',
+            'count' => 0,
+            'message' => 'Toute la liste a été vidée'
+        ]);
+    }
 }

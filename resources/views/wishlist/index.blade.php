@@ -17,9 +17,34 @@
                         Retrouvez ici tous les produits que vous avez aimés.
                     </p>
                 </div>
-                <div class="bg-slate-50 px-6 py-4 rounded-3xl border border-slate-100 flex items-center gap-4">
-                    <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Coups de coeur :</span>
-                    <span class="text-xl font-black text-primary">{{ $wishlists->count() }}</span>
+                <div class="flex flex-col sm:flex-row items-center gap-3">
+                    <div class="bg-slate-50 px-6 py-4 rounded-3xl border border-slate-100 flex items-center gap-4">
+                        <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Coups de coeur :</span>
+                        <span class="text-xl font-black text-primary">{{ $wishlists->count() }}</span>
+                    </div>
+                    <button x-data="{ loading: false }" 
+                            @click="if(confirm('Vider toute votre liste ?')) {
+                                loading = true;
+                                fetch('{{ route('wishlist.clear') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/json'
+                                    }
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    $dispatch('wishlist-cleared');
+                                    $dispatch('wishlist-updated', { count: 0 });
+                                    $dispatch('add-toast', { message: data.message, type: 'success' });
+                                })
+                                .finally(() => loading = false);
+                            }"
+                            class="py-4 px-6 rounded-3xl bg-red-50 text-red-600 font-bold text-[10px] uppercase tracking-widest hover:bg-red-100 transition-all border border-red-100 flex items-center gap-2"
+                            :class="loading && 'opacity-50 pointer-events-none'">
+                        <i class="fas fa-trash-alt" :class="loading && 'animate-spin'"></i>
+                        Tout supprimer
+                    </button>
                 </div>
             </div>
         </div>
@@ -32,8 +57,9 @@
                     @foreach($wishlists as $wishlist)
                         @php $product = $wishlist->product; @endphp
                         <div x-data="{ removed: false }" x-show="!removed" x-transition:leave="transition ease-in duration-300 transform scale-95 opacity-0"
-                             @wishlist-updated.window="if($event.detail.id === {{ $product->id }} && $event.detail.status === 'removed') removed = true">
-                            <x-product-card :product="$product" />
+                             @wishlist-updated.window="if($event.detail.id === {{ $product->id }} && $event.detail.status === 'removed') removed = true"
+                             @wishlist-cleared.window="removed = true">
+                            <x-product-card :product="$product" :can-remove="true" />
                         </div>
                     @endforeach
                 </div>
