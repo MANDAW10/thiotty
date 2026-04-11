@@ -39,7 +39,19 @@
                 </span>
             </div>
             
-            <form action="{{ route('cart.add', $product) }}" method="POST">
+            <form @submit.prevent="
+                fetch('{{ route('cart.add', $product) }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if(data.success) {
+                        $dispatch('cart-updated', { count: data.count });
+                        $dispatch('add-toast', { message: data.message, type: 'success' });
+                    }
+                })
+            ">
                 @csrf
                 <button type="submit" 
                         class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center shadow-xl shadow-slate-900/10 hover:bg-primary transition-all active:scale-95 group/btn overflow-hidden">

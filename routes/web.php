@@ -37,6 +37,17 @@ Route::get('/setup-final-admin', function () {
     }
 });
 
+// Update Premium Visuals (One-time run)
+Route::get('/update-visuals', function () {
+    try {
+        (new \Database\Seeders\CategorySeeder)->run();
+        (new \Database\Seeders\ProductSeeder)->run();
+        return "✨ Visuels Premium activés avec succès ! <br>Les images haute définition sont maintenant opérationnelles sur toute la plateforme.";
+    } catch (\Exception $e) {
+        return "Erreur lors de la mise à jour : " . $e->getMessage();
+    }
+});
+
 // Shop Routes
 Route::get('/', [ShopController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'shop'])->name('shop.index');
@@ -52,12 +63,12 @@ Route::get('/galerie', function () {
     // Auto-seed if empty for a seamless experience
     if (\App\Models\GalleryItem::count() === 0) {
         $items = [
-            ['image' => 'gobra.png', 'title' => 'Majesté Gobra', 'category' => 'Élevage', 'description' => 'Notre troupeau de zébus Gobra pur-sang sous le soleil du Sénégal.'],
-            ['image' => 'harvest.png', 'title' => 'Récolte du Matin', 'category' => 'Terroir', 'description' => 'Des produits frais, bio et locaux cueillis chaque jour pour votre table.'],
-            ['image' => 'poultry.png', 'title' => 'Innovation Avicole', 'category' => 'Culture', 'description' => 'Nos installations modernes garantissent une hygiène et une santé optimales.'],
-            ['image' => 'pasture.png', 'title' => 'Pâturages de Liberté', 'category' => 'Élevage', 'description' => 'Un élevage en plein air pour une qualité de viande et de lait incomparable.'],
-            ['image' => 'truck.png', 'title' => 'Fraîcheur Garantie', 'category' => 'Logistique', 'description' => 'Notre flotte logistique assure une livraison express en moins de 24h.'],
-            ['image' => 'honey.png', 'title' => 'L\'Or de Casamance', 'category' => 'Terroir', 'description' => 'Un miel pur et artisanal, pilier de notre engagement pour le terroir.'],
+            ['image' => 'https://images.unsplash.com/photo-1543160732-23700b1b13b1?q=80&w=1200&auto=format&fit=crop', 'title' => 'Majesté Gobra', 'category' => 'Élevage', 'description' => 'Notre troupeau de zébus Gobra pur-sang sous le soleil du Sénégal.'],
+            ['image' => 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1200&auto=format&fit=crop', 'title' => 'Récolte du Matin', 'category' => 'Terroir', 'description' => 'Des produits frais, bio et locaux cueillis chaque jour pour votre table.'],
+            ['image' => 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1200&auto=format&fit=crop', 'title' => 'Innovation Avicole', 'category' => 'Culture', 'description' => 'Nos installations modernes garantissent une hygiène et une santé optimales.'],
+            ['image' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200&auto=format&fit=crop', 'title' => 'Pâturages de Liberté', 'category' => 'Élevage', 'description' => 'Un élevage en plein air pour une qualité de viande et de lait incomparable.'],
+            ['image' => 'https://images.unsplash.com/photo-1586528116311-ad86d7c7ce80?q=80&w=1200&auto=format&fit=crop', 'title' => 'Fraîcheur Garantie', 'category' => 'Logistique', 'description' => 'Notre flotte logistique assure une livraison express en moins de 24h.'],
+            ['image' => 'https://images.unsplash.com/photo-1559114066-d5993c3bf08c?q=80&w=1200&auto=format&fit=crop', 'title' => 'L\'Or de Casamance', 'category' => 'Terroir', 'description' => 'Un miel pur et artisanal, pilier de notre engagement pour le terroir.'],
         ];
 
         foreach ($items as $item) {

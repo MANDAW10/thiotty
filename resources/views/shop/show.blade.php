@@ -114,7 +114,19 @@
                                </p>
 
                                <div class="space-y-4">
-                                   <form action="{{ route('cart.add', $product) }}" method="POST">
+                                   <form @submit.prevent="
+                                        fetch('{{ route('cart.add', $product) }}', {
+                                            method: 'POST',
+                                            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+                                        })
+                                        .then(r => r.json())
+                                        .then(data => {
+                                            if(data.success) {
+                                                $dispatch('cart-updated', { count: data.count });
+                                                $dispatch('add-toast', { message: data.message, type: 'success' });
+                                            }
+                                        })
+                                   ">
                                        @csrf
                                        <button type="submit" class="w-full btn-thiotty py-6 text-base tracking-widest shadow-2xl shadow-primary/20 flex items-center justify-center gap-4 group/btn">
                                            <span>Ajouter au panier</span>
@@ -180,7 +192,19 @@
                                     </a>
                                     
                                     <div class="absolute top-4 right-4 translate-x-12 group-hover:translate-x-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
-                                         <form action="{{ route('cart.add', $related) }}" method="POST">
+                                         <form @submit.prevent="
+                                            fetch('{{ route('cart.add', $related) }}', {
+                                                method: 'POST',
+                                                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+                                            })
+                                            .then(r => r.json())
+                                            .then(data => {
+                                                if(data.success) {
+                                                    $dispatch('cart-updated', { count: data.count });
+                                                    $dispatch('add-toast', { message: data.message, type: 'success' });
+                                                }
+                                            })
+                                         ">
                                             @csrf
                                             <button type="submit" class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all transform active:scale-90">
                                                 <i class="fas fa-plus"></i>

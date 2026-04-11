@@ -34,6 +34,15 @@ class CartController extends Controller
         }
 
         Session::put('cart', $cart);
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Produit ajouté au panier !',
+                'count' => count($cart)
+            ]);
+        }
+
         return back()->with('success', 'Produit ajouté au panier !');
     }
 

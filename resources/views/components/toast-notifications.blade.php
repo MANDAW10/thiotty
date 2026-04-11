@@ -41,7 +41,7 @@
             @endforeach
         @endif
     }
-}" 
+}" @add-toast.window="addToast($event.detail.message, $event.detail.type)"
 class="fixed top-6 right-6 z-[9999] flex flex-col gap-4 w-full max-w-[380px] pointer-events-none">
     
     <template x-for="toast in toasts" :key="toast.id">

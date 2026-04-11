@@ -10,6 +10,7 @@
     accent: localStorage.getItem('thiotty-accent') || '#E65100',
     accentRGB: localStorage.getItem('thiotty-accent-rgb') || '230, 81, 0',
     wishlistCount: {{ Auth::check() ? Auth::user()->wishlists()->count() : 0 }},
+    cartCount: {{ count(Session::get('cart', [])) }},
     toggleTheme() {
         this.theme = this.theme === 'light' ? 'dark' : 'light';
         localStorage.setItem('thiotty-theme', this.theme);
@@ -39,7 +40,7 @@
         }
         e.target.value = formatted;
     }
-}" @wishlist-updated.window="wishlistCount = $event.detail.count" @open-login.window="showLogin = true">
+}" @wishlist-updated.window="wishlistCount = $event.detail.count" @cart-updated.window="cartCount = $event.detail.count" @open-login.window="showLogin = true">
     <div class="container-custom">
         <!-- Top Header: Logo, Search, Actions -->
         <div class="header-top">
@@ -83,12 +84,9 @@
                     <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white"></span>
                 </a>
 
-                <!-- Cart -->
                 <a href="{{ route('cart.index') }}" class="relative p-2 text-slate-500 hover:text-primary transition-colors group">
                     <i class="fas fa-shopping-cart text-xl"></i>
-                    @php $cartCount = count(Session::get('cart', [])); @endphp
-                    <span class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white">
-                        {{ $cartCount }}
+                    <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white">
                     </span>
                 </a>
 

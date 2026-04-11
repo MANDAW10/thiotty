@@ -26,7 +26,7 @@ class ProductSeeder extends Seeder
                 'price' => 750000,
                 'stock' => 5,
                 'is_featured' => true,
-                'image' => 'vache1.png'
+                'image' => 'https://images.unsplash.com/photo-1543160732-23700b1b13b1?q=80&w=1200&auto=format&fit=crop'
             ],
             [
                 'category_id' => $categories['vaches'],
@@ -35,7 +35,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Vache métisse de haute qualité, excellente production laitière.',
                 'price' => 850000,
                 'stock' => 3,
-                'image' => 'vache2.png'
+                'image' => 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?q=80&w=1200&auto=format&fit=crop'
             ],
             // Chevaux
             [
@@ -46,7 +46,7 @@ class ProductSeeder extends Seeder
                 'price' => 1500000,
                 'stock' => 2,
                 'is_featured' => true,
-                'image' => 'cheval1.png'
+                'image' => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1200&auto=format&fit=crop'
             ],
             // Poulets
             [
@@ -56,7 +56,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Poussins de race Goliath, croissance rapide et très résistants.',
                 'price' => 45000,
                 'stock' => 20,
-                'image' => 'poussins.png'
+                'image' => 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1200&auto=format&fit=crop'
             ],
             [
                 'category_id' => $categories['poulets'],
@@ -65,7 +65,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Poulet bio élevé en plein air, abattu et nettoyé. Poids moyen 1.8kg.',
                 'price' => 4500,
                 'stock' => 100,
-                'image' => 'poulet_chair.png'
+                'image' => 'https://images.unsplash.com/photo-1569337776101-921350a4d53c?q=80&w=1200&auto=format&fit=crop'
             ],
             // Aliments
             [
@@ -75,7 +75,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Mélange nutritif complet pour bovins et ovins. Favorise la croissance et l\'engraissement.',
                 'price' => 14500,
                 'stock' => 200,
-                'image' => 'aliment.jpg'
+                'image' => 'https://images.unsplash.com/photo-1582560475093-ba66accbc424?q=80&w=1200&auto=format&fit=crop'
             ],
             // Lait
             [
@@ -85,7 +85,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Lait pur et naturel, trait le matin même. Sans conservateurs.',
                 'price' => 3500,
                 'stock' => 50,
-                'image' => 'lait.jpg'
+                'image' => 'https://images.unsplash.com/photo-1550583724-125581ff26b7?q=80&w=1200&auto=format&fit=crop'
             ],
         ];
 
@@ -105,7 +105,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Pintade savoureuse élevée traditionnellement. Idéal pour les repas de fête.',
                 'price' => 6500,
                 'stock' => 50,
-                'image' => 'pintade.jpg'
+                'image' => 'https://images.unsplash.com/photo-1569337776101-921350a4d53c?q=80&w=1200&auto=format&fit=crop'
             ],
             [
                 'category_id' => $categories['lait'] ?? 4,
@@ -115,7 +115,7 @@ class ProductSeeder extends Seeder
                 'price' => 8000,
                 'stock' => 100,
                 'is_featured' => true,
-                'image' => 'miel.jpg'
+                'image' => 'https://images.unsplash.com/photo-1559114066-d5993c3bf08c?q=80&w=1200&auto=format&fit=crop'
             ],
             [
                 'category_id' => $categories['vaches'] ?? 2,
@@ -124,7 +124,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Excellente race pour la production de lait et de fromage de qualité.',
                 'price' => 1200000,
                 'stock' => 2,
-                'image' => 'vache3.jpg'
+                'image' => 'https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=1200&auto=format&fit=crop'
             ]
         ];
 
