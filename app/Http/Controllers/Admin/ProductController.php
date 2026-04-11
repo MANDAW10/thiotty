@@ -31,20 +31,18 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'is_featured' => 'boolean',
         ]);
 
-        Product::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'category_id' => $request->category_id,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'description' => $request->description,
-            'image' => $request->image,
-            'is_featured' => $request->boolean('is_featured'),
-        ]);
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        Product::create($data);
 
         return redirect()->route('admin.products.index')->with('success', 'Produit créé avec succès.');
     }
@@ -63,20 +61,22 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
             'is_featured' => 'boolean',
         ]);
 
-        $product->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'category_id' => $request->category_id,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'description' => $request->description,
-            'image' => $request->image,
-            'is_featured' => $request->boolean('is_featured'),
-        ]);
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if it exists in storage
+            if ($product->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($product->image)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($data);
 
         return redirect()->route('admin.products.index')->with('success', 'Produit mis à jour.');
     }

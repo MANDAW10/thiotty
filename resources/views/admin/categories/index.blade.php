@@ -41,13 +41,32 @@
                         <p class="text-[8px] text-slate-400 font-bold mt-1 ml-1">Utilisé dans la navigation mobile.</p>
                     </div>
 
-                    <div class="space-y-1.5">
+                    <div class="space-y-1.5" x-data="{ photoName: null, photoPreview: null }">
                         <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Image (Optionnel)</label>
-                        <div class="relative group">
-                            <input type="file" name="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                            <div class="w-full bg-slate-50 border-2 border-dashed border-slate-100 rounded-2xl py-4 px-6 flex items-center justify-center gap-3 group-hover:border-primary/30 transition-all">
-                                <i class="fas fa-cloud-upload-alt text-slate-300 group-hover:text-primary transition-colors"></i>
-                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Choisir un fichier</span>
+                        
+                        <div class="mt-1 flex flex-col items-center">
+                            <input type="file" name="image" class="hidden" x-ref="image"
+                                   @change="
+                                        photoName = $refs.image.files[0].name;
+                                        const reader = new FileReader();
+                                        reader.onload = (e) => {
+                                            photoPreview = e.target.result;
+                                        };
+                                        reader.readAsDataURL($refs.image.files[0]);
+                                   ">
+                            
+                            <div class="relative group cursor-pointer w-full" @click.prevent="$refs.image.click()">
+                                <div class="w-full h-32 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50 group-hover:bg-primary/5">
+                                    <template x-if="!photoPreview">
+                                        <div class="text-center">
+                                            <i class="fas fa-image text-xl text-slate-300 mb-1"></i>
+                                            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Choisir</p>
+                                        </div>
+                                    </template>
+                                    <template x-if="photoPreview">
+                                        <img :src="photoPreview" class="w-full h-full object-cover">
+                                    </template>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -85,7 +104,7 @@
                                 <td class="px-8 py-6">
                                     <div class="flex items-center gap-4">
                                         @if($category->image)
-                                            <img src="{{ asset('storage/' . $category->image) }}" class="w-10 h-10 rounded-xl object-cover border border-slate-100">
+                                            <img src="{{ $category->image_url }}" class="w-10 h-10 rounded-xl object-cover border border-slate-100">
                                         @else
                                             <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
                                                 <i class="fas fa-folder text-slate-300"></i>

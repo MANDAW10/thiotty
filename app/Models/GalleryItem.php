@@ -17,6 +17,11 @@ class GalleryItem extends Model
     {
         return Attribute::make(
             get: function () {
+                // 1. Storage disk (new uploads)
+                if ($this->image && Storage::disk('public')->exists($this->image)) {
+                    return Storage::disk('public')->url($this->image);
+                }
+
                 if ($this->image) {
                     $localPath = 'img/gallery/' . $this->image;
                     

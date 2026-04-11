@@ -38,31 +38,39 @@
                     </div>
                 </div>
 
-                <div class="space-y-4 pt-4 border-t border-slate-50">
+                <div class="space-y-4 pt-4 border-t border-slate-50" x-data="{ photoName: null, photoPreview: '{{ $category->image_url }}' }">
                     <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Image de couverture</label>
-                    <div class="flex items-center gap-6">
-                        @if($category->image)
-                            <div class="relative group">
-                                <img src="{{ asset('storage/' . $category->image) }}" class="w-24 h-24 rounded-3xl object-cover border border-slate-100 shadow-sm">
-                                <div class="absolute inset-0 bg-black/40 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <i class="fas fa-image text-white text-xl"></i>
-                                </div>
-                            </div>
-                        @else
-                            <div class="w-24 h-24 bg-slate-100 rounded-3xl flex items-center justify-center text-slate-300">
-                                <i class="fas fa-image text-3xl"></i>
-                            </div>
-                        @endif
+                    <div class="flex flex-col sm:flex-row items-center gap-6">
                         
-                        <div class="flex-1">
-                            <div class="relative group">
-                                <input type="file" name="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                <div class="w-full bg-slate-100 border-2 border-dashed border-slate-200 rounded-3xl py-6 px-10 flex flex-col items-center justify-center gap-2 group-hover:border-primary/40 transition-all">
-                                    <i class="fas fa-cloud-upload-alt text-slate-300 group-hover:text-primary transition-colors text-2xl"></i>
-                                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Modifier l'image</span>
-                                </div>
+                        <div class="relative group cursor-pointer w-full sm:w-48" @click.prevent="$refs.image.click()">
+                            <input type="file" name="image" class="hidden" x-ref="image"
+                                   @change="
+                                        photoName = $refs.image.files[0].name;
+                                        const reader = new FileReader();
+                                        reader.onload = (e) => {
+                                            photoPreview = e.target.result;
+                                        };
+                                        reader.readAsDataURL($refs.image.files[0]);
+                                   ">
+                            
+                            <div class="w-full h-48 rounded-[2rem] bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50 group-hover:bg-primary/5">
+                                <template x-if="!photoPreview">
+                                    <div class="text-center">
+                                        <i class="fas fa-image text-2xl text-slate-300 mb-2"></i>
+                                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Choisir</p>
+                                    </div>
+                                </template>
+                                <template x-if="photoPreview">
+                                    <img :src="photoPreview" class="w-full h-full object-cover">
+                                </template>
                             </div>
-                            <p class="text-[9px] text-slate-400 font-bold mt-3 italic">Laissez vide pour conserver l'image actuelle.</p>
+                        </div>
+
+                        <div class="flex-1 space-y-2">
+                            <p class="text-[10px] font-black text-slate-900 uppercase tracking-widest">Nouvelle Image</p>
+                            <p class="text-[9px] text-slate-400 font-bold italic leading-relaxed">
+                                Cliquez sur la zone pour sélectionner une nouvelle image. Laissez vide pour conserver l'image actuelle.
+                            </p>
                         </div>
                     </div>
                 </div>

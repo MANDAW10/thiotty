@@ -11,19 +11,38 @@
     </div>
 
     <div class="max-w-2xl bg-white p-8 md:p-12 rounded-[40px] border border-slate-100 shadow-sm">
-        <form action="{{ route('admin.gallery.update', $item) }}" method="POST" class="space-y-8">
+        <form action="{{ route('admin.gallery.update', $item) }}" method="POST" enctype="multipart/form-data" class="space-y-8">
             @csrf
             @method('PUT')
             
-            <!-- Image Preview -->
-            <div class="w-full aspect-video rounded-3xl overflow-hidden border border-slate-100 bg-slate-50 mb-8">
-                <img src="{{ $item->image }}" class="w-full h-full object-cover">
-            </div>
-
-            <div class="space-y-1">
-                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">URL de l'Image</label>
-                <input type="text" name="image" value="{{ old('image', $item->image) }}" required
-                       class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all">
+            <div class="space-y-1" x-data="{ photoName: null, photoPreview: '{{ $item->image_url }}' }">
+                <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Image de la Galerie</label>
+                
+                <div class="mt-2 flex flex-col items-center">
+                    <input type="file" name="image" class="hidden" x-ref="image"
+                           @change="
+                                photoName = $refs.image.files[0].name;
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    photoPreview = e.target.result;
+                                };
+                                reader.readAsDataURL($refs.image.files[0]);
+                           ">
+                    
+                    <div class="relative group cursor-pointer w-full" @click.prevent="$refs.image.click()">
+                        <div class="w-full h-64 rounded-[2.5rem] bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50 group-hover:bg-primary/5">
+                            <template x-if="!photoPreview">
+                                <div class="text-center">
+                                    <i class="fas fa-image text-3xl text-slate-300 mb-3"></i>
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cliquer pour changer</p>
+                                </div>
+                            </template>
+                            <template x-if="photoPreview">
+                                <img :src="photoPreview" class="w-full h-full object-cover">
+                            </template>
+                        </div>
+                    </div>
+                </div>
                 <x-input-error :messages="$errors->get('image')" class="mt-2" />
             </div>
 

@@ -20,15 +20,14 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
             'icon' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $data = $request->all();
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
-            $data['image'] = $imagePath;
+            $data['image'] = $request->file('image')->store('categories', 'public');
         }
 
         Category::create($data);
@@ -46,15 +45,18 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'icon' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $data = $request->all();
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
-            $data['image'] = $imagePath;
+            // Delete old image if it exists in storage
+            if ($category->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($category->image)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($category->image);
+            }
+            $data['image'] = $request->file('image')->store('categories', 'public');
         }
 
         $category->update($data);

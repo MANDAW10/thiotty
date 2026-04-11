@@ -10,7 +10,7 @@
         <h1 class="text-3xl font-black text-slate-900">Modifier le produit</h1>
     </div>
 
-    <form action="{{ route('admin.products.update', $product) }}" method="POST" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         @csrf
         @method('PUT')
         
@@ -27,7 +27,7 @@
                 <div class="space-y-1">
                     <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Description Détaillée</label>
                     <textarea name="description" rows="8" required 
-                              class="w-full bg-slate-50 border-none rounded-3xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all">{{ old('description', $product->description) }}</textarea>
+                               class="w-full bg-slate-50 border-none rounded-3xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all">{{ old('description', $product->description) }}</textarea>
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
             </div>
@@ -54,13 +54,7 @@
         <!-- Right Column: Sidebar Meta -->
         <div class="space-y-8">
             <div class="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm space-y-6">
-                <!-- Preview Current Image -->
-                @if($product->image)
-                    <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden border border-slate-100 bg-slate-50 mb-4">
-                        <img src="{{ $product->image }}" class="w-full h-full object-cover">
-                    </div>
-                @endif
-
+                
                 <div class="space-y-1">
                     <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Catégorie</label>
                     <select name="category_id" required 
@@ -73,11 +67,37 @@
                     </select>
                 </div>
 
-                <div class="space-y-1">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">URL de l'Image</label>
-                    <input type="text" name="image" value="{{ old('image', $product->image) }}" 
-                           class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all">
+                <div class="space-y-1" x-data="{ photoName: null, photoPreview: '{{ $product->image_url }}' }">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Image du Produit</label>
+                    
+                    <div class="mt-2 flex flex-col items-center">
+                        <input type="file" name="image" class="hidden" x-ref="image"
+                               @change="
+                                    photoName = $refs.image.files[0].name;
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        photoPreview = e.target.result;
+                                    };
+                                    reader.readAsDataURL($refs.image.files[0]);
+                               ">
+                        
+                        <div class="relative group cursor-pointer w-full" @click.prevent="$refs.image.click()">
+                            <div class="w-full h-48 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50 group-hover:bg-primary/5">
+                                <template x-if="!photoPreview">
+                                    <div class="text-center">
+                                        <i class="fas fa-image text-2xl text-slate-300 mb-2"></i>
+                                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Cliquer pour changer</p>
+                                    </div>
+                                </template>
+                                <template x-if="photoPreview">
+                                    <img :src="photoPreview" class="w-full h-full object-cover">
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <x-input-error :messages="$errors->get('image')" class="mt-2" />
                 </div>
+>
 
                 <div class="pt-4 border-t border-slate-50">
                     <label class="flex items-center gap-3 cursor-pointer group">

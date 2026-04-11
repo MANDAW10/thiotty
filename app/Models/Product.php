@@ -41,7 +41,12 @@ class Product extends Model
                     'miel' => 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800',
                 ];
 
-                // Check for local image in public/img/products/
+                // 1. Check if the image is stored in the public disk (new authenticated uploads)
+                if ($this->image && Storage::disk('public')->exists($this->image)) {
+                    return Storage::disk('public')->url($this->image);
+                }
+
+                // 2. Check for legacy local image in public/img/products/
                 if ($this->image) {
                     $localPath = 'img/products/' . $this->image;
                     
@@ -55,9 +60,14 @@ class Product extends Model
                     if (file_exists(public_path($pngPath))) {
                         return asset($pngPath);
                     }
+
+                    // If it's a full URL, return it
+                    if (str_starts_with($this->image, 'http')) {
+                        return $this->image;
+                    }
                 }
 
-                // Match slug to find best fallback
+                // 3. Match slug to find best fallback
                 foreach ($fallbacks as $key => $url) {
                     if (str_contains($this->slug, $key)) {
                         return $url;
