@@ -15,25 +15,25 @@
                     <div class="fade-in mb-8 lg:mb-10">
                         <div class="inline-flex items-center gap-3 px-6 py-2.5 bg-primary/5 border border-primary/10 rounded-full">
                             <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(255,87,34,0.8)]"></span>
-                            <span class="text-[10px] sm:text-xs font-black text-primary uppercase tracking-[0.3em]">L'Art de l'Agriculture Sénégalaise</span>
+                            <span class="text-[10px] sm:text-xs font-black text-primary uppercase tracking-[0.3em]">{{ __('messages.art_agriculture') }}</span>
                         </div>
                     </div>
 
                     <h1 class="fade-in text-5xl sm:text-7xl lg:text-8xl font-black text-slate-900 leading-[1.05] mb-8 lg:mb-10 serif-heading">
-                        L'Excellence <br class="hidden lg:block">
-                        <span class="italic-font text-primary underline decoration-primary/10 underline-offset-[12px]">Signature</span>
+                        {{ explode(' ', __('messages.excellence_signature'))[0] }} <br class="hidden lg:block">
+                        <span class="italic-font text-primary underline decoration-primary/10 underline-offset-[12px]">{{ count(explode(' ', __('messages.excellence_signature'))) > 1 ? explode(' ', __('messages.excellence_signature'))[1] : '' }}</span>
                     </h1>
 
                     <p class="fade-in text-lg sm:text-xl text-slate-500 font-medium mb-10 lg:mb-14 max-w-xl leading-relaxed lg:mx-0 mx-auto" style="animation-delay: 0.2s">
-                        De nos pâturages à votre table. Découvrez la pureté des produits Thiotty, façonnés par la passion et l'innovation au cœur du Sénégal.
+                        {{ __('messages.hero_text') }}
                     </p>
 
                     <div class="fade-in flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6" style="animation-delay: 0.4s">
                         <a href="{{ route('shop.index') }}" class="btn-thiotty w-full sm:w-auto px-12 py-5 text-sm uppercase tracking-[0.2em] shadow-2xl">
-                            Explorer la Collection
+                            {{ __('messages.explore_collection') }}
                         </a>
                         <a href="#categories" class="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] text-slate-900 hover:text-primary transition-all">
-                            Découvrir les Univers
+                            {{ __('messages.discover_universes') }}
                             <i class="fas fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
                         </a>
                     </div>
@@ -59,9 +59,9 @@
         <div class="container-custom">
             <div class="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
                 <div class="max-w-xl">
-                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-4">Nos Univers</h2>
+                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-4">{{ __('messages.our_universes') }}</h2>
                     <h3 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight serif-heading">
-                        Parcourez nos <span class="italic-font">terroirs</span> d'exception.
+                        {{ explode(' ', __('messages.browse_terroir'))[0] }} <span class="italic-font">{{ count(explode(' ', __('messages.browse_terroir'))) > 1 ? implode(' ', array_slice(explode(' ', __('messages.browse_terroir')), 1)) : '' }}</span>
                     </h3>
                 </div>
                 <div class="mb-2">
@@ -72,17 +72,7 @@
             <!-- Luxury Horizontal Category Slider -->
             <div class="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-10 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
                 @php
-                    $catImages = [
-                        'vaches'     => 'https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=1000&auto=format&fit=crop',
-                        'chevaux'    => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1000&auto=format&fit=crop',
-                        'poulets'    => 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1000&auto=format&fit=crop',
-                        'terroir'    => 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1000&auto=format&fit=crop',
-                        'culture'    => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop',
-                        'logistique' => 'https://images.unsplash.com/photo-1586528116311-ad86d7c7ce80?q=80&w=1000&auto=format&fit=crop',
-                        'elevage'    => 'https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=1000&auto=format&fit=crop'
-                    ];
-
-                    $slugs = ['vaches', 'chevaux', 'poulets', 'terroir', 'culture', 'logistique', 'elevage'];
+                    $slugs = ['vaches', 'chevaux', 'poulets', 'aliments', 'lait'];
                 @endphp
 
                 @foreach($categories->sortBy(fn($c) => array_search($c->slug, $slugs)) as $cat)
@@ -91,11 +81,11 @@
                         
                         <!-- Premium Badge -->
                         <div class="absolute top-8 left-8 z-20 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[9px] font-black text-white uppercase tracking-[0.2em]">
-                            {{ $cat->products_count }} Articles
+                            {{ $cat->products_count }} {{ __('messages.articles_count') }}
                         </div>
 
-                        <img src="{{ $catImages[$cat->slug] ?? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop' }}" 
-                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="{{ $cat->name }}">
+                        <img src="{{ $cat->image_url }}" 
+                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="{{ $cat->display_name }}">
                         
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent"></div>
                         
@@ -103,9 +93,9 @@
                             <div class="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-white mb-4 border border-white/20">
                                 <i class="{{ $cat->icon }} text-base"></i>
                             </div>
-                            <h4 class="text-3xl font-black text-white serif-heading mb-2">{{ $cat->name }}</h4>
+                            <h4 class="text-3xl font-black text-white serif-heading mb-2">{{ $cat->display_name }}</h4>
                             <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Découvrir la gamme</span>
+                                <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{{ __('messages.discover_range') }}</span>
                                 <div class="w-8 h-[1px] bg-primary"></div>
                             </div>
                         </div>
@@ -130,20 +120,20 @@
                     </div>
                     <!-- Floating Stat Card -->
                     <div class="absolute -bottom-10 -right-10 md:right-10 bg-white p-10 rounded-[40px] shadow-2xl text-slate-900 border border-slate-100 hidden sm:block">
-                        <p class="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-2">Impact Local</p>
+                        <p class="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-2">{{ __('messages.local_impact') }}</p>
                         <h4 class="text-4xl font-black serif-heading">+500</h4>
-                        <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest">Producteurs Partenaires</p>
+                        <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest">{{ __('messages.partner_producers') }}</p>
                     </div>
                 </div>
 
                 <div class="order-1 lg:order-2">
-                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-6">Notre Héritage</h2>
+                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-6">{{ __('messages.our_heritage') }}</h2>
                     <h3 class="text-5xl md:text-6xl font-black mb-10 leading-tight serif-heading">
-                        La passion de la terre, <br>
-                        <span class="italic-font text-primary">réinventée.</span>
+                        {{ explode(',', __('messages.passion_label'))[0] }} <br>
+                        <span class="italic-font text-primary">{{ count(explode(',', __('messages.passion_label'))) > 1 ? explode(',', __('messages.passion_label'))[1] : '' }}</span>
                     </h3>
                     <p class="text-lg text-slate-400 font-medium leading-relaxed mb-12">
-                        Depuis notre création, Thiotty Enterprise s'engage à transformer le paysage agricole sénégalais. En alliant savoir-faire ancestral et technologies de pointe, nous vous offrons le meilleur du terroir, sans compromis sur l'excellence.
+                        {{ __('messages.heritage_text') }}
                     </p>
                     
                     <div class="grid grid-cols-2 gap-12">
@@ -151,15 +141,15 @@
                             <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-primary mb-6 border border-white/10">
                                 <i class="fas fa-certificate"></i>
                             </div>
-                            <h4 class="text-sm font-black uppercase tracking-widest mb-3">Qualité Certifiée</h4>
-                            <p class="text-xs text-slate-500 leading-relaxed font-bold">Protocoles de santé et d'hygiène stricts pour chaque produit.</p>
+                            <h4 class="text-sm font-black uppercase tracking-widest mb-3">{{ __('messages.quality_certified') }}</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed font-bold">{{ __('messages.quality_text') }}</p>
                         </div>
                         <div>
                             <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-primary mb-6 border border-white/10">
                                 <i class="fas fa-leaf"></i>
                             </div>
-                            <h4 class="text-sm font-black uppercase tracking-widest mb-3">100% Naturel</h4>
-                            <p class="text-xs text-slate-500 leading-relaxed font-bold">Produits directs du producteur, garantis sans additifs chimiques.</p>
+                            <h4 class="text-sm font-black uppercase tracking-widest mb-3">{{ __('messages.natural_label') }}</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed font-bold">{{ __('messages.natural_text') }}</p>
                         </div>
                     </div>
                 </div>
@@ -172,11 +162,13 @@
         <div class="container-custom">
             <div class="flex flex-col md:flex-row items-center justify-between mb-20 gap-8">
                 <div class="text-center md:text-left">
-                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-4">La Sélection</h2>
-                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 serif-heading">Récoltes du <span class="italic-font">Moment</span></h3>
+                    <h2 class="text-xs font-black text-primary uppercase tracking-[0.4em] mb-4">{{ __('messages.the_selection') }}</h2>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 serif-heading">
+                        {{ explode(' ', __('messages.harvest_of_moment'))[0] }} <span class="italic-font">{{ count(explode(' ', __('messages.harvest_of_moment'))) > 1 ? implode(' ', array_slice(explode(' ', __('messages.harvest_of_moment')), 1)) : '' }}</span>
+                    </h3>
                 </div>
                 <a href="{{ route('shop.index') }}" class="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] text-slate-900 hover:text-primary transition-all">
-                    Voir toute la collection
+                    {{ __('messages.view_collection') }}
                     <i class="fas fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
                 </a>
             </div>
@@ -193,17 +185,17 @@
     <section class="py-24 bg-white overflow-hidden">
         <div class="container-custom">
             <div class="text-center mb-16">
-                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-primary mb-4">Distinction Thiotty</h2>
-                <h3 class="text-4xl md:text-5xl font-black text-slate-900 serif-heading">La Confiance de <span class="italic-font underline decoration-primary/20 underline-offset-8">nos Clients</span></h3>
+                <h2 class="text-xs font-black uppercase tracking-[0.3em] text-primary mb-4">{{ __('messages.thiotty_distinction') }}</h2>
+                <h3 class="text-4xl md:text-5xl font-black text-slate-900 serif-heading">{{ explode(' ', __('messages.client_trust'))[0] }} {{ explode(' ', __('messages.client_trust'))[1] }} <span class="italic-font underline decoration-primary/20 underline-offset-8">{{ implode(' ', array_slice(explode(' ', __('messages.client_trust')), 2)) }}</span></h3>
             </div>
 
             <div class="relative">
                 <div class="flex animate-marquee py-12">
                     @php
                         $testimonials = [
-                            ['name' => 'Pape Mandaw Dieng', 'role' => 'Éleveur Pro', 'text' => "L'excellence Thiotty est sans pareille. La qualité du bétail transforme mon exploitation au quotidien."],
-                            ['name' => 'Abdou Lahad Geuye', 'role' => 'Gastronome', 'text' => "Un goût authentique retrouvé. Le lait frais de Thiotty est devenu un incontournable de mon petit-déjeuner."],
-                            ['name' => 'Fatou Fall', 'role' => 'Restauratrice', 'text' => "Nos clients redemandent de la volaille Thiotty. La fraîcheur et la tendreté sont toujours au rendez-vous."]
+                            ['name' => 'Pape Mandaw Dieng', 'role' => __('messages.testimonial_1_role'), 'text' => __('messages.testimonial_1_text')],
+                            ['name' => 'Abdou Lahad Geuye', 'role' => __('messages.testimonial_2_role'), 'text' => __('messages.testimonial_2_text')],
+                            ['name' => 'Fatou Fall', 'role' => __('messages.testimonial_3_role'), 'text' => __('messages.testimonial_3_text')]
                         ];
                     @endphp
 

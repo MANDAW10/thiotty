@@ -8,7 +8,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
     protected $fillable = ['name', 'slug', 'icon', 'image'];
-    protected $appends = ['image_url'];
+    protected $appends = ['image_url', 'display_name'];
+
+    /**
+     * Get the translated name.
+     */
+    protected function displayName(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: function () {
+                $key = 'messages.' . strtolower($this->slug);
+                return \Illuminate\Support\Facades\Lang::has($key) ? __($key) : $this->name;
+            }
+        );
+    }
 
     /**
      * Get the category's image URL with professional fallbacks.

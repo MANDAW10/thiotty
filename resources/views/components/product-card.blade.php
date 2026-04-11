@@ -25,8 +25,9 @@
                 this.isFavorited = (data.status === 'added');
                 this.wishlistLoading = false;
                 $dispatch('wishlist-updated', { count: data.count, id: {{ $product->id }}, status: data.status });
+                const msg = this.isFavorited ? '{{ __("messages.add_to_wishlist_success") }}' : '{{ __("messages.remove_from_wishlist_success") }}';
                 $dispatch('add-toast', { 
-                    message: this.isFavorited ? 'Ajouté aux favoris' : 'Retiré des favoris', 
+                    message: msg || (this.isFavorited ? 'Ajouté aux favoris' : 'Retiré des favoris'), 
                     type: 'success' 
                 });
             }).catch(() => this.wishlistLoading = false);
@@ -44,7 +45,7 @@
                     $dispatch('cart-updated', { count: data.count });
                     if (moveFromWishlist) {
                         this.toggleWishlist(); // Auto-remove from wishlist
-                        $dispatch('add-toast', { message: 'Produit transféré dans votre panier !', type: 'success' });
+                        $dispatch('add-toast', { message: '{{ __("messages.cart_transfer_success") }}', type: 'success' });
                     } else {
                         $dispatch('add-toast', { message: data.message, type: 'success' });
                     }
@@ -56,7 +57,7 @@
     <div class="relative aspect-square md:aspect-[4/5] rounded-[40px] overflow-hidden mb-6">
         <a href="{{ route('shop.product', $product->slug) }}">
             <img src="{{ $product->image_url }}" 
-                 alt="{{ $product->name }}" 
+                 alt="{{ $product->display_name }}" 
                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
         </a>
 
@@ -85,12 +86,12 @@
     <!-- Content -->
     <div class="px-3 pb-4">
         <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">
-            {{ $product->category->name }}
+            {{ $product->category->display_name }}
         </p>
         
         <a href="{{ route('shop.product', $product->slug) }}">
             <h3 class="serif-heading text-2xl font-bold text-slate-900 mb-6 group-hover:text-primary transition-colors line-clamp-1">
-                {{ $product->name }}
+                {{ $product->display_name }}
             </h3>
         </a>
 
@@ -107,7 +108,7 @@
                         class="flex-1 py-3 px-4 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary transition-all active:scale-95 flex items-center justify-center gap-2"
                         :disabled="cartLoading">
                     <i class="fas fa-shopping-basket" :class="cartLoading && 'animate-bounce'"></i>
-                    <span>Mettre au panier</span>
+                    <span>{{ __('messages.add_to_cart_detail') }}</span>
                 </button>
             @else
                 <button @click.prevent="addToCart()" 

@@ -4,26 +4,26 @@
         <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
         <div class="container-custom relative z-10">
             <nav class="flex mb-6 text-[10px] font-black text-slate-400 uppercase tracking-widest gap-2">
-                <a href="{{ route('home') }}" class="hover:text-primary transition-colors">Accueil</a>
+                <a href="{{ route('home') }}" class="hover:text-primary transition-colors">{{ __('messages.home') }}</a>
                 <span class="opacity-20">/</span>
-                <span class="text-slate-900">Mes Favoris</span>
+                <span class="text-slate-900">{{ __('messages.my_favorites') }}</span>
             </nav>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                 <div>
                     <h1 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight">
-                        Mes Favoris
+                        {{ __('messages.my_favorites') }}
                     </h1>
                     <p class="text-slate-500 font-medium max-w-lg mt-4">
-                        Retrouvez ici tous les produits que vous avez aimés.
+                        {{ __('messages.wishlist_desc') }}
                     </p>
                 </div>
                 <div class="flex flex-col sm:flex-row items-center gap-3">
                     <div class="bg-slate-50 px-6 py-4 rounded-3xl border border-slate-100 flex items-center gap-4">
-                        <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Coups de coeur :</span>
+                        <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">{{ __('messages.favorites_count') }} :</span>
                         <span class="text-xl font-black text-primary">{{ $wishlists->count() }}</span>
                     </div>
                     <button x-data="{ loading: false }" 
-                            @click="if(confirm('Vider toute votre liste ?')) {
+                            @click="if(confirm('{{ __('messages.clear_wishlist_confirm') }}')) {
                                 loading = true;
                                 fetch('{{ route('wishlist.clear') }}', {
                                     method: 'POST',
@@ -43,7 +43,7 @@
                             class="py-4 px-6 rounded-3xl bg-red-50 text-red-600 font-bold text-[10px] uppercase tracking-widest hover:bg-red-100 transition-all border border-red-100 flex items-center gap-2"
                             :class="loading && 'opacity-50 pointer-events-none'">
                         <i class="fas fa-trash-alt" :class="loading && 'animate-spin'"></i>
-                        Tout supprimer
+                        {{ __('messages.clear_all') }}
                     </button>
                 </div>
             </div>
@@ -68,10 +68,10 @@
                     <div class="w-20 h-20 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-6">
                         <i class="far fa-heart text-3xl"></i>
                     </div>
-                    <h3 class="text-xl font-black text-slate-900 mb-2">Votre liste est vide</h3>
-                    <p class="text-slate-400 font-medium mb-8">Vous n'avez pas encore ajouté de coups de coeur.</p>
+                    <h3 class="text-xl font-black text-slate-900 mb-2">{{ __('messages.wishlist_empty') }}</h3>
+                    <p class="text-slate-400 font-medium mb-8">{{ __('messages.wishlist_empty_desc') }}</p>
                     <a href="{{ route('shop.index') }}" class="btn-thiotty px-10 py-4 inline-block">
-                        Explorer la boutique
+                        {{ __('messages.explorer_boutique') ?? __('messages.view_catalog') }}
                     </a>
                 </div>
             @endif

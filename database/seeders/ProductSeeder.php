@@ -46,7 +46,7 @@ class ProductSeeder extends Seeder
                 'price' => 1500000,
                 'stock' => 2,
                 'is_featured' => true,
-                'image' => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1200&auto=format&fit=crop'
+                'image' => 'https://images.unsplash.com/photo-1598974357801-cbca100e4811?q=80&w=1200&auto=format&fit=crop'
             ],
             // Poulets
             [
@@ -105,7 +105,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Pintade savoureuse élevée traditionnellement. Idéal pour les repas de fête.',
                 'price' => 6500,
                 'stock' => 50,
-                'image' => 'https://images.unsplash.com/photo-1569337776101-921350a4d53c?q=80&w=1200&auto=format&fit=crop'
+                'image' => 'https://images.unsplash.com/photo-1612170153139-6f881ff067e0?q=80&w=1200&auto=format&fit=crop'
             ],
             [
                 'category_id' => $categories['lait'] ?? 4,
@@ -115,7 +115,7 @@ class ProductSeeder extends Seeder
                 'price' => 8000,
                 'stock' => 100,
                 'is_featured' => true,
-                'image' => 'https://images.unsplash.com/photo-1559114066-d5993c3bf08c?q=80&w=1200&auto=format&fit=crop'
+                'image' => 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?q=80&w=1200&auto=format&fit=crop'
             ],
             [
                 'category_id' => $categories['vaches'] ?? 2,
@@ -129,7 +129,10 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($extras as $extra) {
-            Product::updateOrCreate(['slug' => $extra['slug']], $extra);
+            Product::updateOrCreate(
+                ['slug' => $extra['slug']],
+                $extra
+            );
         }
     }
 }

@@ -24,13 +24,13 @@ class CategorySeeder extends Seeder
                 'name' => 'Chevaux', 
                 'icon' => 'fas fa-horse', 
                 'slug' => 'chevaux',
-                'image' => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1200&auto=format&fit=crop'
+                'image' => 'https://images.unsplash.com/photo-1598974357801-cbca100e4811?q=80&w=1200&auto=format&fit=crop'
             ],
             [
                 'name' => 'Poulets', 
                 'icon' => 'fas fa-egg', 
                 'slug' => 'poulets',
-                'image' => 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1200&auto=format&fit=crop'
+                'image' => 'https://images.unsplash.com/photo-1569337776101-921350a4d53c?q=80&w=1200&auto=format&fit=crop'
             ],
             [
                 'name' => 'Aliments de bétail', 

@@ -15,16 +15,24 @@ class CartService
     public function getItems()
     {
         if (Auth::check()) {
-            return Auth::user()->cartItems()->with('product')->get()->mapWithKeys(function ($item) {
-                return [$item->product_id => [
-                    'id' => $item->product_id,
-                    'name' => $item->product->name,
-                    'quantity' => $item->quantity,
-                    'price' => $item->product->price,
-                    'image' => $item->product->image_url,
-                    'slug' => $item->product->slug
-                ]];
-            })->toArray();
+            return Auth::user()->cartItems()
+                ->whereHas('product') // Only get items that have a valid product
+                ->with('product')
+                ->get()
+                ->mapWithKeys(function ($item) {
+                    if (!$item->product) return []; // Double safety
+                    
+                    return [$item->product_id => [
+                        'id' => $item->product_id,
+                        'name' => $item->product->name,
+                        'quantity' => $item->quantity,
+                        'price' => $item->product->price,
+                        'image' => $item->product->image_url,
+                        'slug' => $item->product->slug
+                    ]];
+                })
+                ->filter() // Remove any empty arrays from failed product loads
+                ->toArray();
         }
 
         return Session::get('cart', []);
@@ -133,19 +141,21 @@ class CartService
         if (empty($sessionCart)) return;
 
         foreach ($sessionCart as $productId => $details) {
+            // Validate that the product exists before migrating
+            $productExists = Product::where('id', $productId)->exists();
+            if (!$productExists) continue;
+
             $cartItem = CartItem::where('user_id', Auth::id())
                 ->where('product_id', $productId)
                 ->first();
 
             if ($cartItem) {
-                // If exists in DB, add quantities
-                $cartItem->increment('quantity', $details['quantity']);
+                $cartItem->increment('quantity', $details['quantity'] ?? 1);
             } else {
-                // If not in DB, create it
                 CartItem::create([
                     'user_id' => Auth::id(),
                     'product_id' => $productId,
-                    'quantity' => $details['quantity']
+                    'quantity' => $details['quantity'] ?? 1
                 ]);
             }
         }

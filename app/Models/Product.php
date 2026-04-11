@@ -20,6 +20,21 @@ class Product extends Model
         'is_featured'
     ];
 
+    protected $appends = ['image_url', 'display_name'];
+
+    /**
+     * Get the translated name.
+     */
+    protected function displayName(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $key = 'messages.' . str_replace('-', '_', $this->slug);
+                return \Illuminate\Support\Facades\Lang::has($key) ? __($key) : $this->name;
+            }
+        );
+    }
+
     /**
      * Get the product's image URL with professional fallbacks.
      */
