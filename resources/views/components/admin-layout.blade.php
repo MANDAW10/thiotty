@@ -123,7 +123,7 @@
         </div>
 
         <!-- Navigation -->
-        <nav class="flex-1 px-6 space-y-2 mt-8">
+        <nav class="flex-1 px-6 space-y-2 mt-8 overflow-y-auto custom-scrollbar">
             @foreach($navLinks as $link)
                 <a href="{{ route($link['route']) }}" 
                    class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all {{ request()->routeIs($link['pattern']) ? 'bg-[var(--primary)] text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:bg-[var(--bg-muted)] hover:text-[var(--text-main)]' }}">
