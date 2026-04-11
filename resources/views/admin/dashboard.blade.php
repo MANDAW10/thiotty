@@ -4,7 +4,10 @@
             <h1 class="text-2xl md:text-3xl font-black text-slate-900 mb-1">Tableau de Bord</h1>
             <p class="text-[9px] md:text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Thiotty Enterprise — Administration</p>
         </div>
-        <div class="flex w-full sm:w-auto">
+        <div class="flex flex-wrap w-full sm:w-auto gap-3">
+            <a href="{{ route('admin.alerts.create') }}" class="btn-thiotty-outline w-full sm:w-auto py-3 px-6 text-xs text-center">
+                <i class="fas fa-bullhorn mr-2"></i> Diffuser Alerte
+            </a>
             <a href="{{ route('admin.products.create') }}" class="btn-thiotty w-full sm:w-auto py-3 px-6 text-xs text-center">
                 <i class="fas fa-plus mr-2"></i> Nouveau Produit
             </a>
