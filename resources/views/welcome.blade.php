@@ -72,7 +72,7 @@
             <div class="bento-grid">
                 @php
                     $catImages = [
-                        'vaches'     => asset('img/categories/vaches.png'),
+                        'vaches'     => 'https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=1000&auto=format&fit=crop',
                         'chevaux'    => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1000&auto=format&fit=crop',
                         'poulets'    => 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1000&auto=format&fit=crop',
                         'terroir'    => 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1000&auto=format&fit=crop',
