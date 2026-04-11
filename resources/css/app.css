@@ -26,18 +26,18 @@
 
 /* Dark Mode Overrides (Explicit) */
 .dark {
-    --bg-page: #0F172A;
-    --bg-surface: #1E293B;
-    --bg-muted: #334155;
+    --bg-page: #050505; /* Deep Obsidian */
+    --bg-surface: #0D0D10; /* Midnight Onyx */
+    --bg-muted: #16161A; /* Stealth Slate */
     
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
-    --text-inverse: #0F172A;
+    --text-main: #F1F5F9;
+    --text-muted: #64748B;
+    --text-inverse: #050505;
     
-    --border-main: #334155;
-    --border-light: #1E293B;
+    --border-main: rgba(255, 255, 255, 0.06);
+    --border-light: rgba(255, 255, 255, 0.03);
 
-    --shadow-main: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+    --shadow-main: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
 }
 
 @layer base {
@@ -93,10 +93,18 @@
         @apply px-8 py-3 text-white font-bold rounded-xl transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2;
         box-shadow: var(--shadow-main);
     }
+    .dark .btn-thiotty {
+        box-shadow: 0 0 20px rgba(var(--shadow-color), 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
     .btn-thiotty-outline {
         border-color: var(--border-main);
         color: var(--text-main);
         @apply px-8 py-3 border-2 font-bold rounded-xl transition-all hover:border-[var(--primary)] hover:text-[var(--primary)] active:scale-95 flex items-center justify-center gap-2;
+    }
+    .dark .btn-thiotty-outline {
+        background-color: rgba(255, 255, 255, 0.02);
     }
 
     /* Category Card */
@@ -104,6 +112,10 @@
         background-color: var(--bg-surface);
         @apply p-6 rounded-2xl text-center transition-all hover:shadow-xl border border-transparent cursor-pointer;
     }
+    .dark .category-card {
+        background: radial-gradient(circle at top left, var(--bg-surface) 0%, var(--bg-page) 100%);
+    }
+
     .category-card:hover {
         border-color: rgba(var(--shadow-color), 0.1);
     }
@@ -119,6 +131,10 @@
         border-color: var(--border-main);
         @apply rounded-[32px] overflow-hidden border transition-all hover:shadow-2xl hover:-translate-y-1;
     }
+    .dark .product-card-thiotty {
+        background: radial-gradient(circle at 0% 0%, #151518 0%, var(--bg-surface) 100%);
+    }
+
     .product-card-img {
         background-color: var(--bg-muted);
         @apply aspect-[4/3] overflow-hidden relative;
@@ -152,6 +168,9 @@
     /* Luxury UI Helpers */
     .glass-panel-thiotty {
         @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-2xl;
+    }
+    .dark .glass-panel-thiotty {
+        @apply bg-black/60 backdrop-blur-2xl border-white/5;
     }
 
     .luxury-mask {
