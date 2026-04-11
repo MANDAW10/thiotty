@@ -51,6 +51,7 @@
            class="fixed inset-y-0 left-0 w-72 bg-[var(--bg-surface)] border-r border-[var(--border-main)] z-[70] lg:hidden flex flex-col">
         
         <!-- Mobile Logo Section -->
+        <!-- Mobile Logo Section -->
         <div class="p-6 flex items-center justify-between border-b border-[var(--border-main)]">
             <div class="flex items-center gap-3">
                 <x-application-logo :minimal="true" class="h-8 w-auto" />
@@ -61,21 +62,22 @@
             </button>
         </div>
 
+@php
+    $navLinks = [
+        ['route' => 'admin.dashboard', 'icon' => 'fa-th-large', 'label' => 'Dashboard', 'pattern' => 'admin.dashboard'],
+        ['route' => 'admin.alerts.index', 'icon' => 'fa-bullhorn', 'label' => 'Alertes', 'pattern' => 'admin.alerts.*'],
+        ['route' => 'admin.products.index', 'icon' => 'fa-box', 'label' => 'Produits', 'pattern' => 'admin.products.*'],
+        ['route' => 'admin.categories.index', 'icon' => 'fa-tags', 'label' => 'Catégories', 'pattern' => 'admin.categories.*'],
+        ['route' => 'admin.orders.index', 'icon' => 'fa-shopping-cart', 'label' => 'Commandes', 'pattern' => 'admin.orders.*'],
+        ['route' => 'admin.users.index', 'icon' => 'fa-users', 'label' => 'Utilisateurs', 'pattern' => 'admin.users.*'],
+        ['route' => 'admin.zones.index', 'icon' => 'fa-truck', 'label' => 'Zones', 'pattern' => 'admin.zones.*'],
+        ['route' => 'admin.gallery.index', 'icon' => 'fa-images', 'label' => 'Galerie', 'pattern' => 'admin.gallery.*'],
+        ['route' => 'admin.contacts.index', 'icon' => 'fa-envelope', 'label' => 'Messages', 'pattern' => 'admin.contacts.*'],
+    ];
+@endphp
+
         <!-- Navigation Links (Copied from Desktop Sidebar for consistency) -->
         <nav class="flex-1 px-4 space-y-1.5 mt-6 overflow-y-auto custom-scrollbar">
-            @php
-                $navLinks = [
-                    ['route' => 'admin.dashboard', 'icon' => 'fa-th-large', 'label' => 'Dashboard', 'pattern' => 'admin.dashboard'],
-                    ['route' => 'admin.products.index', 'icon' => 'fa-box', 'label' => 'Produits', 'pattern' => 'admin.products.*'],
-                    ['route' => 'admin.categories.index', 'icon' => 'fa-tags', 'label' => 'Catégories', 'pattern' => 'admin.categories.*'],
-                    ['route' => 'admin.orders.index', 'icon' => 'fa-shopping-cart', 'label' => 'Commandes', 'pattern' => 'admin.orders.*'],
-                    ['route' => 'admin.users.index', 'icon' => 'fa-users', 'label' => 'Utilisateurs', 'pattern' => 'admin.users.*'],
-                    ['route' => 'admin.zones.index', 'icon' => 'fa-truck', 'label' => 'Zones', 'pattern' => 'admin.zones.*'],
-                    ['route' => 'admin.gallery.index', 'icon' => 'fa-images', 'label' => 'Galerie', 'pattern' => 'admin.gallery.*'],
-                    ['route' => 'admin.contacts.index', 'icon' => 'fa-envelope', 'label' => 'Messages', 'pattern' => 'admin.contacts.*'],
-                    ['route' => 'admin.alerts.index', 'icon' => 'fa-bullhorn', 'label' => 'Alertes', 'pattern' => 'admin.alerts.*'],
-                ];
-            @endphp
 
             @foreach($navLinks as $link)
                 <a href="{{ route($link['route']) }}" 
