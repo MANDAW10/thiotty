@@ -267,3 +267,18 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }
+
+/* Hotwire Turbo Transitions */
+.turbo-progress-bar {
+    height: 4px;
+    background: var(--primary);
+}
+
+@keyframes turboFadeIn {
+    from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+main {
+    animation: turboFadeIn 0.4s ease-out;
+}

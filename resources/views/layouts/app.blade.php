@@ -41,6 +41,16 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Hotwire Turbo for SPA-like navigation -->
+        <script src="https://unpkg.com/@hotwired/turbo@8.0.0/dist/turbo.es2017-umd.js" defer></script>
+        <style>
+            .turbo-progress-bar {
+                height: 3px;
+                background-color: #FF5722;
+                box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+            }
+        </style>
     </head>
     <body class="font-sans antialiased text-slate-900 bg-[#FDFDFD]">
         <!-- Global Toast Notifications -->
