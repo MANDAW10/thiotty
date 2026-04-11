@@ -53,13 +53,13 @@
     <div class="py-12 lg:py-24 bg-slate-50/30 min-h-[60vh]">
         <div class="container-custom">
             @if($wishlists->count() > 0)
-                <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-10">
+                <div class="flex flex-col gap-4 md:gap-6">
                     @foreach($wishlists as $wishlist)
                         @php $product = $wishlist->product; @endphp
                         <div x-data="{ removed: false }" x-show="!removed" x-transition:leave="transition ease-in duration-300 transform scale-95 opacity-0"
                              @wishlist-updated.window="if($event.detail.id === {{ $product->id }} && $event.detail.status === 'removed') removed = true"
                              @wishlist-cleared.window="removed = true">
-                            <x-product-card :product="$product" :wishlist-mode="true" />
+                            <x-wishlist-item :product="$product" />
                         </div>
                     @endforeach
                 </div>
