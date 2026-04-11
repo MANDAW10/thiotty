@@ -5,26 +5,15 @@
     showProfile: {{ (Auth::check() && ($errors->any() || session('status') === 'profile-updated')) ? 'true' : 'false' }},
     showResetForm: {{ (session('identity_verified') || session('reset_user_id') || $errors->has('password_reset_success') || $errors->has('reset_error')) ? 'true' : 'false' }},
     showMobileMenu: false,
-    showSettings: false,
-    theme: localStorage.getItem('thiotty-theme') || 'light',
-    accent: localStorage.getItem('thiotty-accent') || '#E65100',
-    accentRGB: localStorage.getItem('thiotty-accent-rgb') || '230, 81, 0',
+    accent: localStorage.getItem('thiotty-accent') || '#FF5722',
+    accentRGB: localStorage.getItem('thiotty-accent-rgb') || '255, 87, 34',
     wishlistCount: {{ Auth::check() ? Auth::user()->wishlists()->count() : 0 }},
     cartCount: {{ count(Session::get('cart', [])) }},
-    toggleTheme() {
-        this.theme = this.theme === 'light' ? 'dark' : 'light';
-        localStorage.setItem('thiotty-theme', this.theme);
-        if (this.theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    },
     setAccent(color, rgb) {
         this.accent = color;
         this.accentRGB = rgb;
         localStorage.setItem('thiotty-accent', color);
-    localStorage.setItem('thiotty-accent-rgb', rgb);
+        localStorage.setItem('thiotty-accent-rgb', rgb);
         document.documentElement.style.setProperty('--primary', color);
         document.documentElement.style.setProperty('--shadow-color', rgb);
     },
@@ -72,10 +61,6 @@
                 </div>
                 
 
-                <!-- Settings (Hidden on mobile) -->
-                <button @click="showSettings = true" class="hidden sm:block p-2 text-slate-500 hover:text-primary transition-colors hover:rotate-90 transition-transform duration-500">
-                    <i class="fas fa-cog text-xl"></i>
-                </button>
 
                 <!-- Wishlist (Hidden on mobile) -->
                 <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth 
@@ -167,9 +152,9 @@
              x-transition:leave="transition ease-in duration-200 transform"
              x-transition:leave-start="translate-x-0"
              x-transition:leave-end="-translate-x-full"
-             class="absolute inset-y-0 left-0 w-[280px] bg-white dark:bg-[var(--bg-surface)] shadow-2xl flex flex-col border-r dark:border-white/5">
+             class="absolute inset-y-0 left-0 w-[280px] bg-white shadow-2xl flex flex-col border-r border-slate-50">
             
-            <div class="p-6 border-b border-slate-50 dark:border-white/5 flex justify-between items-center">
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
                 <x-application-logo class="h-8 w-auto" />
                 <button @click="showMobileMenu = false" class="text-slate-400 hover:text-primary transition-colors">
                     <i class="fas fa-times text-xl"></i>
@@ -220,11 +205,7 @@
                         </div>
                         <span x-show="wishlistCount > 0" x-text="wishlistCount" class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-black"></span>
                     </a>
-                    <button @click="showMobileMenu = false; showSettings = true" class="w-full flex items-center gap-4 p-4 rounded-2xl text-slate-600 hover:bg-slate-50 font-bold transition-all">
-                        <i class="fas fa-palette w-5"></i>
-                        <span>Réglages Thème</span>
-                    </button>
-                </div>
+                 </div>
             </nav>
 
             <div class="p-6 border-t border-slate-50">
@@ -602,95 +583,8 @@
                 <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100">
                     @include('profile.partials.update-password-form')
                 </div>
-            </div>
-        </div>
-    </div>
-    @endauth
-
-    <!-- Theme Settings Modal -->
-    <div x-show="showSettings" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[1001] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-         style="display: none;"
-         @click.self="showSettings = false">
-        
-        <div x-show="showSettings"
-             x-transition:enter="transition ease-out duration-300 transform"
-             x-transition:enter-start="opacity-0 scale-95 translate-x-12"
-             x-transition:enter-end="opacity-100 scale-100 translate-x-0"
-             class="bg-[var(--bg-surface)] w-full max-w-sm rounded-[40px] p-8 md:p-10 shadow-2xl relative border border-[var(--border-main)]">
-            
-            <button @click="showSettings = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-
-            <div class="mb-8 text-center">
-                <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-palette text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-black text-[var(--text-main)] mb-1">Apparence</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest px-8">Personnalisez votre expérience</p>
-            </div>
-
-            <div class="space-y-8">
-                <!-- Theme Select -->
-                <div class="space-y-4">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Mode d'affichage</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button @click="if(theme === 'dark') toggleTheme()" 
-                                :class="theme === 'light' ? 'bg-primary text-white' : 'bg-[var(--bg-muted)] text-slate-400'"
-                                class="flex flex-col items-center gap-2 p-4 rounded-2xl transition-all border border-transparent">
-                            <i class="fas fa-sun text-lg"></i>
-                            <span class="text-[10px] font-black uppercase tracking-widest">Clair</span>
-                        </button>
-                        <button @click="if(theme === 'light') toggleTheme()" 
-                                :class="theme === 'dark' ? 'bg-primary text-white' : 'bg-[var(--bg-muted)] text-slate-400'"
-                                class="flex flex-col items-center gap-2 p-4 rounded-2xl transition-all border border-transparent">
-                            <i class="fas fa-moon text-lg"></i>
-                            <span class="text-[10px] font-black uppercase tracking-widest">Sombre</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Color Select -->
-                <div class="space-y-4">
-                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Couleur d'accentuation</label>
-                    <div class="grid grid-cols-4 gap-4">
-                        <!-- Orange -->
-                        <button @click="setAccent('#E65100', '230, 81, 0')" 
-                                class="w-full aspect-square rounded-full flex items-center justify-center transition-all bg-[#E65100] hover:scale-110 shadow-lg shadow-orange-500/20"
-                                :class="accent === '#E65100' ? 'ring-4 ring-orange-500/30' : ''">
-                            <i x-show="accent === '#E65100'" class="fas fa-check text-white text-xs"></i>
-                        </button>
-                        <!-- Green -->
-                        <button @click="setAccent('#1B5E20', '27, 94, 32')" 
-                                class="w-full aspect-square rounded-full flex items-center justify-center transition-all bg-[#1B5E20] hover:scale-110 shadow-lg shadow-green-500/20"
-                                :class="accent === '#1B5E20' ? 'ring-4 ring-green-500/30' : ''">
-                            <i x-show="accent === '#1B5E20'" class="fas fa-check text-white text-xs"></i>
-                        </button>
-                        <!-- Blue -->
-                        <button @click="setAccent('#0284c7', '2, 132, 199')" 
-                                class="w-full aspect-square rounded-full flex items-center justify-center transition-all bg-[#0284c7] hover:scale-110 shadow-lg shadow-blue-500/20"
-                                :class="accent === '#0284c7' ? 'ring-4 ring-blue-500/30' : ''">
-                            <i x-show="accent === '#0284c7'" class="fas fa-check text-white text-xs"></i>
-                        </button>
-                        <!-- Purple -->
-                        <button @click="setAccent('#7c3aed', '124, 58, 237')" 
-                                class="w-full aspect-square rounded-full flex items-center justify-center transition-all bg-[#7c3aed] hover:scale-110 shadow-lg shadow-purple-500/20"
-                                :class="accent === '#7c3aed' ? 'ring-4 ring-purple-500/30' : ''">
-                            <i x-show="accent === '#7c3aed'" class="fas fa-check text-white text-xs"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-10 pt-6 border-t border-[var(--border-main)] text-center text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                Interface Thiotty v2.5 ✨
+ </header>
+5 ✨
             </div>
         </div>
     </div>

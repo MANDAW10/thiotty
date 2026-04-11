@@ -24,22 +24,6 @@
     --shadow-main: 0 10px 30px -5px rgba(var(--shadow-color), 0.15);
 }
 
-/* Dark Mode Overrides (Explicit) */
-.dark {
-    --bg-page: #0B0E14; /* Midnight Slate Deep */
-    --bg-surface: #111827; /* Royal Navy Slate */
-    --bg-muted: #1F2937; /* Tactical Slate */
-    
-    --text-main: #F1F5F9;
-    --text-muted: #94A3B8;
-    --text-inverse: #0B0E14;
-    
-    --border-main: rgba(255, 255, 255, 0.08); /* More visible on Slate */
-    --border-light: rgba(255, 255, 255, 0.04);
-
-    --shadow-main: 0 40px 80px -20px rgba(0, 0, 0, 0.6);
-}
-
 @layer base {
     body {
         background-color: var(--bg-page);
@@ -93,27 +77,17 @@
         @apply px-8 py-3 text-white font-bold rounded-xl transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2;
         box-shadow: var(--shadow-main);
     }
-    .dark .btn-thiotty {
-        box-shadow: 0 0 20px rgba(var(--shadow-color), 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
 
     .btn-thiotty-outline {
         border-color: var(--border-main);
         color: var(--text-main);
         @apply px-8 py-3 border-2 font-bold rounded-xl transition-all hover:border-[var(--primary)] hover:text-[var(--primary)] active:scale-95 flex items-center justify-center gap-2;
     }
-    .dark .btn-thiotty-outline {
-        background-color: rgba(255, 255, 255, 0.02);
-    }
 
     /* Category Card */
     .category-card {
         background-color: var(--bg-surface);
         @apply p-6 rounded-2xl text-center transition-all hover:shadow-xl border border-transparent cursor-pointer;
-    }
-    .dark .category-card {
-        background: radial-gradient(circle at top left, var(--bg-surface) 0%, var(--bg-page) 100%);
     }
 
     .category-card:hover {
@@ -130,9 +104,6 @@
         background-color: var(--bg-surface);
         border-color: var(--border-main);
         @apply rounded-[32px] overflow-hidden border transition-all hover:shadow-2xl hover:-translate-y-1;
-    }
-    .dark .product-card-thiotty {
-        background: radial-gradient(circle at 0% 0%, #151518 0%, var(--bg-surface) 100%);
     }
 
     .product-card-img {
@@ -168,9 +139,6 @@
     /* Luxury UI Helpers */
     .glass-panel-thiotty {
         @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-2xl;
-    }
-    .dark .glass-panel-thiotty {
-        @apply bg-black/60 backdrop-blur-2xl border-white/5;
     }
 
     .luxury-mask {

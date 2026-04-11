@@ -52,7 +52,7 @@ class="fixed top-auto bottom-6 left-4 right-4 md:top-6 md:bottom-auto md:right-6
              x-transition:leave="transition ease-in duration-200 transform"
              x-transition:leave-start="opacity-100 translate-x-0 scale-100"
              x-transition:leave-end="opacity-0 translate-x-12 scale-90"
-             class="pointer-events-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50 shadow-2xl rounded-[24px] p-4 flex items-center gap-4 group relative overflow-hidden">
+             class="pointer-events-auto bg-white/80 backdrop-blur-xl border border-slate-200/50 shadow-2xl rounded-[24px] p-4 flex items-center gap-4 group relative overflow-hidden">
             
             <!-- Type-specific Icon & Background Glow -->
             <div :class="{
@@ -72,11 +72,11 @@ class="fixed top-auto bottom-6 left-4 right-4 md:top-6 md:bottom-auto md:right-6
                     'text-primary': toast.type === 'error',
                     'text-blue-600': toast.type === 'info'
                 }" class="text-[9px] font-black uppercase tracking-[0.2em] mb-0.5" x-text="toast.type === 'error' ? 'Attention' : 'Notification'"></p>
-                <p class="text-xs font-bold text-slate-800 dark:text-slate-100 leading-tight break-words" x-text="toast.message"></p>
+                <p class="text-xs font-bold text-slate-800 leading-tight break-words" x-text="toast.message"></p>
             </div>
 
             <!-- Close Action -->
-            <button @click="removeToast(toast.id)" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+            <button @click="removeToast(toast.id)" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-slate-600 hover:bg-slate-100 transition-all">
                 <i class="fas fa-times text-[10px]"></i>
             </button>
 
