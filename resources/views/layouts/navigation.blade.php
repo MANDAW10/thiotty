@@ -5,6 +5,7 @@
     showProfile: {{ (Auth::check() && ($errors->any() || session('status') === 'profile-updated')) ? 'true' : 'false' }},
     showResetForm: {{ (session('identity_verified') || session('reset_user_id') || $errors->has('password_reset_success') || $errors->has('reset_error')) ? 'true' : 'false' }},
     showMobileMenu: false,
+    showSettings: false,
     accent: localStorage.getItem('thiotty-accent') || '#FF5722',
     accentRGB: localStorage.getItem('thiotty-accent-rgb') || '255, 87, 34',
     wishlistCount: {{ Auth::check() ? Auth::user()->wishlists()->count() : 0 }},
@@ -61,6 +62,10 @@
                 </div>
                 
 
+                <!-- Settings (Theme) -->
+                <button @click="showSettings = true" class="p-2 text-slate-500 hover:text-primary transition-colors group">
+                    <i class="fas fa-cog text-xl transition-transform group-hover:rotate-90"></i>
+                </button>
 
                 <!-- Wishlist -->
                 <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth 
@@ -587,4 +592,116 @@
         </div>
     </div>
     @endauth
+    <!-- Settings Modal (Theme Only) -->
+    <div x-show="showSettings" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+         style="display: none;"
+         @click.self="showSettings = false">
+        
+        <div x-show="showSettings"
+             x-transition:enter="transition ease-out duration-300 transform"
+             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+             class="bg-white w-full max-w-md rounded-[40px] p-8 shadow-2xl relative overflow-hidden">
+            
+            <button @click="showSettings = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+
+            <div class="mb-8">
+                <div class="flex items-center gap-4 mb-2">
+                    <div class="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                        <i class="fas fa-palette text-lg"></i>
+                    </div>
+                    <h2 class="text-2xl font-black text-slate-900 tracking-tight">Personnalisation</h2>
+                </div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-14">Choisissez votre couleur d'accentuation</p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- Thiotty Orange -->
+                    <button @click="setAccent('#FF5722', '255, 87, 34')" 
+                            class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
+                            :class="accent === '#FF5722' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
+                        <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #FF5722"></div>
+                        <span class="text-[9px] font-black uppercase tracking-widest" :class="accent === '#FF5722' ? 'text-primary' : 'text-slate-400'">Thiotty</span>
+                        <div x-show="accent === '#FF5722'" class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[8px] border-2 border-white shadow-sm">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </button>
+
+                    <!-- Emerald -->
+                    <button @click="setAccent('#10B981', '16, 185, 129')" 
+                            class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
+                            :class="accent === '#10B981' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
+                        <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #10B981"></div>
+                        <span class="text-[9px] font-black uppercase tracking-widest" :class="accent === '#10B981' ? 'text-primary' : 'text-slate-400'">Naturel</span>
+                        <div x-show="accent === '#10B981'" class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[8px] border-2 border-white shadow-sm">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </button>
+
+                    <!-- Indigo -->
+                    <button @click="setAccent('#4F46E5', '79, 70, 229')" 
+                            class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
+                            :class="accent === '#4F46E5' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
+                        <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #4F46E5"></div>
+                        <span class="text-[9px] font-black uppercase tracking-widest" :class="accent === '#4F46E5' ? 'text-primary' : 'text-slate-400'">Royal</span>
+                        <div x-show="accent === '#4F46E5'" class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[8px] border-2 border-white shadow-sm">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </button>
+
+                    <!-- Rose -->
+                    <button @click="setAccent('#E11D48', '225, 29, 72')" 
+                            class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
+                            :class="accent === '#E11D48' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
+                        <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #E11D48"></div>
+                        <span class="text-[9px] font-black uppercase tracking-widest" :class="accent === '#E11D48' ? 'text-primary' : 'text-slate-400'">Élégant</span>
+                        <div x-show="accent === '#E11D48'" class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[8px] border-2 border-white shadow-sm">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </button>
+
+                    <!-- Amber -->
+                    <button @click="setAccent('#D97706', '217, 119, 6')" 
+                            class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
+                            :class="accent === '#D97706' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
+                        <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #D97706"></div>
+                        <span class="text-[9px] font-black uppercase tracking-widest" :class="accent === '#D97706' ? 'text-primary' : 'text-slate-400'">Chaud</span>
+                        <div x-show="accent === '#D97706'" class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[8px] border-2 border-white shadow-sm">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </button>
+
+                    <!-- Slate -->
+                    <button @click="setAccent('#475569', '71, 85, 105')" 
+                            class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
+                            :class="accent === '#475569' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
+                        <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #475569"></div>
+                        <span class="text-[9px] font-black uppercase tracking-widest" :class="accent === '#475569' ? 'text-primary' : 'text-slate-400'">Minimal</span>
+                        <div x-show="accent === '#475569'" class="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[8px] border-2 border-white shadow-sm">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="mt-8 p-6 bg-slate-50 rounded-[32px] border border-slate-100 flex items-center gap-5 translate-y-2">
+                    <div class="p-3 bg-white rounded-2xl shadow-sm text-primary">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <p class="text-[10px] leading-relaxed font-bold text-slate-500 uppercase tracking-widest">
+                        La couleur sélectionnée s'appliquera instantanément à tous les boutons et éléments d'interaction du site.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>
