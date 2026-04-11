@@ -62,9 +62,9 @@
                 
 
 
-                <!-- Wishlist (Hidden on mobile) -->
+                <!-- Wishlist -->
                 <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth 
-                   class="hidden sm:block relative p-2 text-slate-500 hover:text-primary transition-colors group">
+                   class="relative p-2 text-slate-500 hover:text-primary transition-colors group">
                     <i class="fas fa-heart text-xl"></i>
                     <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white"></span>
                 </a>
