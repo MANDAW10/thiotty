@@ -1,46 +1,56 @@
 <x-app-layout>
     <!-- Immersive Cinematic Hero -->
-    <section class="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background Image with Parallax-ready feel -->
-        <div class="absolute inset-0 z-0">
-            <img src="{{ asset('img/banners/hero-main.png') }}" class="w-full h-full object-cover scale-105 animate-[slowZoom_20s_ease-in-out_infinite]" alt="Thiotty Cinematic Hero">
-            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/20 to-slate-900/60 transition-colors duration-1000"></div>
-        </div>
+    <!-- Sophisticated Split Hero -->
+    <section class="relative py-12 lg:py-24 overflow-hidden bg-white">
+        <!-- Decoration background -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-slate-50/50 -z-10 hidden lg:block"></div>
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -z-10"></div>
 
-        <div class="container-custom relative z-10 text-center">
-            <div class="max-w-4xl mx-auto flex flex-col items-center">
-                <!-- Premium Badge -->
-                <div class="fade-in mb-8">
-                    <div class="inline-flex items-center gap-3 px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
-                        <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(255,87,34,0.8)]"></span>
-                        <span class="text-[10px] sm:text-xs font-black text-white uppercase tracking-[0.3em]">L'Art de l'Agriculture Sénégalaise</span>
+        <div class="container-custom relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                
+                <!-- Left Content -->
+                <div class="text-center lg:text-left">
+                    <!-- Premium Badge -->
+                    <div class="fade-in mb-8 lg:mb-10">
+                        <div class="inline-flex items-center gap-3 px-6 py-2.5 bg-primary/5 border border-primary/10 rounded-full">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(255,87,34,0.8)]"></span>
+                            <span class="text-[10px] sm:text-xs font-black text-primary uppercase tracking-[0.3em]">L'Art de l'Agriculture Sénégalaise</span>
+                        </div>
+                    </div>
+
+                    <h1 class="fade-in text-5xl sm:text-7xl lg:text-8xl font-black text-slate-900 leading-[1.05] mb-8 lg:mb-10 serif-heading">
+                        L'Excellence <br class="hidden lg:block">
+                        <span class="italic-font text-primary underline decoration-primary/10 underline-offset-[12px]">Signature</span>
+                    </h1>
+
+                    <p class="fade-in text-lg sm:text-xl text-slate-500 font-medium mb-10 lg:mb-14 max-w-xl leading-relaxed lg:mx-0 mx-auto" style="animation-delay: 0.2s">
+                        De nos pâturages à votre table. Découvrez la pureté des produits Thiotty, façonnés par la passion et l'innovation au cœur du Sénégal.
+                    </p>
+
+                    <div class="fade-in flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6" style="animation-delay: 0.4s">
+                        <a href="{{ route('shop.index') }}" class="btn-thiotty w-full sm:w-auto px-12 py-5 text-sm uppercase tracking-[0.2em] shadow-2xl">
+                            Explorer la Collection
+                        </a>
+                        <a href="#categories" class="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.3em] text-slate-900 hover:text-primary transition-all">
+                            Découvrir les Univers
+                            <i class="fas fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
+                        </a>
                     </div>
                 </div>
 
-                <h1 class="fade-in text-5xl sm:text-7xl md:text-8xl font-black text-white leading-tight mb-8 serif-heading drop-shadow-2xl">
-                    L'Excellence <br class="hidden md:block">
-                    <span class="italic-font text-primary">Signature</span>
-                </h1>
-
-                <p class="fade-in text-lg sm:text-xl text-white/90 font-medium mb-12 max-w-2xl leading-relaxed drop-shadow-lg" style="animation-delay: 0.2s">
-                    De nos pâturages à votre table. Découvrez la pureté des produits Thiotty, façonnés par la passion et l'innovation.
-                </p>
-
-                <div class="fade-in flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto" style="animation-delay: 0.4s">
-                    <a href="{{ route('shop.index') }}" class="btn-thiotty w-full sm:w-auto px-12 py-5 text-sm uppercase tracking-[0.2em]">
-                        Explorer la Collection
-                    </a>
-                    <a href="#categories" class="px-12 py-5 text-white text-sm font-black uppercase tracking-[0.2em] bg-white/5 backdrop-blur-md border border-white/20 rounded-xl hover:bg-white hover:text-slate-900 transition-all active:scale-95">
-                        Découvrir les Univers
-                    </a>
+                <!-- Right Visual -->
+                <div class="fade-in relative" style="animation-delay: 0.3s">
+                    <div class="relative z-10 rounded-[60px] overflow-hidden shadow-[0_40px_100px_-15px_rgba(0,0,0,0.2)] aspect-[4/5] lg:aspect-auto lg:h-[700px]">
+                        <img src="{{ asset('img/banners/hero-main.png') }}" class="w-full h-full object-cover scale-105 animate-[slowZoom_20s_ease-in-out_infinite]" alt="Thiotty Vision">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
+                    </div>
+                    
+                    <!-- Floating Highlight -->
+                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-secondary/10 rounded-full blur-[80px] -z-10"></div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-white/40 animate-bounce">
-            <span class="text-[10px] font-black uppercase tracking-widest">Scroll</span>
-            <div class="w-px h-12 bg-gradient-to-b from-white/40 to-transparent"></div>
+            </div>
         </div>
     </section>
 
