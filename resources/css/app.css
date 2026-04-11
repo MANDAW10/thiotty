@@ -232,3 +232,29 @@
 .animate-delivery {
     animation: drive 20s linear infinite;
 }
+
+/* Bento Grid System */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .bento-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 400px);
+    }
+
+    .bento-span-2 { grid-column: span 2; }
+    .bento-row-span-1 { grid-row: span 1; }
+    .bento-row-span-2 { grid-row: span 2; }
+}
+
+.bento-item {
+    @apply relative h-full rounded-[3rem] overflow-hidden shadow-2xl shadow-slate-200/50 transition-all duration-700 bg-slate-100;
+}
+
+.bento-badge {
+    @apply absolute top-8 left-8 z-20 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[9px] font-black text-white uppercase tracking-[0.2em];
+}

@@ -59,32 +59,50 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bento-grid">
                 @php
-                    // Custom image mapping for categories if icons/images are not enough
                     $catImages = [
-                        'élevage' => 'https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=1000&auto=format&fit=crop',
-                        'terroir' => 'https://images.unsplash.com/photo-1533614767277-33116314389f?q=80&w=1000&auto=format&fit=crop',
-                        'poulets' => 'https://images.unsplash.com/photo-1518492104633-c3ed9e7a7be7?q=80&w=1000&auto=format&fit=crop',
-                        'lait' => 'https://images.unsplash.com/photo-1550583724-1d552d4adad2?q=80&w=1000&auto=format&fit=crop'
+                        'vaches'     => asset('img/categories/vaches.png'),
+                        'chevaux'    => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1000&auto=format&fit=crop',
+                        'poulets'    => 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1000&auto=format&fit=crop',
+                        'terroir'    => 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1000&auto=format&fit=crop',
+                        'culture'    => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop',
+                        'logistique' => 'https://images.unsplash.com/photo-1586528116311-ad86d7c7ce80?q=80&w=1000&auto=format&fit=crop',
+                        'elevage'    => 'https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=1000&auto=format&fit=crop'
                     ];
+
+                    $slugs = ['vaches', 'chevaux', 'poulets', 'terroir', 'culture', 'logistique', 'elevage'];
                 @endphp
 
-                @foreach($categories as $cat)
+                @foreach($categories->sortBy(fn($c) => array_search($c->slug, $slugs)) as $cat)
+                    @php
+                        $spanClass = '';
+                        if($cat->slug === 'vaches') $spanClass = 'bento-span-2 bento-row-span-2';
+                        elseif($cat->slug === 'chevaux') $spanClass = 'bento-span-2 bento-row-span-1';
+                        else $spanClass = 'bento-span-1 bento-row-span-1';
+                    @endphp
+
                     <a href="{{ route('shop.category', $cat->slug) }}" 
-                       class="group relative h-[450px] rounded-[40px] overflow-hidden shadow-2xl shadow-slate-200/50 hover-glare transition-all flex flex-col justify-end p-10">
-                        <img src="{{ $cat->image ? asset('storage/' . $cat->image) : ($catImages[strtolower($cat->name)] ?? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop') }}" 
-                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="{{ $cat->name }}">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                       class="bento-item {{ $spanClass }} group hover-glare">
                         
-                        <div class="relative z-10 transform transition-transform duration-500 group-hover:-translate-y-4">
-                            <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center text-white mb-6 border border-white/20">
-                                <i class="{{ $cat->icon }} text-xl"></i>
+                        <!-- Premium Badge -->
+                        <div class="bento-badge">
+                            {{ $cat->products_count }} Articles
+                        </div>
+
+                        <img src="{{ $catImages[$cat->slug] ?? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop' }}" 
+                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="{{ $cat->name }}">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent"></div>
+                        
+                        <div class="absolute bottom-10 left-10 right-10 z-10 transform transition-transform duration-500 group-hover:-translate-y-4">
+                            <div class="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-white mb-4 border border-white/20">
+                                <i class="{{ $cat->icon }} text-base"></i>
                             </div>
-                            <h4 class="text-3xl font-black text-white serif-heading mb-2">{{ $cat->name }}</h4>
-                            <div class="flex items-center gap-3">
-                                <span class="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Découvrir la gamme</span>
-                                <div class="w-8 h-[1px] bg-primary group-hover:w-16 transition-all duration-500"></div>
+                            <h4 class="text-2xl md:text-3xl font-black text-white serif-heading mb-2">{{ $cat->name }}</h4>
+                            <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Découvrir la gamme</span>
+                                <div class="w-8 h-[1px] bg-primary"></div>
                             </div>
                         </div>
                     </a>

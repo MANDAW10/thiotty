@@ -10,7 +10,7 @@ class ShopController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::withCount('products')->get();
         $featuredProducts = Product::where('is_featured', true)->latest()->take(8)->get();
         $recentProducts = Product::latest()->take(8)->get();
 
