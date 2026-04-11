@@ -132,60 +132,9 @@
                              <a href="{{ route('shop.index') }}" class="mt-10 inline-block text-[10px] font-black text-primary uppercase tracking-[0.3em] hover:underline">Réinitialiser tout</a>
                         </div>
                     @else
-                        <div class="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-10">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-12">
                             @foreach($products as $product)
-                                <div class="product-card-thiotty group bg-white p-2 sm:p-4 rounded-[32px] sm:rounded-[40px] border border-slate-50 hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-700">
-                                    <div class="product-card-img h-48 sm:h-80 rounded-[24px] sm:rounded-[32px] overflow-hidden relative mb-4 sm:mb-6">
-                                        <a href="{{ route('shop.product', $product->slug) }}">
-                                            <img src="{{ $product->image_url }}" 
-                                                 alt="{{ $product->name }}" 
-                                                 class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
-                                        </a>
-
-                                        <!-- Hover Actions (Desktop) -->
-                                        <div class="hidden sm:flex absolute top-4 right-4 flex flex-col gap-2 translate-x-16 group-hover:translate-x-0 transition-all duration-500 opacity-0 group-hover:opacity-100">
-                                            <form action="{{ route('cart.add', $product) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all transform active:scale-95">
-                                                    <i class="fas fa-plus"></i>
-                                                </button>
-                                            </form>
-                                            <button @click="$dispatch('wishlist-toggle', { id: {{ $product->id }} })" class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center text-slate-400 hover:text-red-500 transition-all transform active:scale-95">
-                                                <i class="far fa-heart"></i>
-                                            </button>
-                                        </div>
-                                        
-                                        <!-- Wishlist (Mobile) -->
-                                        <button @click="$dispatch('wishlist-toggle', { id: {{ $product->id }} })" class="sm:hidden absolute top-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-slate-400 text-xs active:text-red-500 transition-all">
-                                            <i class="far fa-heart"></i>
-                                        </button>
-
-                                        <div class="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 bg-white/60 backdrop-blur-md px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[7px] sm:text-[9px] font-black uppercase text-slate-900 border border-white/50">
-                                            {{ $catName = \Illuminate\Support\Str::limit($product->category->name, 10) }}
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="px-1 sm:px-2 pb-1 sm:pb-2">
-                                        <a href="{{ route('shop.product', $product->slug) }}">
-                                            <h3 class="text-sm sm:text-xl font-black text-slate-900 mb-1 sm:mb-2 truncate group-hover:text-primary transition-colors tracking-tighter">
-                                                {{ $product->name }}
-                                            </h3>
-                                        </a>
-                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
-                                            <div class="text-lg sm:text-2xl font-black text-slate-900 tracking-tighter">
-                                                {{ number_format($product->price, 0, ',', ' ') }} <small class="text-[8px] sm:text-[10px] italic opacity-30 font-black ml-1 uppercase">Xof</small>
-                                            </div>
-                                            
-                                            <!-- Add Button (Mobile) -->
-                                            <form action="{{ route('cart.add', $product) }}" method="POST" class="sm:hidden">
-                                                @csrf
-                                                <button type="submit" class="w-full py-3 bg-slate-50 rounded-xl text-[8px] font-black uppercase tracking-widest text-primary flex items-center justify-center gap-2 active:bg-primary active:text-white transition-all">
-                                                    <i class="fas fa-shopping-basket"></i> Ajouter
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                                <x-product-card :product="$product" />
                             @endforeach
                         </div>
 

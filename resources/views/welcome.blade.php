@@ -183,39 +183,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                 @foreach($featuredProducts as $product)
-                    <div class="bg-white rounded-[48px] p-4 border border-slate-100 shadow-xl shadow-slate-200/50 group hover:-translate-y-2 transition-all duration-500">
-                        <div class="aspect-[4/5] rounded-[40px] overflow-hidden relative mb-8">
-                            <img src="{{ $product->image_url }}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="{{ $product->name }}">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
-                            
-                            <!-- Premium Wishlist -->
-                            <div class="absolute top-6 right-6" x-data="{ isFavorited: false }">
-                                <button @click.prevent="isFavorited = !isFavorited" 
-                                        :class="isFavorited ? 'bg-primary text-white' : 'bg-white/80 text-primary backdrop-blur-md'"
-                                        class="w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-lg active:scale-90">
-                                    <i :class="isFavorited ? 'fas fa-heart' : 'far fa-heart'"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="px-4 pb-4">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">{{ $product->category->name }}</p>
-                            <h4 class="text-xl font-black text-slate-900 mb-4 line-clamp-1 serif-heading">{{ $product->name }}</h4>
-                            
-                            <div class="flex items-center justify-between">
-                                <div class="text-xl font-black text-primary">
-                                    {{ number_format($product->price, 0, ',', ' ') }} 
-                                    <span class="text-[10px] uppercase font-bold text-primary/60">CFA</span>
-                                </div>
-                                <form action="{{ route('cart.add', $product) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="w-10 h-10 bg-slate-900 text-white rounded-xl shadow-xl flex items-center justify-center hover:bg-primary transition-all active:scale-90">
-                                        <i class="fas fa-plus text-xs"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <x-product-card :product="$product" />
                 @endforeach
             </div>
         </div>
