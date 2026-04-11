@@ -79,7 +79,9 @@
             </main>
 
             <!-- Floating WhatsApp Button -->
-            <a href="https://wa.me/221783577431" target="_blank" 
+            <a x-data="{ isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) }"
+               :href="isMobile ? 'whatsapp://send?phone=221783577431' : 'https://wa.me/221783577431'" 
+               target="_blank" 
                class="fixed bottom-20 right-4 sm:bottom-28 sm:right-8 z-50 w-12 h-12 sm:w-16 sm:h-16 bg-[#25D366] text-white rounded-[18px] sm:rounded-[24px] shadow-2xl flex items-center justify-center transition-all transform hover:scale-110 active:scale-95 border-[3px] sm:border-4 border-white group">
                 <i class="fab fa-whatsapp text-2xl sm:text-3xl"></i>
                 <div class="absolute right-full mr-4 bg-white px-4 py-2 rounded-xl shadow-xl border border-slate-50 text-slate-800 text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none">
@@ -90,6 +92,7 @@
             <!-- Chatbot Component -->
             <div x-data="{ 
                 open: false, 
+                isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
                 messages: [
                     { role: 'bot', text: '{{ addslashes(__('messages.assistant_greeting')) }}' }
                 ],
@@ -107,7 +110,8 @@
                     } else if (action === 'products') {
                         window.location.href = '{{ route('shop.index') }}';
                     } else if (action === 'whatsapp') {
-                        window.open('https://wa.me/221783577431', '_blank');
+                        const link = this.isMobile ? 'whatsapp://send?phone=221783577431' : 'https://wa.me/221783577431';
+                        window.open(link, '_blank');
                     }
                 }
             }" class="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50">
@@ -188,7 +192,11 @@
                         <div class="flex items-center gap-6">
                             <a href="#" class="text-slate-400 hover:text-primary transition-colors"><i class="fab fa-facebook-f"></i></a>
                             <a href="#" class="text-slate-400 hover:text-primary transition-colors"><i class="fab fa-instagram"></i></a>
-                            <a href="https://wa.me/221783577431" class="text-slate-400 hover:text-primary transition-colors"><i class="fab fa-whatsapp"></i></a>
+                            <a x-data="{ isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) }"
+                               :href="isMobile ? 'whatsapp://send?phone=221783577431' : 'https://wa.me/221783577431'" 
+                               class="text-slate-400 hover:text-primary transition-colors">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
