@@ -92,9 +92,15 @@
                             </div>
  
                             <div class="space-y-4">
-                                <a href="{{ route('checkout.index') }}" class="btn-thiotty w-full py-4 md:py-5 text-base md:text-lg">
-                                    Valider la commande
-                                </a>
+                                @auth
+                                    <a href="{{ route('checkout.index') }}" class="btn-thiotty w-full py-4 md:py-5 text-base md:text-lg text-center block">
+                                        Valider la commande
+                                    </a>
+                                @else
+                                    <button type="button" @click="$dispatch('open-login')" class="btn-thiotty w-full py-4 md:py-5 text-base md:text-lg">
+                                        Valider la commande
+                                    </button>
+                                @endauth
                                 <a href="{{ route('shop.index') }}" class="flex items-center justify-center gap-2 text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">
                                     <i class="fas fa-arrow-left text-[8px] md:text-[10px]"></i> Continuer les achats
                                 </a>
