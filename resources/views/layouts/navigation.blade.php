@@ -281,9 +281,9 @@
                 <div class="space-y-1.5">
                     <label for="modal_email" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email</label>
                     <input id="modal_email" name="email" type="email" 
-                           class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                           class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 text-base md:text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
                            placeholder="votre@email.com"
-                           required autofocus>
+                           required autofocus shadow-none>
                 </div>
 
                 <div class="space-y-1.5">
@@ -293,7 +293,7 @@
                     </div>
                     <div class="relative group">
                         <input id="modal_password" name="password" :type="showPass ? 'text' : 'password'" 
-                               class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-6 pr-12 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                               class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-6 pr-12 font-bold text-slate-900 text-base md:text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
                                placeholder="••••••••"
                                required>
                         <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-400 hover:text-primary transition-colors">
@@ -361,7 +361,7 @@
                     <div class="space-y-1.5">
                         <label for="modal_reg_name" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Nom</label>
                         <input id="modal_reg_name" name="name" type="text" 
-                               class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                               class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
                                required placeholder="Nom complet" value="{{ old('name') }}">
                     </div>
                     <div class="space-y-1.5">
@@ -369,7 +369,7 @@
                         <div class="relative flex items-center">
                             <span class="absolute left-3 text-[10px] font-black text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">+221</span>
                             <input id="modal_reg_phone" name="phone" type="tel" x-on:input="formatPhone($event)" 
-                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-14 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300" 
+                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-14 pr-4 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300" 
                                    required placeholder="7x xxx xx" value="{{ old('phone') }}">
                         </div>
                     </div>
@@ -378,7 +378,7 @@
                 <div class="space-y-1.5">
                     <label for="modal_reg_email" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email</label>
                     <input id="modal_reg_email" name="email" type="email" 
-                           class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                           class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
                            required placeholder="votre@email.com" value="{{ old('email') }}">
                 </div>
 
@@ -387,7 +387,7 @@
                         <label for="modal_reg_password" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Pass</label>
                         <div class="relative group">
                             <input id="modal_reg_password" name="password" :type="showPass ? 'text' : 'password'" 
-                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
                                    required placeholder="••••">
                             <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
                                 <i class="fas text-[10px]" :class="showPass ? 'fa-eye-slash' : 'fa-eye'"></i>
@@ -398,7 +398,7 @@
                         <label for="modal_reg_confirm" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Confirmer</label>
                         <div class="relative group">
                             <input id="modal_reg_confirm" name="password_confirmation" :type="showConfirm ? 'text' : 'password'" 
-                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
                                    required placeholder="••••">
                             <button type="button" @click="showConfirm = !showConfirm" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
                                 <i class="fas text-[10px]" :class="showConfirm ? 'fa-eye-slash' : 'fa-eye'"></i>
