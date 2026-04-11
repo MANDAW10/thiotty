@@ -26,7 +26,7 @@
         @foreach($items as $item)
             <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden group">
                 <div class="relative aspect-square overflow-hidden bg-slate-50">
-                    <img src="{{ $item->image }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <img src="{{ $item->image_url }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                         <a href="{{ route('admin.gallery.edit', $item) }}" class="w-10 h-10 bg-white text-slate-900 rounded-xl flex items-center justify-center hover:bg-primary hover:text-white transition-all">
                             <i class="fas fa-edit"></i>

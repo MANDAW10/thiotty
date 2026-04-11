@@ -41,7 +41,7 @@
                             <td class="p-8">
                                 <div class="flex items-center gap-4">
                                     <div class="w-14 h-14 rounded-2xl overflow-hidden bg-slate-50 shrink-0 border border-slate-100">
-                                        <img src="{{ $product->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=200&auto=format&fit=crop' }}" 
+                                        <img src="{{ $product->image_url }}" 
                                              class="w-full h-full object-cover">
                                     </div>
                                     <div>
