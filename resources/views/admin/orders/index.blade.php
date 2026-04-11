@@ -127,31 +127,8 @@
         </div>
 
         @if($orders->hasPages())
-            <div class="px-8 py-6 bg-slate-50/50 border-t border-slate-50 flex items-center justify-between">
-                <div class="text-[10px] font-black uppercase text-slate-400 tracking-widest">
-                    Page {{ $orders->currentPage() }} sur {{ $orders->lastPage() }}
-                </div>
-                <div class="flex items-center gap-2">
-                    @if($orders->onFirstPage())
-                        <span class="px-4 py-2 bg-slate-100 text-slate-300 rounded-lg text-[10px] font-black uppercase tracking-widest cursor-not-allowed">
-                            <i class="fas fa-chevron-left mr-2"></i> Précédent
-                        </span>
-                    @else
-                        <a href="{{ $orders->previousPageUrl() }}" class="px-4 py-2 bg-white border border-slate-100 text-slate-600 hover:text-primary hover:border-primary rounded-lg text-[10px] font-black uppercase tracking-widest transition-all shadow-sm">
-                            <i class="fas fa-chevron-left mr-2"></i> Précédent
-                        </a>
-                    @endif
-
-                    @if($orders->hasMorePages())
-                        <a href="{{ $orders->nextPageUrl() }}" class="px-4 py-2 bg-slate-900 border border-slate-900 text-white hover:bg-primary hover:border-primary rounded-lg text-[10px] font-black uppercase tracking-widest transition-all shadow-lg active:scale-95">
-                            Suivant <i class="fas fa-chevron-right ml-2"></i>
-                        </a>
-                    @else
-                        <span class="px-4 py-2 bg-slate-100 text-slate-300 rounded-lg text-[10px] font-black uppercase tracking-widest cursor-not-allowed">
-                            Suivant <i class="fas fa-chevron-right ml-2"></i>
-                        </span>
-                    @endif
-                </div>
+            <div class="px-8 py-6 bg-slate-50/50 border-t border-slate-50">
+                {{ $orders->links() }}
             </div>
         @endif
     </div>

@@ -59,8 +59,29 @@
                     @endforeach
                 </div>
                 
-                <div class="mt-16">
-                    {{ $orders->links() }}
+                <div class="mt-20 flex justify-between items-center bg-[#FCFCFC] p-4 rounded-[32px] border border-slate-50">
+                    <div>
+                        @if($orders->onFirstPage())
+                            <span class="px-8 py-4 rounded-2xl bg-slate-50 text-slate-300 font-black text-[10px] uppercase tracking-widest cursor-not-allowed">Précédent</span>
+                        @else
+                            <a href="{{ $orders->previousPageUrl() }}" class="px-8 py-4 rounded-2xl bg-white text-slate-900 border border-slate-100 hover:border-primary hover:text-primary transition-all font-black text-[10px] uppercase tracking-widest shadow-sm">Précédent</a>
+                        @endif
+                    </div>
+
+                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-50">
+                        Page {{ $orders->currentPage() }}
+                    </div>
+
+                    <div>
+                        @if($orders->hasMorePages())
+                            <a href="{{ $orders->nextPageUrl() }}" class="px-8 py-4 rounded-2xl bg-slate-900 text-white hover:bg-primary transition-all font-black text-[10px] uppercase tracking-widest shadow-xl shadow-slate-900/10 flex items-center gap-3 group">
+                                Suivant
+                                <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                            </a>
+                        @else
+                            <span class="px-8 py-4 rounded-2xl bg-slate-50 text-slate-300 font-black text-[10px] uppercase tracking-widest cursor-not-allowed">Suivant</span>
+                        @endif
+                    </div>
                 </div>
             @endif
         </div>
