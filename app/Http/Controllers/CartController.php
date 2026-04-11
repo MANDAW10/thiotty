@@ -28,7 +28,7 @@ class CartController extends Controller
                 "name" => $product->name,
                 "quantity" => 1,
                 "price" => $product->price,
-                "image" => $product->image,
+                "image" => $product->image_url,
                 "slug" => $product->slug
             ];
         }
