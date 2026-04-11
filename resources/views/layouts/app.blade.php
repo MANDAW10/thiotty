@@ -70,7 +70,7 @@
             </div>
         @endif
 
-        <div class="min-h-screen">
+        <div class="min-h-screen" x-data="{}">
             @include('layouts.navigation')
 
             <!-- Page Content -->
