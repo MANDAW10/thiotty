@@ -258,3 +258,12 @@
 .bento-badge {
     @apply absolute top-8 left-8 z-20 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[9px] font-black text-white uppercase tracking-[0.2em];
 }
+
+/* Scroll Utilities */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}

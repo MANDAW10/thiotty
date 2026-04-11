@@ -69,7 +69,8 @@
                 </div>
             </div>
 
-            <div class="bento-grid">
+            <!-- Luxury Horizontal Category Slider -->
+            <div class="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-10 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
                 @php
                     $catImages = [
                         'vaches'     => 'https://images.unsplash.com/photo-1547496502-affa22d38842?q=80&w=1000&auto=format&fit=crop',
@@ -85,18 +86,11 @@
                 @endphp
 
                 @foreach($categories->sortBy(fn($c) => array_search($c->slug, $slugs)) as $cat)
-                    @php
-                        $spanClass = '';
-                        if($cat->slug === 'vaches') $spanClass = 'bento-span-2 bento-row-span-2';
-                        elseif($cat->slug === 'chevaux') $spanClass = 'bento-span-2 bento-row-span-1';
-                        else $spanClass = 'bento-span-1 bento-row-span-1';
-                    @endphp
-
                     <a href="{{ route('shop.category', $cat->slug) }}" 
-                       class="bento-item {{ $spanClass }} group hover-glare">
+                       class="flex-none w-[85%] md:w-[450px] snap-center h-[500px] md:h-[600px] relative rounded-[3rem] overflow-hidden shadow-2xl shadow-slate-200/50 transition-all duration-700 bg-slate-100 group hover-glare">
                         
                         <!-- Premium Badge -->
-                        <div class="bento-badge">
+                        <div class="absolute top-8 left-8 z-20 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[9px] font-black text-white uppercase tracking-[0.2em]">
                             {{ $cat->products_count }} Articles
                         </div>
 
@@ -109,7 +103,7 @@
                             <div class="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-white mb-4 border border-white/20">
                                 <i class="{{ $cat->icon }} text-base"></i>
                             </div>
-                            <h4 class="text-2xl md:text-3xl font-black text-white serif-heading mb-2">{{ $cat->name }}</h4>
+                            <h4 class="text-3xl font-black text-white serif-heading mb-2">{{ $cat->name }}</h4>
                             <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500">
                                 <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Découvrir la gamme</span>
                                 <div class="w-8 h-[1px] bg-primary"></div>
