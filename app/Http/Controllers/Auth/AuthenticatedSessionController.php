@@ -29,9 +29,11 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         if ($request->user()->is_admin) {
+            app(\App\Services\CartService::class)->migrateSessionToUser();
             return redirect()->route('admin.dashboard')->with('success', 'Connexion réussie administrateur !');
         }
 
+        app(\App\Services\CartService::class)->migrateSessionToUser();
         return redirect()->intended(route('home', absolute: false))->with('success', 'Connexion réussie !');
     }
 

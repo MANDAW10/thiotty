@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\CartService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
+    protected $cartService;
+
+    public function __construct(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
+
     public function index()
     {
-        $cart = Session::get('cart', []);
+        $cart = $this->cartService->getItems();
         $total = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
         
         return view('cart.index', compact('cart', 'total'));
@@ -18,22 +25,8 @@ class CartController extends Controller
 
     public function add(Product $product)
     {
-        $cart = Session::get('cart', []);
-        $id = $product->id;
-
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-        } else {
-            $cart[$id] = [
-                "name" => $product->name,
-                "quantity" => 1,
-                "price" => $product->price,
-                "image" => $product->image_url,
-                "slug" => $product->slug
-            ];
-        }
-
-        Session::put('cart', $cart);
+        $this->cartService->add($product);
+        $cart = $this->cartService->getItems();
 
         if (request()->ajax() || request()->wantsJson()) {
             return response()->json([
@@ -48,12 +41,8 @@ class CartController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $cart = Session::get('cart', []);
-        $id = $product->id;
-
-        if (isset($cart[$id]) && $request->quantity > 0) {
-            $cart[$id]['quantity'] = $request->quantity;
-            Session::put('cart', $cart);
+        if ($request->quantity > 0) {
+            $this->cartService->update($product, $request->quantity);
             return back()->with('success', 'Panier mis à jour !');
         }
 
@@ -62,14 +51,7 @@ class CartController extends Controller
 
     public function remove(Product $product)
     {
-        $cart = Session::get('cart', []);
-        $id = $product->id;
-
-        if (isset($cart[$id])) {
-            unset($cart[$id]);
-            Session::put('cart', $cart);
-        }
-
+        $this->cartService->remove($product);
         return back()->with('success', 'Produit retiré du panier.');
     }
 }

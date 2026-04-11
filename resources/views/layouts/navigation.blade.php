@@ -6,10 +6,10 @@
     showResetForm: {{ (session('identity_verified') || session('reset_user_id') || $errors->has('password_reset_success') || $errors->has('reset_error')) ? 'true' : 'false' }},
     showMobileMenu: false,
     showSettings: false,
-    accent: localStorage.getItem('thiotty-accent') || '#FF5722',
-    accentRGB: localStorage.getItem('thiotty-accent-rgb') || '255, 87, 34',
+    accent: localStorage.getItem('thiotty-accent') || '{{ Auth::user()->accent_color ?? "#FF5722" }}',
+    accentRGB: localStorage.getItem('thiotty-accent-rgb') || '{{ Auth::user()->accent_rgb ?? "255, 87, 34" }}',
     wishlistCount: {{ Auth::check() ? Auth::user()->wishlists()->count() : 0 }},
-    cartCount: {{ count(Session::get('cart', [])) }},
+    cartCount: {{ app(\App\Services\CartService::class)->getCount() }},
     setAccent(color, rgb) {
         this.accent = color;
         this.accentRGB = rgb;
@@ -17,6 +17,17 @@
         localStorage.setItem('thiotty-accent-rgb', rgb);
         document.documentElement.style.setProperty('--primary', color);
         document.documentElement.style.setProperty('--shadow-color', rgb);
+        
+        @auth
+        fetch('{{ route('profile.theme.update') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ accent_color: color, accent_rgb: rgb })
+        });
+        @endauth
     },
     formatPhone(e) {
         let val = e.target.value.replace(/\D/g, '');

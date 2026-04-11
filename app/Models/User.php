@@ -24,6 +24,8 @@ class User extends Authenticatable
         'phone',
         'password',
         'is_admin',
+        'accent_color',
+        'accent_rgb',
     ];
 
     /**
@@ -58,5 +60,10 @@ class User extends Authenticatable
     public function wishlists(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Wishlist::class);
+    }
+
+    public function cartItems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CartItem::class);
     }
 }

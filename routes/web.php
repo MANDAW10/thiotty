@@ -48,6 +48,16 @@ Route::get('/update-visuals', function () {
     }
 });
 
+// Activate Universal Sync (One-time run)
+Route::get('/sync-setup', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return "✨ Synchronisation Universelle activée ! <br>✅ Base de données mise à jour. <br>✅ Panier & Thème persistants opérationnels.";
+    } catch (\Exception $e) {
+        return "Erreur lors de l'activation : " . $e->getMessage();
+    }
+});
+
 // Shop Routes
 Route::get('/', [ShopController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'shop'])->name('shop.index');
@@ -103,6 +113,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/theme', [ProfileController::class, 'updateTheme'])->name('profile.theme.update');
     
     // User Order History
     Route::get('/my-orders', [OrderController::class, 'index'])->name('orders.index');

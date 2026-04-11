@@ -57,4 +57,25 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    /**
+     * Update the user's theme preference.
+     */
+    public function updateTheme(Request $request)
+    {
+        $request->validate([
+            'accent_color' => ['required', 'string'],
+            'accent_rgb' => ['required', 'string'],
+        ]);
+
+        $user = $request->user();
+        if ($user) {
+            $user->update([
+                'accent_color' => $request->accent_color,
+                'accent_rgb' => $request->accent_rgb,
+            ]);
+        }
+
+        return response()->json(['success' => true]);
+    }
 }
