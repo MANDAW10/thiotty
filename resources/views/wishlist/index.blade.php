@@ -59,7 +59,7 @@
                         <div x-data="{ removed: false }" x-show="!removed" x-transition:leave="transition ease-in duration-300 transform scale-95 opacity-0"
                              @wishlist-updated.window="if($event.detail.id === {{ $product->id }} && $event.detail.status === 'removed') removed = true"
                              @wishlist-cleared.window="removed = true">
-                            <x-product-card :product="$product" :can-remove="true" />
+                            <x-product-card :product="$product" :wishlist-mode="true" />
                         </div>
                     @endforeach
                 </div>
