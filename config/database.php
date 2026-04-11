@@ -98,6 +98,7 @@ return [
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'require'),
             'dont_use_advisory_connections' => true,
+            'prepared' => false,
         ],
 
         'sqlsrv' => [
