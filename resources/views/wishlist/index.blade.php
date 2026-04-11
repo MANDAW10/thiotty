@@ -31,63 +31,9 @@
                 <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-10">
                     @foreach($wishlists as $wishlist)
                         @php $product = $wishlist->product; @endphp
-                        <div class="product-card-thiotty group bg-white rounded-[40px] overflow-hidden" x-data="{ removed: false }" x-show="!removed" x-transition:leave="transition ease-in duration-300 transform scale-95 opacity-0">
-                            <div class="product-card-img h-64 relative overflow-hidden">
-                                <a href="{{ route('shop.product', $product->slug) }}">
-                                    <img src="{{ $product->image ?: 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=800&auto=format&fit=crop' }}" 
-                                         alt="{{ $product->name }}" 
-                                         class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                                </a>
-                                
-                                <div class="absolute top-4 right-4 z-20">
-                                    <button @click.prevent="
-                                        fetch('{{ route('wishlist.toggle', $product) }}', {
-                                            method: 'POST',
-                                            headers: {
-                                                'X-CSRF-TOKEN': document.querySelector('meta[name=&quot;csrf-token&quot;]').getAttribute('content'),
-                                                'Accept': 'application/json'
-                                            }
-                                        }).then(res => res.json()).then(data => {
-                                            removed = true;
-                                            window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { count: data.count } }));
-                                        })
-                                    " class="w-8 h-8 rounded-full bg-primary text-white backdrop-blur-sm flex items-center justify-center transition-all shadow-lg hover:scale-110">
-                                        <i class="fas fa-heart text-[10px]"></i>
-                                    </button>
-                                </div>
-
-                                <form action="{{ route('cart.add', $product) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="product-card-btn-add">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </form>
-                            </div>
-                            
-                            <div class="p-8">
-                                <div class="flex items-center gap-2 mb-4">
-                                    <span class="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/5 px-2 py-1 rounded-md">
-                                        {{ $product->category->name }}
-                                    </span>
-                                </div>
-                                <a href="{{ route('shop.product', $product->slug) }}">
-                                    <h3 class="text-xl font-black text-slate-900 mb-3 truncate hover:text-primary transition-colors">
-                                        {{ $product->name }}
-                                    </h3>
-                                </a>
-                                <div class="flex items-end justify-between mt-6">
-                                    <div>
-                                        <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Prix</div>
-                                        <div class="text-2xl font-black text-primary flex items-baseline gap-1">
-                                            {{ number_format($product->price, 0, ',', ' ') }} 
-                                            <span class="text-[10px] text-primary/60 uppercase">CFA</span>
-                                        </div>
-                                    </div>
-                                    <a href="{{ route('shop.product', $product->slug) }}" class="text-slate-300 hover:text-primary transition-colors">
-                                        <i class="fas fa-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+                        <div x-data="{ removed: false }" x-show="!removed" x-transition:leave="transition ease-in duration-300 transform scale-95 opacity-0"
+                             @wishlist-updated.window="if($event.detail.id === {{ $product->id }} && $event.detail.status === 'removed') removed = true">
+                            <x-product-card :product="$product" />
                         </div>
                     @endforeach
                 </div>

@@ -10,11 +10,44 @@
         </a>
         
         <!-- Wishlist Button -->
-        <div class="absolute top-6 right-6" x-data="{ isFavorited: false }">
-            <button @click.prevent="isFavorited = !isFavorited" 
+        <div class="absolute top-6 right-6" x-data="{ 
+            isFavorited: {{ $product->isFavoritedBy(Auth::user()) ? 'true' : 'false' }},
+            loading: false,
+            toggle() {
+                if ({{ Auth::check() ? 'false' : 'true' }}) {
+                    window.dispatchEvent(new CustomEvent('open-login'));
+                    return;
+                }
+                
+                if (this.loading) return;
+                this.loading = true;
+                
+                fetch('{{ route('wishlist.toggle', $product) }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    this.isFavorited = (data.status === 'added');
+                    this.loading = false;
+                    $dispatch('wishlist-updated', { count: data.count, id: {{ $product->id }}, status: data.status });
+                    $dispatch('add-toast', { 
+                        message: this.isFavorited ? '{{ __("messages.added_to_wishlist") ?? "Ajouté aux favoris" }}' : '{{ __("messages.removed_from_wishlist") ?? "Retiré des favoris" }}', 
+                        type: 'success' 
+                    });
+                })
+                .catch(() => this.loading = false);
+            }
+        }">
+            <button @click.prevent="toggle()" 
                     :class="isFavorited ? 'bg-primary text-white scale-110' : 'bg-white text-primary'"
-                    class="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-lg active:scale-90 hover:scale-105">
-                <i :class="isFavorited ? 'fas fa-heart' : 'far fa-heart'"></i>
+                    class="w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-lg active:scale-90 hover:scale-105"
+                    :disabled="loading">
+                <i :class="isFavorited ? 'fas fa-heart' : 'far fa-heart'" :class="loading && 'animate-pulse'"></i>
             </button>
         </div>
     </div>

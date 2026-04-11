@@ -90,8 +90,9 @@ class Product extends Model
         return $this->hasMany(Wishlist::class);
     }
 
-    public function isFavoritedBy(User $user)
+    public function isFavoritedBy(?User $user): bool
     {
+        if (!$user) return false;
         return $this->wishlists()->where('user_id', $user->id)->exists();
     }
 }
