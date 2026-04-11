@@ -62,8 +62,8 @@
                 </div>
                 
 
-                <!-- Settings (Theme) -->
-                <button @click="showSettings = true" class="p-2 text-slate-500 hover:text-primary transition-colors group">
+                <!-- Settings (Theme) - Hidden on mobile, moved to drawer -->
+                <button @click="showSettings = true" class="hidden md:flex p-2 text-slate-500 hover:text-primary transition-colors group">
                     <i class="fas fa-cog text-xl transition-transform group-hover:rotate-90"></i>
                 </button>
 
@@ -205,11 +205,16 @@
                     <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showMobileMenu = false; showLogin = true" @endauth 
                        class="flex items-center justify-between p-4 rounded-2xl text-slate-600 hover:bg-slate-50 font-bold transition-all">
                         <div class="flex items-center gap-4">
-                            <i class="fas fa-heart w-5"></i>
+                            <i class="fas fa-heart w-5 text-red-400"></i>
                             <span>Liste de souhaits</span>
                         </div>
                         <span x-show="wishlistCount > 0" x-text="wishlistCount" class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-black"></span>
                     </a>
+
+                    <button @click="showMobileMenu = false; showSettings = true" class="w-full flex items-center gap-4 p-4 rounded-2xl text-slate-600 hover:bg-slate-50 font-bold transition-all">
+                        <i class="fas fa-palette w-5 text-amber-500"></i>
+                        <span>Personnalisation</span>
+                    </button>
                  </div>
             </nav>
 
