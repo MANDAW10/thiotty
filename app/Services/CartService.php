@@ -163,4 +163,16 @@ class CartService
         // Clear session cart after migration
         Session::forget('cart');
     }
+
+    /**
+     * Get the total balance of the cart.
+     */
+    public function getTotalBalance()
+    {
+        $total = 0;
+        foreach ($this->getItems() as $item) {
+            $total += ($item['price'] * $item['quantity']);
+        }
+        return $total;
+    }
 }
