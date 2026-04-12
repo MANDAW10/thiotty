@@ -15,24 +15,6 @@
         <!-- FontAwesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        <!-- Theme Initialization Script -->
-    <script>
-        (function() {
-            let accent = localStorage.getItem('thiotty-accent') || '#FF5722';
-            let accentRGB = localStorage.getItem('thiotty-accent-rgb') || '255, 87, 34';
-            
-            // Migration for old primary color
-            if (accent === '#E65100') {
-                accent = '#FF5722';
-                accentRGB = '255, 87, 34';
-                localStorage.setItem('thiotty-accent', accent);
-                localStorage.setItem('thiotty-accent-rgb', accentRGB);
-            }
-            
-            document.documentElement.style.setProperty('--primary', accent);
-            document.documentElement.style.setProperty('--shadow-color', accentRGB);
-        })();
-    </script>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])

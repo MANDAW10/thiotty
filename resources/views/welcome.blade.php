@@ -5,7 +5,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
                 <!-- LEFT: VIANDE DE BOEUF -->
                 <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1544025162-d76694265da4?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Viande de Boeuf">
+                    <img src="https://images.unsplash.com/photo-1607623814075-e41dfee430ef?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Viande de Boeuf">
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
                         <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">VIANDE DE BOEUF</h2>
