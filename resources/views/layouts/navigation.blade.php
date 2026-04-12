@@ -107,19 +107,22 @@
     <!-- LEVEL 3: Bottom Bar (Nav Menu & Actions) -->
     <div class="bg-white border-b border-slate-100 hidden md:block">
         <div class="container-custom flex items-center justify-between h-[60px]">
-            <!-- Main Menu -->
+            <!-- Main Menu (Industrial Style) -->
             <nav class="flex items-center h-full">
                 <a href="{{ route('home') }}" class="nav-link-blocky {{ request()->routeIs('home') ? 'active' : '' }}">
                     ACCUEIL
                 </a>
-                <a href="{{ route('shop.index') }}" class="nav-link-blocky {{ request()->routeIs('shop.index') ? 'active' : '' }}">
-                    BOUTIQUE
+                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'agro-alimentaire'])) ? 'active' : '' }}">
+                    AGRO-ALIMENTAIRE
                 </a>
-                <a href="{{ route('shop.index', ['category' => 'elevage']) }}" class="nav-link-blocky">
+                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'volaille'])) ? 'active' : '' }}">
+                    VOLAILLE
+                </a>
+                <a href="{{ route('shop.index', ['category' => 'elevage']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'elevage'])) ? 'active' : '' }}">
                     ÉLEVAGE
                 </a>
-                <a href="{{ route('shop.index', ['category' => 'agriculture']) }}" class="nav-link-blocky">
-                    AGRICULTURE
+                <a href="{{ route('gallery') }}" class="nav-link-blocky {{ request()->routeIs('gallery') ? 'active' : '' }}">
+                    GALLERIE
                 </a>
                 <a href="{{ route('contact') }}" class="nav-link-blocky {{ request()->routeIs('contact') ? 'active' : '' }}">
                     CONTACT
