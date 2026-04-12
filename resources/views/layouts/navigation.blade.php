@@ -201,6 +201,9 @@
                         </x-slot>
                         <x-slot name="content">
                             <x-dropdown-link href="javascript:void(0)" @click="showProfile = true">{{ __('messages.profile') }}</x-dropdown-link>
+                            @if(Auth::user()->is_admin)
+                                <x-dropdown-link :href="route('admin.dashboard')">{{ __('messages.admin_nav') }}</x-dropdown-link>
+                            @endif
                             <x-dropdown-link :href="route('orders.index')">{{ __('messages.my_orders') }}</x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -210,7 +213,7 @@
                     </x-dropdown>
                 @else
                     <button @click="showLogin = true" class="text-[11px] font-black uppercase tracking-[0.1em] hover:text-primary transition-colors">
-                        LOGIN / REGISTER
+                        CONNEXION / INSCRIPTION
                     </button>
                 @endauth
             </div>

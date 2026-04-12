@@ -88,18 +88,20 @@ class CheckoutController extends Controller
                 CartItem::where('user_id', auth()->id())->delete();
             }
 
-            // Send automatic Telegram notification to admin (Free & Automatic)
-            // Redirect to payment page
-            return redirect()->route('payment.show', $order)->with('success', 'Commande passée ! Veuillez procéder au paiement.
+            try {
                 $order->load(['items.product', 'deliveryZone']);
-                $telegram = new TelegramService;
+                $telegram = new \App\Services\TelegramService;
                 $telegram->sendOrderNotification($order);
             } catch (\Exception $e) {
                 // Silently fail if Telegram service has issues, don't block the user
-                Log::error('Erreur lors de l\'envoi de la notification Telegram: '.$e->getMessage());
+                \Illuminate\Support\Facades\Log::error('Erreur lors de l\'envoi de la notification Telegram: '.$e->getMessage());
             }
 
-            return redirect()->route('order.confirmation', $order)->with('success', 'Commande passée avec succès !');
+            if ($request->payment_method === 'cash') {
+                return redirect()->route('order.confirmation', $order)->with('success', 'Commande passée avec succès ! Payer à la livraison.');
+            }
+
+            return redirect()->route('payment.show', $order)->with('success', 'Commande passée ! Veuillez procéder au paiement.');
         } catch (\Exception $e) {
             DB::rollBack();
 
