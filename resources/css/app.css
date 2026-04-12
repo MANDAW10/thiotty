@@ -3,25 +3,25 @@
 @tailwind utilities;
 
 :root {
-    /* Base Light Colors - Updated to vibrant orange */
-    --primary: #FF5722;
-    --primary-light: #FF7043;
-    --secondary: #1B5E20;
+    /* Base Colors - Switched to Caawogi Forest Green & Gold */
+    --primary: #2B7A0B;
+    --primary-hover: #236109;
+    --secondary: #F09D23;
     
-    --bg-page: #FDFDFD;
+    --bg-page: #F3F4F7;
     --bg-surface: #FFFFFF;
     --bg-muted: #F8FAFC;
     
-    --text-main: #0F172A;
-    --text-muted: #64748B;
+    --text-main: #1A1A1A;
+    --text-muted: #666666;
     --text-inverse: #FFFFFF;
     
-    --border-main: #F1F5F9;
-    --border-light: #F8FAFC;
+    --border-main: #E5E5E5;
+    --border-light: #F3F4F7;
 
-    /* Shadow Config */
-    --shadow-color: 255, 87, 34; /* Primary RGB for #FF5722 */
-    --shadow-main: 0 10px 30px -5px rgba(var(--shadow-color), 0.15);
+    /* Shadow Config - Minimalist */
+    --shadow-color: 0, 0, 0; 
+    --shadow-main: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 @layer base {
@@ -29,7 +29,7 @@
         background-color: var(--bg-page);
         color: var(--text-main);
         @apply font-sans antialiased transition-colors duration-300 overflow-x-hidden;
-        font-family: 'Outfit', sans-serif;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .italic-font {
@@ -61,27 +61,27 @@
         @apply border-t py-3 flex items-center gap-10;
     }
 
-    /* Search Bar */
+    /* Search Bar - Sharp & Modern */
     .search-bar-container {
         @apply flex-1 max-w-2xl relative;
     }
     .search-input {
-        background-color: var(--bg-muted);
+        background-color: #FFFFFF;
         color: var(--text-main);
-        @apply w-full border-none rounded-xl py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary transition-all placeholder-[var(--text-muted)];
+        @apply w-full border border-[var(--border-main)] rounded-none py-3 pl-12 pr-4 text-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder-[var(--text-muted)];
     }
 
-    /* Primary Button */
+    /* Primary Button - Sharp corners */
     .btn-thiotty {
         background-color: var(--primary);
-        @apply px-8 py-3 text-white font-bold rounded-xl transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2;
-        box-shadow: var(--shadow-main);
+        @apply px-4 py-3 text-white font-bold rounded-none transition-all hover:bg-[var(--primary-hover)] active:scale-95 flex items-center justify-center gap-2 text-[11px] uppercase tracking-widest;
+        box-shadow: none;
     }
 
     .btn-thiotty-outline {
-        border-color: var(--border-main);
-        color: var(--text-main);
-        @apply px-8 py-3 border-2 font-bold rounded-xl transition-all hover:border-[var(--primary)] hover:text-[var(--primary)] active:scale-95 flex items-center justify-center gap-2;
+        border-color: var(--primary);
+        color: var(--primary);
+        @apply px-4 py-3 border-2 font-bold rounded-none transition-all hover:bg-[var(--primary)] hover:text-white active:scale-95 flex items-center justify-center gap-2 text-[11px] uppercase tracking-widest;
     }
 
     /* Category Card */
@@ -99,21 +99,20 @@
         @apply w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-all hover:bg-[var(--primary)] hover:text-white;
     }
 
-    /* Product Card */
+    /* Product Card - Sharp & Professional */
     .product-card-thiotty {
         background-color: var(--bg-surface);
         border-color: var(--border-main);
-        @apply rounded-[32px] overflow-hidden border transition-all hover:shadow-2xl hover:-translate-y-1;
+        @apply rounded-none overflow-hidden border transition-all hover:shadow-lg;
     }
 
     .product-card-img {
-        background-color: var(--bg-muted);
-        @apply aspect-[4/3] overflow-hidden relative;
+        background-color: #FFFFFF;
+        @apply aspect-square overflow-hidden relative;
     }
     .product-card-btn-add {
         background-color: var(--primary);
-        @apply absolute bottom-6 right-6 w-12 h-12 text-white rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-90 z-10;
-        box-shadow: 0 10px 20px -5px var(--primary);
+        @apply absolute bottom-4 right-4 w-10 h-10 text-white rounded-none flex items-center justify-center shadow-md transition-all hover:scale-110 active:scale-90 z-10;
     }
 
     /* Custom Navigation Link */

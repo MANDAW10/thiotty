@@ -6,29 +6,9 @@
     showResetForm: {{ (session('identity_verified') || session('reset_user_id') || $errors->has('password_reset_success') || $errors->has('reset_error')) ? 'true' : 'false' }},
     showMobileMenu: false,
     showSettings: false,
-    accent: localStorage.getItem('thiotty-accent') || '{{ Auth::user()->accent_color ?? "#FF5722" }}',
-    accentRGB: localStorage.getItem('thiotty-accent-rgb') || '{{ Auth::user()->accent_rgb ?? "255, 87, 34" }}',
+    accent: '#2B7A0B',
     wishlistCount: {{ Auth::check() ? Auth::user()->wishlists()->count() : 0 }},
     cartCount: {{ app(\App\Services\CartService::class)->getCount() }},
-    setAccent(color, rgb) {
-        this.accent = color;
-        this.accentRGB = rgb;
-        localStorage.setItem('thiotty-accent', color);
-        localStorage.setItem('thiotty-accent-rgb', rgb);
-        document.documentElement.style.setProperty('--primary', color);
-        document.documentElement.style.setProperty('--shadow-color', rgb);
-        
-        @auth
-        fetch('{{ route('profile.theme.update') }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ accent_color: color, accent_rgb: rgb })
-        });
-        @endauth
-    },
     formatPhone(e) {
         let val = e.target.value.replace(/\D/g, '');
         if (val.length > 9) val = val.substring(0, 9);
@@ -42,86 +22,76 @@
         e.target.value = formatted;
     }
 }" @wishlist-updated.window="wishlistCount = $event.detail.count" @cart-updated.window="cartCount = $event.detail.count" @open-login.window="showLogin = true">
-    <div class="container-custom">
-        <!-- Top Header: Logo, Search, Actions -->
-        <div class="header-top">
-            <div class="flex items-center gap-2 sm:gap-4">
+
+    <!-- LEVEL 1: Top Bar (Contact Info) -->
+    <div class="bg-[var(--primary)] text-white py-2 hidden md:block border-b border-white/10">
+        <div class="container-custom flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>+221 78 357 74 31</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-envelope"></i>
+                    <span>contact@thiotty.com</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Dakar, Sénégal</span>
+                </div>
+                <div class="flex items-center bg-white/10 rounded-none p-1 border border-white/20">
+                    <a href="{{ route('language.switch', 'fr') }}" class="px-2 py-0.5 {{ App::getLocale() == 'fr' ? 'bg-white text-[var(--primary)]' : 'text-white' }}">FR</a>
+                    <a href="{{ route('language.switch', 'en') }}" class="px-2 py-0.5 {{ App::getLocale() == 'en' ? 'bg-white text-[var(--primary)]' : 'text-white' }}">EN</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEVEL 2: Middle Bar (Brand & Search) -->
+    <div class="bg-white py-6 md:py-8 border-b border-[var(--border-main)]">
+        <div class="container-custom flex items-center justify-between gap-8 md:gap-12">
+            <!-- Logo -->
+            <div class="flex items-center gap-4 min-w-fit">
                 <button @click="showMobileMenu = true" class="md:hidden p-2 text-slate-500 hover:text-primary transition-colors">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
-                <a href="{{ route('home') }}" class="group">
-                    <x-application-logo class="h-6 sm:h-8 w-auto" />
+                <a href="{{ route('home') }}" class="block">
+                    <x-application-logo class="h-8 sm:h-12 w-auto" />
                 </a>
             </div>
 
-            <!-- Search Bar -->
-            <div class="search-bar-container hidden md:block">
-                <form action="{{ route('shop.search') }}" method="GET">
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" name="query" placeholder="{{ __('messages.search_placeholder') }}" class="search-input" value="{{ request('query') }}">
-                    </div>
+            <!-- Search Bar (Centered) -->
+            <div class="flex-1 hidden md:block max-w-2xl mx-auto">
+                <form action="{{ route('shop.search') }}" method="GET" class="relative group">
+                    <input type="text" name="query" placeholder="{{ __('messages.search_placeholder') }}" 
+                           class="w-full h-[50px] border border-[var(--border-main)] rounded-none px-6 py-3 text-sm focus:ring-1 focus:ring-[var(--primary)] focus:border-[var(--primary)] transition-all outline-none">
+                    <button type="submit" class="absolute right-0 top-0 h-full w-[60px] bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] transition-colors">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </form>
             </div>
 
-            <!-- Header Actions -->
-            <div class="flex items-center gap-2 sm:gap-6">
-                <!-- Language Switcher (Desktop) -->
-                <div class="hidden lg:flex items-center bg-slate-100 rounded-full p-1 border border-slate-200">
-                    <a href="{{ route('language.switch', 'fr') }}" 
-                       class="px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full transition-all {{ App::getLocale() == 'fr' ? 'bg-white text-primary shadow-sm' : 'text-slate-400 hover:text-slate-600' }}">
-                        FR
-                    </a>
-                    <a href="{{ route('language.switch', 'en') }}" 
-                       class="px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full transition-all {{ App::getLocale() == 'en' ? 'bg-white text-primary shadow-sm' : 'text-slate-400 hover:text-slate-600' }}">
-                        EN
-                    </a>
-                </div>
-
-                <!-- Location -->
-                <div class="hidden lg:flex items-center gap-2 text-sm font-medium text-slate-600">
-                    <i class="fas fa-map-marker-alt text-primary"></i>
-                    <span>{{ __('messages.dakar_senegal') }}</span>
-                </div>
-                
-
-                <!-- Settings (Theme) - Hidden on mobile, moved to drawer -->
-                <button @click="showSettings = true" class="hidden md:flex p-2 text-slate-500 hover:text-primary transition-colors group">
-                    <i class="fas fa-cog text-xl transition-transform group-hover:rotate-90"></i>
-                </button>
-
-                <!-- Wishlist -->
-                <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth 
-                   class="relative p-2 text-slate-500 hover:text-primary transition-colors group">
-                    <i class="fas fa-heart text-xl"></i>
-                    <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white"></span>
-                </a>
-
-                <a href="{{ route('cart.index') }}" class="relative p-2 text-slate-500 hover:text-primary transition-colors group">
-                    <i class="fas fa-shopping-cart text-xl"></i>
-                    <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white">
-                    </span>
-                </a>
-
-
-                <!-- User Profile / Inscription -->
+            <!-- Actions -->
+            <div class="flex items-center gap-2 sm:gap-6 min-w-fit">
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="p-1 rounded-full border-2 border-transparent hover:border-primary transition-all">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=E65100&color=fff" class="w-8 h-8 rounded-full">
+                            <button class="flex items-center gap-3 p-2 group">
+                                <i class="fas fa-user text-xl text-slate-400 group-hover:text-[var(--primary)] transition-colors"></i>
+                                <div class="hidden lg:block text-left">
+                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Mon Compte</p>
+                                    <p class="text-[11px] font-bold text-slate-800 leading-none">{{ Auth::user()->name }}</p>
+                                </div>
                             </button>
                         </x-slot>
                         <x-slot name="content">
-                            <div class="px-4 py-2 border-b border-slate-50 text-xs text-slate-500">
-                                {{ __('messages.profile_linked_as') }} <strong>{{ Auth::user()->name }}</strong>
-                            </div>
                             <x-dropdown-link href="javascript:void(0)" @click="showProfile = true">{{ __('messages.profile') }}</x-dropdown-link>
                             @if(Auth::user()->is_admin)
                                 <x-dropdown-link :href="route('admin.dashboard')" class="text-primary font-black">Administration</x-dropdown-link>
                             @endif
                             <x-dropdown-link :href="route('orders.index')">{{ __('messages.my_orders') }}</x-dropdown-link>
-                            <div class="border-t border-slate-50"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-500">{{ __('messages.logout') }}</x-dropdown-link>
@@ -129,150 +99,97 @@
                         </x-slot>
                     </x-dropdown>
                 @else
-                    <div class="flex items-center gap-1 sm:gap-2">
-                        <button @click="showLogin = true" class="p-2 text-slate-500 hover:text-primary transition-colors">
-                            <i class="fas fa-user-circle text-2xl"></i>
-                        </button>
-                        <button @click="showRegister = true" class="hidden sm:block btn-thiotty py-2 px-6 text-sm">
-                            {{ __('messages.register') }}
-                        </button>
-                    </div>
+                    <button @click="showLogin = true" class="flex items-center gap-3 p-2 group">
+                        <i class="fas fa-user-circle text-2xl text-slate-400 group-hover:text-[var(--primary)] transition-colors"></i>
+                        <div class="hidden lg:block text-left">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Connexion</p>
+                            <p class="text-[11px] font-bold text-slate-800 leading-none">S'identifier</p>
+                        </div>
+                    </button>
                 @endauth
+
+                <!-- Wishlist -->
+                <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth 
+                   class="relative p-2 group">
+                    <i class="fas fa-heart text-xl text-slate-400 group-hover:text-[var(--primary)] transition-colors"></i>
+                    <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-1 -right-1 bg-[var(--primary)] text-white text-[9px] font-bold w-4 h-5 flex items-center justify-center"></span>
+                </a>
+
+                <!-- Cart -->
+                <a href="{{ route('cart.index') }}" class="relative p-2 group">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <i class="fas fa-shopping-basket text-xl text-slate-400 group-hover:text-[var(--primary)] transition-colors"></i>
+                            <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-1 -right-1 bg-[var(--primary)] text-white text-[9px] font-bold w-4 h-5 flex items-center justify-center"></span>
+                        </div>
+                        <div class="hidden lg:block text-left">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Mon Panier</p>
+                            <p class="text-[11px] font-bold text-slate-800 leading-none">Panier</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
+    </div>
 
-        <!-- Bottom Header: Navigation Links (Desktop Only) -->
-        <div class="header-bottom hidden md:flex">
-            <a href="{{ route('home') }}" class="nav-link-thiotty {{ request()->routeIs('home') ? 'active' : '' }}">{{ __('messages.home') }}</a>
-            <a href="{{ route('gallery') }}" class="nav-link-thiotty {{ request()->routeIs('gallery') ? 'active' : '' }}">{{ __('messages.gallery') }}</a>
-            @auth
-                @if(Auth::user()->is_admin)
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link-thiotty text-primary border-primary">Administration</a>
-                @endif
-                <a href="{{ route('orders.index') }}" class="nav-link-thiotty {{ request()->routeIs('orders.index') ? 'active' : '' }}">{{ __('messages.my_orders') }}</a>
-                <a href="javascript:void(0)" @click="showProfile = true" class="nav-link-thiotty {{ request()->routeIs('profile.edit') ? 'active' : '' }}">{{ __('messages.profile') }}</a>
-            @endauth
-            <a href="{{ route('shop.index') }}" class="nav-link-thiotty {{ request()->routeIs('shop.index') ? 'active' : '' }}">{{ __('messages.shop') }}</a>
-            <a href="{{ route('contact') }}" class="nav-link-thiotty {{ request()->routeIs('contact') ? 'active' : '' }}">{{ __('messages.contact') }}</a>
+    <!-- LEVEL 3: Bottom Bar (Navigation Menu) -->
+    <div class="bg-[var(--primary)] hidden md:block">
+        <div class="container-custom">
+            <nav class="flex items-center">
+                <a href="{{ route('home') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10 {{ request()->routeIs('home') ? 'bg-white/20' : '' }}">
+                    {{ __('messages.home') }}
+                </a>
+                <a href="{{ route('shop.index') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10 {{ request()->routeIs('shop.index') ? 'bg-white/20' : '' }}">
+                    {{ __('messages.shop') }}
+                </a>
+                <a href="{{ route('gallery') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10 {{ request()->routeIs('gallery') ? 'bg-white/20' : '' }}">
+                    {{ __('messages.gallery') }}
+                </a>
+                <a href="{{ route('contact') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10 {{ request()->routeIs('contact') ? 'bg-white/20' : '' }}">
+                    {{ __('messages.contact') }}
+                </a>
+                @auth
+                    <a href="{{ route('orders.index') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10">
+                        {{ __('messages.my_orders') }}
+                    </a>
+                @endauth
+                <div class="ml-auto flex items-center gap-4 text-white text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">
+                    <i class="fas fa-shipping-fast"></i>
+                    <span>Livraison rapide partout au Sénégal</span>
+                </div>
+            </nav>
         </div>
     </div>
 
     <!-- Mobile Navigation Drawer -->
-    <div x-show="showMobileMenu" 
-         class="fixed inset-0 z-[150] md:hidden"
-         style="display: none;">
-        <!-- Backdrop -->
-        <div x-show="showMobileMenu" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             @click="showMobileMenu = false"
-             class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
-        
-        <!-- Drawer Content -->
-        <div x-show="showMobileMenu"
-             x-transition:enter="transition ease-out duration-300 transform"
-             x-transition:enter-start="-translate-x-full"
-             x-transition:enter-end="translate-x-0"
-             x-transition:leave="transition ease-in duration-200 transform"
-             x-transition:leave-start="translate-x-0"
-             x-transition:leave-end="-translate-x-full"
-             class="absolute inset-y-0 left-0 w-[280px] bg-white shadow-2xl flex flex-col border-r border-slate-50">
-            
-            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
-                <x-application-logo class="h-8 w-auto" />
-                <button @click="showMobileMenu = false" class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:text-primary transition-colors">
+    <div x-show="showMobileMenu" class="fixed inset-0 z-[150] md:hidden" style="display: none;">
+        <div @click="showMobileMenu = false" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+        <div x-show="showMobileMenu" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+             class="absolute inset-y-0 left-0 w-[280px] bg-white flex flex-col border-r border-slate-50">
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-[var(--primary)]">
+                <x-application-logo class="h-8 w-auto brightness-0 invert" />
+                <button @click="showMobileMenu = false" class="text-white">
                     <i class="fas fa-times text-lg"></i>
                 </button>
             </div>
-
-            <nav class="flex-1 overflow-y-auto p-6 space-y-2">
-                <a href="{{ route('home') }}" class="flex items-center gap-4 p-4 rounded-2xl {{ request()->routeIs('home') ? 'bg-primary/5 text-primary' : 'text-slate-600 hover:bg-slate-50' }} font-bold transition-all">
-                    <i class="fas fa-home w-5"></i>
-                    <span>{{ __('messages.home') }}</span>
+            <nav class="flex-1 overflow-y-auto p-0">
+                <a href="{{ route('home') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                    <i class="fas fa-home w-5 text-[var(--primary)]"></i> Accueil
                 </a>
-                <a href="{{ route('gallery') }}" class="flex items-center gap-4 p-4 rounded-2xl {{ request()->routeIs('gallery') ? 'bg-primary/5 text-primary' : 'text-slate-600 hover:bg-slate-50' }} font-bold transition-all">
-                    <i class="fas fa-images w-5"></i>
-                    <span>{{ __('messages.gallery') }}</span>
+                <a href="{{ route('shop.index') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                    <i class="fas fa-shopping-bag w-5 text-[var(--primary)]"></i> Boutique
                 </a>
-                <a href="{{ route('shop.index') }}" class="flex items-center gap-4 p-4 rounded-2xl {{ request()->routeIs('shop.index') ? 'bg-primary/5 text-primary' : 'text-slate-600 hover:bg-slate-50' }} font-bold transition-all">
-                    <i class="fas fa-shop w-5"></i>
-                    <span>{{ __('messages.shop') }}</span>
+                <a href="{{ route('gallery') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                    <i class="fas fa-images w-5 text-[var(--primary)]"></i> Galerie
                 </a>
-                @auth
-                    @if(Auth::user()->is_admin)
-                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-4 p-4 rounded-2xl bg-primary/5 text-primary font-black transition-all">
-                            <i class="fas fa-shield-halved w-5"></i>
-                            <span>{{ __('messages.admin_nav') }}</span>
-                        </a>
-                    @endif
-                    <a href="{{ route('orders.index') }}" class="flex items-center gap-4 p-4 rounded-2xl {{ request()->routeIs('orders.index') ? 'bg-primary/5 text-primary' : 'text-slate-600 hover:bg-slate-50' }} font-bold transition-all">
-                        <i class="fas fa-box w-5"></i>
-                        <span>{{ __('messages.my_orders') }}</span>
-                    </a>
-                    <button @click="showMobileMenu = false; showProfile = true" class="w-full flex items-center gap-4 p-4 rounded-2xl text-slate-600 hover:bg-slate-50 font-bold transition-all">
-                        <i class="fas fa-user-circle w-5"></i>
-                        <span>{{ __('messages.profile') }}</span>
-                    </button>
-                @endauth
-                <a href="{{ route('contact') }}" class="flex items-center gap-4 p-4 rounded-2xl {{ request()->routeIs('contact') ? 'bg-primary/5 text-primary' : 'text-slate-600 hover:bg-slate-50' }} font-bold transition-all">
-                    <i class="fas fa-envelope w-5"></i>
-                    <span>{{ __('messages.contact') }}</span>
+                <a href="{{ route('contact') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                    <i class="fas fa-envelope w-5 text-[var(--primary)]"></i> Contact
                 </a>
-
-                <div class="sm:hidden border-t border-slate-50 pt-4 mt-4">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 px-4">{{ __('messages.my_shortcuts') }}</p>
-                    <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showMobileMenu = false; showLogin = true" @endauth 
-                       class="flex items-center justify-between p-4 rounded-2xl text-slate-600 hover:bg-slate-50 font-bold transition-all">
-                        <div class="flex items-center gap-4">
-                            <i class="fas fa-heart w-5 text-red-400"></i>
-                            <span>{{ __('messages.wishlist_nav') }}</span>
-                        </div>
-                        <span x-show="wishlistCount > 0" x-text="wishlistCount" class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full font-black"></span>
-                    </a>
-
-                    <button @click="showMobileMenu = false; showSettings = true" class="w-full flex items-center gap-4 p-4 rounded-2xl text-slate-600 hover:bg-slate-50 font-bold transition-all">
-                        <i class="fas fa-palette w-5 text-amber-500"></i>
-                        <span>{{ __('messages.customization') }}</span>
-                    </button>
-
-                    <!-- Language Switcher (Mobile) -->
-                    <div class="mt-6 px-4">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Langue / Language</p>
-                        <div class="flex items-center gap-2 p-1 bg-slate-50 rounded-2xl border border-slate-100">
-                            <a href="{{ route('language.switch', 'fr') }}" 
-                               class="flex-1 text-center py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ App::getLocale() == 'fr' ? 'bg-white text-primary shadow-sm ring-1 ring-slate-100' : 'text-slate-400' }}">
-                                Français
-                            </a>
-                            <a href="{{ route('language.switch', 'en') }}" 
-                               class="flex-1 text-center py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ App::getLocale() == 'en' ? 'bg-white text-primary shadow-sm ring-1 ring-slate-100' : 'text-slate-400' }}">
-                                English
-                            </a>
-                        </div>
-                    </div>
-                 </div>
             </nav>
-
-            <div class="p-6 border-t border-slate-50">
-                @guest
-                    <div class="grid grid-cols-2 gap-4">
-                        <button @click="showMobileMenu = false; showLogin = true" class="py-4 rounded-2xl border border-slate-200 text-slate-600 font-bold text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all">{{ __('messages.login') }}</button>
-                        <button @click="showMobileMenu = false; showRegister = true" class="btn-thiotty py-4 rounded-2xl text-[10px]">{{ __('messages.register') }}</button>
-                    </div>
-                @else
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="w-full py-4 rounded-2xl bg-red-50 text-red-600 font-bold text-sm hover:bg-red-100 transition-all">
-                            <i class="fas fa-power-off mr-2"></i> {{ __('messages.logout') }}
-                        </button>
-                    </form>
-                @endguest
-            </div>
         </div>
     </div>
+</header>
+
 
     <!-- Login Modal -->
     <div x-show="showLogin" 
