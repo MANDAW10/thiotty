@@ -73,6 +73,7 @@
         ['route' => 'admin.zones.index', 'icon' => 'fa-truck', 'label' => 'Zones', 'pattern' => 'admin.zones.*'],
         ['route' => 'admin.gallery.index', 'icon' => 'fa-images', 'label' => 'Galerie', 'pattern' => 'admin.gallery.*'],
         ['route' => 'admin.contacts.index', 'icon' => 'fa-envelope', 'label' => 'Messages', 'pattern' => 'admin.contacts.*'],
+        ['route' => 'admin.reviews.index', 'icon' => 'fa-star', 'label' => 'Avis', 'pattern' => 'admin.reviews.*'],
     ];
 @endphp
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ZoneController;
 use App\Http\Controllers\Auth\PasswordRecoveryController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\CompareController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WishlistController;
 use App\Models\GalleryItem;
@@ -162,6 +164,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/favoris', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/favoris/toggle/{product}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::post('/favoris/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
+
+    Route::post('/product/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 // Admin Routes
@@ -189,6 +194,10 @@ Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group
     Route::post('/alerts', [AlertController::class, 'store'])->name('alerts.store');
     Route::post('/alerts/{alert}/toggle', [AlertController::class, 'toggle'])->name('alerts.toggle');
     Route::delete('/alerts/{alert}', [AlertController::class, 'destroy'])->name('alerts.destroy');
+
+    Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+    Route::patch('/reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
+    Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.delete');
 });
 
 require __DIR__.'/auth.php';

@@ -84,7 +84,18 @@ class ShopController extends Controller
             ->take(4)
             ->get();
 
-        return view('shop.show', compact('product', 'relatedProducts'));
+        $reviews = $product->reviews()
+            ->where('is_approved', true)
+            ->with('user:id,name')
+            ->latest()
+            ->take(30)
+            ->get();
+
+        $userReview = auth()->check()
+            ? $product->reviews()->where('user_id', auth()->id())->first()
+            : null;
+
+        return view('shop.show', compact('product', 'relatedProducts', 'reviews', 'userReview'));
     }
 
     /**
@@ -97,6 +108,9 @@ class ShopController extends Controller
             'slug' => $product->slug,
             'name' => $product->display_name,
             'price' => (float) $product->price,
+            'sale_price' => $product->sale_price !== null ? (float) $product->sale_price : null,
+            'selling_price' => (float) $product->selling_price,
+            'has_sale' => (bool) $product->has_sale,
             'image' => $product->image_url,
             'description' => Str::limit(strip_tags((string) $product->description), 280),
             'stock' => (int) $product->stock,

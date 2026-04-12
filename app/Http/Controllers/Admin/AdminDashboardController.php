@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
 {
@@ -17,6 +17,7 @@ class AdminDashboardController extends Controller
             'total_revenue' => Order::where('status', '!=', 'cancelled')->sum('total_amount'),
             'total_products' => Product::count(),
             'total_users' => User::count(),
+            'pending_reviews' => Review::where('is_approved', false)->count(),
         ];
 
         $recentOrders = Order::with('user')->latest()->take(5)->get();

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
@@ -15,34 +14,34 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Vaches', 
-                'icon' => 'fas fa-cow', 
+                'name' => 'Vaches',
+                'icon' => 'fas fa-cow',
                 'slug' => 'vaches',
-                'image' => 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?q=80&w=1200'
+                'image' => 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?q=80&w=1600&auto=format&fit=crop',
             ],
             [
-                'name' => 'Chevaux', 
-                'icon' => 'fas fa-horse', 
+                'name' => 'Chevaux',
+                'icon' => 'fas fa-horse',
                 'slug' => 'chevaux',
-                'image' => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1200'
+                'image' => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=1600&auto=format&fit=crop',
             ],
             [
-                'name' => 'Poulets', 
-                'icon' => 'fas fa-egg', 
+                'name' => 'Poulets',
+                'icon' => 'fas fa-egg',
                 'slug' => 'poulets',
-                'image' => 'https://images.unsplash.com/photo-1569337776101-921350a4d53c?q=80&w=1200'
+                'image' => 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1600&auto=format&fit=crop',
             ],
             [
-                'name' => 'Aliments de bétail', 
-                'icon' => 'fas fa-seedling', 
+                'name' => 'Aliments de bétail',
+                'icon' => 'fas fa-seedling',
                 'slug' => 'aliments',
-                'image' => 'https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?q=80&w=1200'
+                'image' => 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=1600&auto=format&fit=crop',
             ],
             [
-                'name' => 'Lait naturel', 
-                'icon' => 'fas fa-tint', 
+                'name' => 'Lait naturel',
+                'icon' => 'fas fa-tint',
                 'slug' => 'lait',
-                'image' => 'https://images.unsplash.com/photo-1550583724-125581ff26b7?q=80&w=1200&auto=format&fit=crop'
+                'image' => 'https://images.unsplash.com/photo-1550583724-125581ff26b7?q=80&w=1200&auto=format&fit=crop',
             ],
         ];
 

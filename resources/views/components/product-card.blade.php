@@ -116,9 +116,16 @@
         </a>
 
         <div class="mb-5">
-            <span class="text-lg font-black text-[var(--primary)]">
-                {{ number_format($product->price, 0, ',', ' ') }} <span class="text-[11px] font-bold">CFA</span>
-            </span>
+            @if($product->has_sale)
+                <div class="flex flex-col items-center gap-1">
+                    <span class="text-sm text-slate-400 line-through font-bold">{{ number_format($product->price, 0, ',', ' ') }} CFA</span>
+                    <span class="text-lg font-black text-[var(--primary)]">{{ number_format($product->selling_price, 0, ',', ' ') }} <span class="text-[11px] font-bold">CFA</span></span>
+                </div>
+            @else
+                <span class="text-lg font-black text-[var(--primary)]">
+                    {{ number_format($product->price, 0, ',', ' ') }} <span class="text-[11px] font-bold">CFA</span>
+                </span>
+            @endif
         </div>
         
         <button @click.prevent="addToCart()" 

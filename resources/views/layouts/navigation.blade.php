@@ -302,7 +302,10 @@
                 <div class="p-6 space-y-3">
                     <p class="text-[10px] font-black uppercase tracking-widest text-[var(--primary)]" x-text="quickViewProduct.category"></p>
                     <h3 class="text-xl font-black uppercase text-slate-900" x-text="quickViewProduct.name"></h3>
-                    <p class="text-2xl font-black text-[var(--primary)]">CFA <span x-text="new Intl.NumberFormat('fr-FR').format(quickViewProduct.price)"></span></p>
+                    <div class="space-y-1">
+                        <p x-show="quickViewProduct.has_sale" class="text-sm text-slate-400 line-through font-bold">CFA <span x-text="new Intl.NumberFormat('fr-FR').format(quickViewProduct.price)"></span></p>
+                        <p class="text-2xl font-black text-[var(--primary)]">CFA <span x-text="new Intl.NumberFormat('fr-FR').format(quickViewProduct.selling_price)"></span></p>
+                    </div>
                     <p class="text-sm text-slate-600 leading-relaxed" x-text="quickViewProduct.description"></p>
                     <p class="text-xs font-bold text-green-600" x-show="quickViewProduct.stock > 0">{{ __('messages.in_stock') }} : <span x-text="quickViewProduct.stock"></span></p>
                     <p class="text-xs font-bold text-red-500" x-show="quickViewProduct.stock <= 0">{{ __('messages.out_of_stock') }}</p>

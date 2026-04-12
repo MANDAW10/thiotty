@@ -15,7 +15,7 @@
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10 md:mb-12">
+    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mb-10 md:mb-12">
         <div class="bg-white p-6 md:p-8 rounded-[28px] md:rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
             <div class="w-12 h-12 bg-orange-50 text-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <i class="fas fa-shopping-bag text-xl"></i>
@@ -46,6 +46,15 @@
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Clients</p>
             <h3 class="text-3xl font-black text-slate-900">{{ $stats['total_users'] }}</h3>
+        </div>
+
+        <div class="bg-white p-6 md:p-8 rounded-[28px] md:rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
+            <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i class="fas fa-star text-xl"></i>
+            </div>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Avis en attente</p>
+            <h3 class="text-3xl font-black text-slate-900 mb-4">{{ $stats['pending_reviews'] }}</h3>
+            <a href="{{ route('admin.reviews.index', ['filter' => 'pending']) }}" class="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">Modérer →</a>
         </div>
     </div>
 

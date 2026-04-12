@@ -221,4 +221,18 @@ return [
     'about_lead' => 'Moderniser l\'élevage et l\'agrobusiness au Sénégal.',
     'blog_title' => 'Blog & actualités',
     'blog_lead' => 'Tendances, conseils et projets autour de l\'élevage et du terroir.',
+
+    'reviews_section_title' => 'Avis clients',
+    'your_review' => 'Votre avis',
+    'review_visible' => 'Visible sur la fiche produit',
+    'review_pending' => 'En attente de modération par l\'équipe',
+    'review_delete_confirm' => 'Supprimer votre avis ?',
+    'review_rating' => 'Note',
+    'review_comment' => 'Commentaire (optionnel)',
+    'review_submit' => 'Envoyer mon avis',
+    'review_login_prompt' => 'Connectez-vous pour partager votre expérience sur ce produit.',
+    'reviews_empty' => 'Pas encore d\'avis publié. Soyez le premier !',
+    'review_submitted_pending' => 'Merci ! Votre avis sera publié après validation.',
+    'review_already_submitted' => 'Vous avez déjà laissé un avis pour ce produit.',
+    'review_deleted' => 'Votre avis a été supprimé.',
 ];

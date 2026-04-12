@@ -221,4 +221,18 @@ return [
     'about_lead' => 'Modernizing livestock and agribusiness in Senegal.',
     'blog_title' => 'Blog & news',
     'blog_lead' => 'Trends, tips and projects around farming and local produce.',
+
+    'reviews_section_title' => 'Customer reviews',
+    'your_review' => 'Your review',
+    'review_visible' => 'Visible on the product page',
+    'review_pending' => 'Pending team moderation',
+    'review_delete_confirm' => 'Delete your review?',
+    'review_rating' => 'Rating',
+    'review_comment' => 'Comment (optional)',
+    'review_submit' => 'Submit review',
+    'review_login_prompt' => 'Sign in to leave a review for this product.',
+    'reviews_empty' => 'No published reviews yet. Be the first!',
+    'review_submitted_pending' => 'Thanks! Your review will appear after approval.',
+    'review_already_submitted' => 'You already submitted a review for this product.',
+    'review_deleted' => 'Your review was deleted.',
 ];

@@ -65,8 +65,11 @@
                     {{ $product->category->name }}
                 </p>
             </div>
-            <div class="text-lg md:text-2xl font-black text-primary">
-                {{ number_format($product->price, 0, ',', ' ') }} 
+            <div class="text-lg md:text-2xl font-black text-primary text-right">
+                @if($product->has_sale)
+                    <span class="block text-sm text-slate-400 line-through">{{ number_format($product->price, 0, ',', ' ') }} CFA</span>
+                @endif
+                {{ number_format($product->selling_price, 0, ',', ' ') }}
                 <span class="text-[10px] md:text-xs opacity-50 uppercase tracking-tighter">CFA</span>
             </div>
         </div>

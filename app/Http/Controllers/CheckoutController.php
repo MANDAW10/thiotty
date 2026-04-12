@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartItem;
+use App\Models\DeliveryZone;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\DeliveryZone;
+use App\Services\CartService;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,18 +15,20 @@ use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
-    public function index()
+    public function index(CartService $cartService)
     {
-        $cart = Session::get('cart', []);
-        if (empty($cart)) return redirect()->route('shop.index')->with('error', 'Votre panier est vide.');
+        $cart = $cartService->getItems();
+        if (empty($cart)) {
+            return redirect()->route('shop.index')->with('error', 'Votre panier est vide.');
+        }
 
         $deliveryZones = DeliveryZone::all();
-        $subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
+        $subtotal = array_sum(array_map(fn ($item) => $item['price'] * $item['quantity'], $cart));
 
         return view('checkout.index', compact('cart', 'deliveryZones', 'subtotal'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, CartService $cartService)
     {
         $request->validate([
             'customer_name' => 'required|string',
@@ -34,11 +38,13 @@ class CheckoutController extends Controller
             'payment_method' => 'required|in:cash,wave,orange_money',
         ]);
 
-        $cart = Session::get('cart', []);
-        if (empty($cart)) return redirect()->route('shop.index');
+        $cart = $cartService->getItems();
+        if (empty($cart)) {
+            return redirect()->route('shop.index');
+        }
 
         $deliveryZone = DeliveryZone::find($request->delivery_zone_id);
-        $subtotal = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
+        $subtotal = array_sum(array_map(fn ($item) => $item['price'] * $item['quantity'], $cart));
         $total = $subtotal + $deliveryZone->fee;
 
         DB::beginTransaction();
@@ -66,47 +72,52 @@ class CheckoutController extends Controller
             }
 
             DB::commit();
+
             Session::forget('cart');
+            if (auth()->check()) {
+                CartItem::where('user_id', auth()->id())->delete();
+            }
 
             // Send automatic Telegram notification to admin (Free & Automatic)
             try {
                 $order->load(['items.product', 'deliveryZone']);
-                $telegram = new TelegramService();
+                $telegram = new TelegramService;
                 $telegram->sendOrderNotification($order);
             } catch (\Exception $e) {
                 // Silently fail if Telegram service has issues, don't block the user
-                Log::error('Erreur lors de l\'envoi de la notification Telegram: ' . $e->getMessage());
+                Log::error('Erreur lors de l\'envoi de la notification Telegram: '.$e->getMessage());
             }
 
             return redirect()->route('order.confirmation', $order)->with('success', 'Commande passée avec succès !');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Erreur lors de la commande : ' . $e->getMessage());
+
+            return back()->with('error', 'Erreur lors de la commande : '.$e->getMessage());
         }
     }
 
     public function confirmation(Order $order)
     {
         $order->load(['items.product', 'deliveryZone']);
-        
+
         // Generate WhatsApp message
-        $itemsText = "";
-        foreach($order->items as $item) {
-            $itemsText .= "- " . $item->product->name . " x " . $item->quantity . " (" . number_format($item->unit_price * $item->quantity, 0, ',', ' ') . " CFA)\n";
+        $itemsText = '';
+        foreach ($order->items as $item) {
+            $itemsText .= '- '.$item->product->name.' x '.$item->quantity.' ('.number_format($item->unit_price * $item->quantity, 0, ',', ' ')." CFA)\n";
         }
 
         $message = "📦 *NOUVELLE COMMANDE THIOTTY !*\n\n"
-                 . "🔖 *Réf:* #" . str_pad($order->id, 5, '0', STR_PAD_LEFT) . "\n"
-                 . "👤 *Client:* " . $order->customer_name . "\n"
-                 . "📞 *WhatsApp:* " . $order->customer_phone . "\n"
-                 . "📍 *Zone:* " . $order->deliveryZone->name . " (+ " . number_format($order->delivery_fee, 0, ',', ' ') . " CFA)\n"
-                 . "🏠 *Adresse:* " . $order->customer_address . "\n\n"
-                 . "🛒 *ARTICLES:*\n" . $itemsText . "\n"
-                 . "💰 *TOTAL À PAYER: " . number_format($order->total_amount, 0, ',', ' ') . " CFA*\n\n"
-                 . "✨ *Mode:* " . strtoupper(str_replace('_', ' ', $order->payment_method)) . "\n"
-                 . "🚀 *Statut:* Paiement à la livraison";
+                 .'🔖 *Réf:* #'.str_pad($order->id, 5, '0', STR_PAD_LEFT)."\n"
+                 .'👤 *Client:* '.$order->customer_name."\n"
+                 .'📞 *WhatsApp:* '.$order->customer_phone."\n"
+                 .'📍 *Zone:* '.$order->deliveryZone->name.' (+ '.number_format($order->delivery_fee, 0, ',', ' ')." CFA)\n"
+                 .'🏠 *Adresse:* '.$order->customer_address."\n\n"
+                 ."🛒 *ARTICLES:*\n".$itemsText."\n"
+                 .'💰 *TOTAL À PAYER: '.number_format($order->total_amount, 0, ',', ' ')." CFA*\n\n"
+                 .'✨ *Mode:* '.strtoupper(str_replace('_', ' ', $order->payment_method))."\n"
+                 .'🚀 *Statut:* Paiement à la livraison';
 
-        $whatsappUrl = "https://wa.me/221783577431?text=" . urlencode($message);
+        $whatsappUrl = 'https://wa.me/221783577431?text='.urlencode($message);
 
         return view('checkout.confirmation', compact('order', 'whatsappUrl'));
     }
@@ -114,6 +125,7 @@ class CheckoutController extends Controller
     public function history()
     {
         $orders = auth()->user()->orders()->latest()->get();
+
         return view('orders.history', compact('orders'));
     }
 }

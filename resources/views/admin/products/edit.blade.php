@@ -36,13 +36,20 @@
                 <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-6 pb-4 border-b border-slate-50">Logistique & Prix</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-1">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Prix (CFA)</label>
-                        <input type="number" name="price" value="{{ old('price', $product->price) }}" required 
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Prix catalogue (CFA)</label>
+                        <input type="number" name="price" value="{{ old('price', $product->price) }}" required step="1"
                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all">
                         <x-input-error :messages="$errors->get('price')" class="mt-2" />
                     </div>
                     <div class="space-y-1">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Stock Initial</label>
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Prix promo (CFA)</label>
+                        <input type="number" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}" step="1"
+                               class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all"
+                               placeholder="Vide = pas de promo">
+                        <x-input-error :messages="$errors->get('sale_price')" class="mt-2" />
+                    </div>
+                    <div class="space-y-1 md:col-span-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Stock</label>
                         <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" required 
                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all">
                         <x-input-error :messages="$errors->get('stock')" class="mt-2" />
@@ -97,7 +104,6 @@
                     </div>
                     <x-input-error :messages="$errors->get('image')" class="mt-2" />
                 </div>
->
 
                 <div class="pt-4 border-t border-slate-50">
                     <label class="flex items-center gap-3 cursor-pointer group">

@@ -66,11 +66,38 @@
                 </div>
 
                 <!-- Product Buying Section (Col 8-12) -->
-                <div class="lg:col-span-5 sticky top-36">
+                @php
+                    $avg = $product->average_rating;
+                    $fullStars = $avg ? (int) floor($avg) : 0;
+                    $outOfStock = ($product->stock ?? 0) <= 0;
+                @endphp
+                <div class="lg:col-span-5 sticky top-36" x-data="{
+                    isFavorited: {{ $product->isFavoritedBy(Auth::user()) ? 'true' : 'false' }},
+                    wishlistLoading: false,
+                    toggleWishlist() {
+                        if ({{ Auth::check() ? 'false' : 'true' }}) { window.dispatchEvent(new CustomEvent('open-login')); return; }
+                        if (this.wishlistLoading) return;
+                        this.wishlistLoading = true;
+                        fetch('{{ route('wishlist.toggle', $product) }}', {
+                            method: 'POST',
+                            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+                        }).then(r => r.json()).then(d => {
+                            this.isFavorited = (d.status === 'added');
+                            this.wishlistLoading = false;
+                            $dispatch('wishlist-updated', { count: d.count });
+                            $dispatch('add-toast', { message: d.status === 'added' ? '{{ __('messages.add_to_wishlist_success') }}' : '{{ __('messages.remove_from_wishlist_success') }}', type: 'success' });
+                        }).catch(() => this.wishlistLoading = false);
+                    }
+                }">
                     <div class="space-y-12 border-l-8 border-[var(--primary)] pl-12 py-4">
                         <div class="space-y-4">
-                            <div class="flex items-center gap-2 text-amber-500">
-                                <i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i>
+                            <div class="flex items-center gap-1 text-amber-500">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star text-xs {{ $i <= $fullStars ? '' : 'opacity-20' }}"></i>
+                                @endfor
+                                @if($avg)
+                                    <span class="text-slate-400 text-[10px] font-bold ml-2">({{ $avg }}/5 — {{ $reviews->count() }} {{ __('messages.reviews') }})</span>
+                                @endif
                             </div>
                             <h1 class="text-4xl md:text-6xl font-black text-slate-800 uppercase tracking-tight leading-[1.1]">
                                 {{ $product->display_name }}
@@ -78,10 +105,17 @@
                         </div>
 
                         <div class="space-y-8">
-                            <div class="flex items-baseline gap-3">
-                                <span class="text-6xl font-black text-[var(--secondary)] tracking-tighter">{{ number_format($product->price, 0, ',', ' ') }}</span>
+                            <div class="flex flex-wrap items-baseline gap-3">
+                                @if($product->has_sale)
+                                    <span class="text-2xl font-black text-slate-300 line-through tracking-tight">{{ number_format($product->price, 0, ',', ' ') }} CFA</span>
+                                @endif
+                                <span class="text-6xl font-black text-[var(--secondary)] tracking-tighter">{{ number_format($product->selling_price, 0, ',', ' ') }}</span>
                                 <span class="text-xl font-bold text-slate-400 uppercase">CFA</span>
                             </div>
+
+                            @if($outOfStock)
+                                <p class="text-red-600 font-black text-sm uppercase tracking-widest">{{ __('messages.out_of_stock') }}</p>
+                            @endif
 
                             <p class="text-slate-600 text-lg leading-relaxed font-medium">
                                 {{ $product->description ?: 'Ce produit de qualité industrielle supérieure est disponible pour vos besoins agricoles et d\'élevage.' }}
@@ -102,26 +136,30 @@
                                     })
                                 ">
                                     @csrf
-                                    <button type="submit" class="w-full py-6 bg-[var(--primary)] text-white text-base font-black uppercase tracking-widest hover:bg-[var(--primary-hover)] transition-all flex items-center justify-center gap-4">
+                                    <button type="submit" @if($outOfStock) disabled @endif class="w-full py-6 bg-[var(--primary)] text-white text-base font-black uppercase tracking-widest hover:bg-[var(--primary-hover)] transition-all flex items-center justify-center gap-4 disabled:opacity-40 disabled:cursor-not-allowed">
                                         <span>{{ __('messages.add_to_cart_detail') }}</span>
                                         <i class="fas fa-shopping-basket"></i>
                                     </button>
                                 </form>
-                                
+
                                 <div class="grid grid-cols-2 gap-4">
-                                    <button @click="$dispatch('wishlist-toggle', { id: {{ $product->id }} })" class="flex items-center justify-center gap-3 py-4 bg-slate-50 border border-slate-100 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-white transition-all">
-                                         <i class="far fa-heart"></i> Favoris
+                                    <button type="button" @click="toggleWishlist()" :disabled="wishlistLoading"
+                                            class="flex items-center justify-center gap-3 py-4 border text-[10px] font-black uppercase tracking-widest transition-all"
+                                            :class="isFavorited ? 'bg-[var(--primary)] border-[var(--primary)] text-white' : 'bg-slate-50 border-slate-100 text-slate-600 hover:bg-white'">
+                                        <i :class="isFavorited ? 'fas fa-heart' : 'far fa-heart'"></i> {{ __('messages.favorites') }}
                                     </button>
                                     <a href="https://wa.me/221783577431?text={{ urlencode('Bonjour, je souhaite commander : ' . $product->name) }}" target="_blank" class="flex items-center justify-center gap-3 py-4 bg-[#25D366] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#128C7E] transition-all">
-                                         <i class="fab fa-whatsapp"></i> Order Status
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
                                     </a>
                                 </div>
                             </div>
 
-                            <div class="pt-8 border-t border-slate-100">
-                                <div class="flex items-center gap-4 mb-2">
+                            <div class="pt-8 border-t border-slate-100 space-y-2">
+                                <div class="flex items-center gap-4">
                                     <i class="fas fa-check-circle text-[var(--primary)]"></i>
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ __('messages.in_stock') }}</span>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        @if($outOfStock) {{ __('messages.out_of_stock') }} @else {{ __('messages.in_stock') }} ({{ $product->stock }}) @endif
+                                    </span>
                                 </div>
                                 <div class="flex items-center gap-4">
                                     <i class="fas fa-shield-alt text-[var(--primary)]"></i>
@@ -130,6 +168,73 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Avis clients -->
+            <div class="mt-24 pt-16 border-t border-slate-100">
+                <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tight mb-8">{{ __('messages.reviews_section_title') }}</h2>
+
+                @if(session('review_success'))
+                    <p class="mb-6 text-green-600 font-bold text-sm">{{ session('review_success') }}</p>
+                @endif
+                @if(session('review_error'))
+                    <p class="mb-6 text-red-600 font-bold text-sm">{{ session('review_error') }}</p>
+                @endif
+
+                @auth
+                    @if($userReview)
+                        <div class="mb-10 p-6 bg-slate-50 border border-slate-100 rounded-none">
+                            <p class="text-sm font-bold text-slate-700">{{ __('messages.your_review') }} : <span class="text-amber-500">{{ $userReview->rating }}/5</span></p>
+                            <p class="text-slate-600 text-sm mt-2">{{ $userReview->body ?: '—' }}</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase mt-2">
+                                @if($userReview->is_approved) {{ __('messages.review_visible') }} @else {{ __('messages.review_pending') }} @endif
+                            </p>
+                            <form action="{{ route('reviews.destroy', $userReview) }}" method="POST" class="mt-4" onsubmit="return confirm('{{ __('messages.review_delete_confirm') }}');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-[10px] font-black uppercase text-red-500 hover:underline">{{ __('messages.remove_line') }}</button>
+                            </form>
+                        </div>
+                    @else
+                        <form action="{{ route('reviews.store', $product) }}" method="POST" class="mb-12 max-w-xl space-y-4">
+                            @csrf
+                            <div>
+                                <label class="text-[10px] font-black uppercase text-slate-400">{{ __('messages.review_rating') }}</label>
+                                <select name="rating" required class="mt-1 w-full bg-slate-50 border border-slate-100 py-3 px-4 font-bold">
+                                    @for($r = 5; $r >= 1; $r--)
+                                        <option value="{{ $r }}">{{ $r }} / 5</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black uppercase text-slate-400">{{ __('messages.review_comment') }}</label>
+                                <textarea name="body" rows="4" class="mt-1 w-full bg-slate-50 border border-slate-100 py-3 px-4 font-medium text-sm" placeholder="..."></textarea>
+                            </div>
+                            <button type="submit" class="px-8 py-3 bg-[var(--primary)] text-white text-[11px] font-black uppercase tracking-widest hover:bg-slate-900 transition-colors">{{ __('messages.review_submit') }}</button>
+                        </form>
+                    @endif
+                @else
+                    <p class="mb-10 text-slate-500 text-sm font-medium">{{ __('messages.review_login_prompt') }}</p>
+                @endauth
+
+                <div class="space-y-6">
+                    @forelse($reviews as $rev)
+                        <div class="border-b border-slate-100 pb-6">
+                            <div class="flex items-center gap-2 text-amber-500 mb-2">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="fas fa-star text-[10px] {{ $i <= $rev->rating ? '' : 'opacity-20' }}"></i>
+                                @endfor
+                                <span class="text-slate-800 font-black text-sm ml-2">{{ $rev->user?->name ?? 'Client' }}</span>
+                            </div>
+                            @if($rev->body)
+                                <p class="text-slate-600 text-sm leading-relaxed">{{ $rev->body }}</p>
+                            @endif
+                            <p class="text-[10px] text-slate-400 mt-2">{{ $rev->created_at->translatedFormat('d M Y') }}</p>
+                        </div>
+                    @empty
+                        <p class="text-slate-400 text-sm font-medium">{{ __('messages.reviews_empty') }}</p>
+                    @endforelse
                 </div>
             </div>
 

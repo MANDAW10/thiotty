@@ -17,12 +17,53 @@ class Product extends Model
         'slug',
         'description',
         'price',
+        'sale_price',
         'stock',
         'image',
         'is_featured',
     ];
 
-    protected $appends = ['image_url', 'display_name', 'average_rating'];
+    protected $appends = ['image_url', 'display_name', 'average_rating', 'selling_price', 'has_sale'];
+
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+            'sale_price' => 'decimal:2',
+            'is_featured' => 'boolean',
+        ];
+    }
+
+    /**
+     * Prix affiché / panier (promo si défini et inférieur au prix barré).
+     */
+    protected function sellingPrice(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $regular = (float) $this->price;
+                $sale = $this->sale_price !== null ? (float) $this->sale_price : null;
+
+                if ($sale !== null && $sale > 0 && $sale < $regular) {
+                    return $sale;
+                }
+
+                return $regular;
+            }
+        );
+    }
+
+    protected function hasSale(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $regular = (float) $this->price;
+                $sale = $this->sale_price !== null ? (float) $this->sale_price : null;
+
+                return $sale !== null && $sale > 0 && $sale < $regular;
+            }
+        );
+    }
 
     /**
      * Get the translated name.
@@ -66,10 +107,17 @@ class Product extends Model
                     'vache-gobra' => 'https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&q=80&w=800',
                     'vache-metisse' => 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?auto=format&fit=crop&q=80&w=800',
                     'vache-laitiere' => 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&q=80&w=800',
+                    'montbeliarde' => 'https://images.unsplash.com/photo-1547496502-affa22d38842?auto=format&fit=crop&q=80&w=800',
+                    'holstein' => 'https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&q=80&w=800',
+                    'jersey' => 'https://images.unsplash.com/photo-1563911305907-b759d2b86604?auto=format&fit=crop&q=80&w=800',
                     'cheval' => 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&q=80&w=800',
                     'poussins' => 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&q=80&w=800',
                     'poulet' => 'https://images.unsplash.com/photo-1587593810167-a84920ea0831?auto=format&fit=crop&q=80&w=800',
                     'pintade' => 'https://images.unsplash.com/photo-1612170153139-6f881ff067e0?auto=format&fit=crop&q=80&w=800',
+                    'pigeon' => 'https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&q=80&w=800',
+                    'mouton' => 'https://images.unsplash.com/photo-1484557985045-edf745e49ea4?auto=format&fit=crop&q=80&w=800',
+                    'ensilage' => 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&q=80&w=800',
+                    'viande' => 'https://images.unsplash.com/photo-1607623814075-e41dfee430ef?auto=format&fit=crop&q=80&w=800',
                     'aliment' => 'https://images.unsplash.com/photo-1534067783941-51c9c2396414?auto=format&fit=crop&q=80&w=800',
                     'lait' => 'https://images.unsplash.com/photo-1550583724-1d2ee29ad7a2?auto=format&fit=crop&q=80&w=800',
                     'miel' => 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=800',

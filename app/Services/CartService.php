@@ -20,15 +20,17 @@ class CartService
                 ->with('product')
                 ->get()
                 ->mapWithKeys(function ($item) {
-                    if (!$item->product) return []; // Double safety
-                    
+                    if (! $item->product) {
+                        return [];
+                    } // Double safety
+
                     return [$item->product_id => [
                         'id' => $item->product_id,
                         'name' => $item->product->name,
                         'quantity' => $item->quantity,
-                        'price' => $item->product->price,
+                        'price' => $item->product->selling_price,
                         'image' => $item->product->image_url,
-                        'slug' => $item->product->slug
+                        'slug' => $item->product->slug,
                     ]];
                 })
                 ->filter() // Remove any empty arrays from failed product loads
@@ -54,7 +56,7 @@ class CartService
                 CartItem::create([
                     'user_id' => Auth::id(),
                     'product_id' => $product->id,
-                    'quantity' => $quantity
+                    'quantity' => $quantity,
                 ]);
             }
         } else {
@@ -68,9 +70,9 @@ class CartService
                     'id' => $product->id, // Store ID explicitly for easier migration
                     'name' => $product->name,
                     'quantity' => $quantity,
-                    'price' => $product->price,
+                    'price' => $product->selling_price,
                     'image' => $product->image_url,
-                    'slug' => $product->slug
+                    'slug' => $product->slug,
                 ];
             }
             Session::put('cart', $cart);
@@ -135,15 +137,21 @@ class CartService
      */
     public function migrateSessionToUser()
     {
-        if (!Auth::check()) return;
+        if (! Auth::check()) {
+            return;
+        }
 
         $sessionCart = Session::get('cart', []);
-        if (empty($sessionCart)) return;
+        if (empty($sessionCart)) {
+            return;
+        }
 
         foreach ($sessionCart as $productId => $details) {
             // Validate that the product exists before migrating
             $productExists = Product::where('id', $productId)->exists();
-            if (!$productExists) continue;
+            if (! $productExists) {
+                continue;
+            }
 
             $cartItem = CartItem::where('user_id', Auth::id())
                 ->where('product_id', $productId)
@@ -155,7 +163,7 @@ class CartService
                 CartItem::create([
                     'user_id' => Auth::id(),
                     'product_id' => $productId,
-                    'quantity' => $details['quantity'] ?? 1
+                    'quantity' => $details['quantity'] ?? 1,
                 ]);
             }
         }
@@ -173,6 +181,7 @@ class CartService
         foreach ($this->getItems() as $item) {
             $total += ($item['price'] * $item['quantity']);
         }
+
         return $total;
     }
 }
