@@ -10,6 +10,9 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-6" :status="session('status')" />
 
+    <!-- Afficher les erreurs -->
+    <x-form-errors />
+
     <form method="POST" action="{{ route('login') }}" class="space-y-6" x-data="{ show: false, loading: false }" @submit="loading = true">
         @csrf
 
@@ -20,8 +23,8 @@
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-primary transition-colors">
                     <i class="fas fa-envelope text-sm"></i>
                 </div>
-                <input id="email" name="email" type="email" 
-                       class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                <input id="email" name="email" type="email"
+                       class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-12 pr-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300"
                        placeholder="votre@email.com"
                        value="{{ old('email') }}" required autofocus autocomplete="username">
             </div>
@@ -41,8 +44,8 @@
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-primary transition-colors">
                     <i class="fas fa-lock text-sm"></i>
                 </div>
-                <input id="password" name="password" :type="show ? 'text' : 'password'" 
-                       class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-12 pr-12 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                <input id="password" name="password" :type="show ? 'text' : 'password'"
+                       class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-12 pr-12 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300"
                        placeholder="••••••••"
                        required autocomplete="current-password">
                 <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-400 hover:text-primary transition-colors">
@@ -74,7 +77,7 @@
 
         <div class="text-center pt-4">
             <p class="text-xs font-bold text-slate-400">
-                Pas encore de compte ? 
+                Pas encore de compte ?
                 <a href="{{ route('register') }}" class="text-primary hover:underline ml-1 font-black">Inscrivez-vous ici</a>
             </p>
         </div>

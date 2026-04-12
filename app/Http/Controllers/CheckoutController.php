@@ -6,6 +6,7 @@ use App\Models\CartItem;
 use App\Models\DeliveryZone;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Payment;
 use App\Services\CartService;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
@@ -71,6 +72,15 @@ class CheckoutController extends Controller
                 ]);
             }
 
+            // Create payment record
+            Payment::create([
+                'order_id' => $order->id,
+                'user_id' => auth()->id(),
+                'amount' => $total,
+                'payment_method' => $request->payment_method,
+                'status' => 'pending',
+            ]);
+
             DB::commit();
 
             Session::forget('cart');
@@ -79,7 +89,8 @@ class CheckoutController extends Controller
             }
 
             // Send automatic Telegram notification to admin (Free & Automatic)
-            try {
+            // Redirect to payment page
+            return redirect()->route('payment.show', $order)->with('success', 'Commande passée ! Veuillez procéder au paiement.
                 $order->load(['items.product', 'deliveryZone']);
                 $telegram = new TelegramService;
                 $telegram->sendOrderNotification($order);

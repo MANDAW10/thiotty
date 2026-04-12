@@ -16,6 +16,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ShopController;
@@ -145,6 +146,19 @@ Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index')->middleware('auth');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store')->middleware('auth');
 Route::get('/order/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('order.confirmation')->middleware('auth');
+
+// Payment Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/payment/{order}', [PaymentController::class, 'show'])->name('payment.show');
+    Route::post('/payment/{order}/initiate', [PaymentController::class, 'initiate'])->name('payment.initiate');
+    Route::post('/payment/{order}/process', [PaymentController::class, 'process'])->name('payment.process');
+    Route::get('/payment/{order}/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+    Route::get('/payment/history', [PaymentController::class, 'history'])->name('payment.history');
+    Route::get('/payment/details/{payment}', [PaymentController::class, 'details'])->name('payment.details');
+});
+
+// Payment Webhook (public, no auth)
+Route::post('/payment/confirm', [PaymentController::class, 'confirm'])->name('payment.confirm');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

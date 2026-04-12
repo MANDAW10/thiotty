@@ -24,7 +24,7 @@
 
             <!-- Uber-Style Tracking Visualization -->
             <div class="bg-[#FCFCFC] rounded-[48px] p-8 md:p-16 mb-16 border border-slate-100 relative overflow-hidden group shadow-2xl shadow-slate-200/50">
-                
+
                 <!-- ETA Notification -->
                 @if($order->status == 'shipping' || $order->status == 'arriving')
                 <div class="mb-12 flex items-center gap-6 bg-white p-6 rounded-[32px] border border-primary/10 shadow-xl shadow-primary/5 animate-fade-in-up">
@@ -141,7 +141,7 @@
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
                         @if($order->delivery_person_phone)
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $order->delivery_person_phone) }}?text=Bonjour {{ $order->delivery_person_name }}, je vous contacte pour ma commande Thiotty #{{ $order->id }}" 
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $order->delivery_person_phone) }}?text=Bonjour {{ $order->delivery_person_name }}, je vous contacte pour ma commande Thiotty #{{ $order->id }}"
                            target="_blank"
                            class="flex-1 flex items-center justify-center gap-4 bg-white text-slate-900 px-8 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all group">
                            <i class="fab fa-whatsapp text-lg text-green-500 group-hover:text-white"></i> Contacter
@@ -199,6 +199,64 @@
                                     <p class="text-xs font-black text-slate-900">{{ $order->deliveryZone->name ?? 'Dakar' }} (+{{ number_format($order->delivery_fee, 0, ',', ' ') }})</p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Status Card -->
+                    <div class="bg-white rounded-[32px] p-10 border border-slate-200 shadow-sm">
+                        <h3 class="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-8 leading-none">Statut du paiement</h3>
+                        <div class="space-y-6">
+                            @php
+                                $payment = $order->payment;
+                                $payment_status = $payment ? $payment->status : $order->payment_status;
+                            @endphp
+
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black
+                                    @if($payment_status === 'paid' || ($payment && $payment->isCompleted())) bg-green-500
+                                    @elseif($payment_status === 'processing' || ($payment && $payment->isProcessing())) bg-yellow-500
+                                    @elseif($payment_status === 'failed' || ($payment && $payment->isFailed())) bg-red-500
+                                    @else bg-slate-300
+                                    @endif">
+                                    <i class="fas @if($payment_status === 'paid' || ($payment && $payment->isCompleted())) fa-check-circle @elseif($payment_status === 'processing' || ($payment && $payment->isProcessing())) fa-hourglass @elseif($payment_status === 'failed' || ($payment && $payment->isFailed())) fa-times-circle @else fa-circle-notch @endif"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Mode de paiement</p>
+                                    <p class="text-xs font-black text-slate-900">
+                                        @if($order->payment_method === 'cash')
+                                            À la livraison
+                                        @elseif($order->payment_method === 'wave')
+                                            Wave / Wari
+                                        @elseif($order->payment_method === 'orange_money')
+                                            Orange Money
+                                        @else
+                                            {{ ucfirst($order->payment_method) }}
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+
+                            @if(!($payment_status === 'paid' || ($payment && $payment->isCompleted())))
+                                <a href="{{ route('payment.show', $order) }}" class="w-full mt-6 inline-block text-center bg-primary hover:bg-primary/90 text-white px-6 py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] transition-all shadow-lg shadow-primary/20">
+                                    <i class="fas fa-credit-card mr-2"></i> Procéder au paiement
+                                </a>
+                            @else
+                                <div class="mt-6 p-4 bg-green-50 rounded-xl border border-green-200 text-center">
+                                    <p class="text-xs font-black text-green-700">✓ Paiement effectué avec succès</p>
+                                    @if($payment && $payment->transaction_id)
+                                        <p class="text-[9px] text-green-600 mt-2">ID: {{ $payment->transaction_id }}</p>
+                                    @endif
+                                </div>
+                            @endif
+
+                            @if($payment && $payment->isFailed())
+                                <div class="mt-6 p-4 bg-red-50 rounded-xl border border-red-200">
+                                    <p class="text-xs font-black text-red-700 mb-3">⚠️ Paiement échoué</p>
+                                    <a href="{{ route('payment.show', $order) }}" class="w-full text-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-widest transition-colors">
+                                        Réessayer
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

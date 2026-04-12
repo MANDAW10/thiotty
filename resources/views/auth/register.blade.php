@@ -7,7 +7,7 @@
         <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Rejoignez la <span class="text-primary">famille Thiotty</span></p>
     </div>
 
-    <form method="POST" action="{{ route('register') }}" class="space-y-4" x-data="{ show: false, showConfirm: false, loading: false, 
+    <form method="POST" action="{{ route('register') }}" class="space-y-4" x-data="{ show: false, showConfirm: false, loading: false,
         formatPhone(e) {
             let val = e.target.value.replace(/\D/g, '');
             if (val.length > 9) val = val.substring(0, 9);
@@ -23,6 +23,9 @@
     }" @submit="loading = true">
         @csrf
 
+        <!-- Afficher les erreurs -->
+        <x-form-errors />
+
         <div class="grid grid-cols-2 gap-4">
             <!-- Name -->
             <div class="space-y-1.5">
@@ -31,8 +34,8 @@
                     <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-primary transition-colors">
                         <i class="fas fa-user text-sm"></i>
                     </div>
-                    <input id="name" name="name" type="text" 
-                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                    <input id="name" name="name" type="text"
+                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300"
                            placeholder="Nom complet"
                            value="{{ old('name') }}" required autofocus autocomplete="name">
                 </div>
@@ -46,7 +49,7 @@
                         <span class="text-[10px] font-black text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">+221</span>
                     </div>
                     <input id="phone" name="phone" type="tel" x-on:input="formatPhone($event)"
-                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-14 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300" 
+                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-14 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300"
                            value="{{ old('phone') }}" required placeholder="7x xxx xx">
                 </div>
             </div>
@@ -60,8 +63,8 @@
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-primary transition-colors">
                     <i class="fas fa-envelope text-sm"></i>
                 </div>
-                <input id="email" name="email" type="email" 
-                       class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                <input id="email" name="email" type="email"
+                       class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-4 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300"
                        placeholder="votre@email.com"
                        value="{{ old('email') }}" required autocomplete="username">
             </div>
@@ -75,8 +78,8 @@
                     <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-primary transition-colors">
                         <i class="fas fa-lock text-sm"></i>
                     </div>
-                    <input id="password" name="password" :type="show ? 'text' : 'password'" 
-                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300" 
+                    <input id="password" name="password" :type="show ? 'text' : 'password'"
+                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300"
                            placeholder="••••"
                            required autocomplete="new-password">
                     <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
@@ -92,8 +95,8 @@
                     <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-300 group-focus-within:text-primary transition-colors">
                         <i class="fas fa-check-double text-sm"></i>
                     </div>
-                    <input id="password_confirmation" name="password_confirmation" :type="showConfirm ? 'text' : 'password'" 
-                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300" 
+                    <input id="password_confirmation" name="password_confirmation" :type="showConfirm ? 'text' : 'password'"
+                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-10 font-bold text-slate-900 text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300"
                            placeholder="••••"
                            required autocomplete="new-password">
                     <button type="button" @click="showConfirm = !showConfirm" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
@@ -119,7 +122,7 @@
 
         <div class="text-center pt-4">
             <p class="text-xs font-bold text-slate-400">
-                Déjà inscrit ? 
+                Déjà inscrit ?
                 <a href="{{ route('login') }}" class="text-primary hover:underline ml-1 font-black">Se connecter</a>
             </p>
         </div>
