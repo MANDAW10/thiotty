@@ -77,7 +77,7 @@
 
                 @foreach($categories->sortBy(fn($c) => array_search($c->slug, $slugs)) as $cat)
                     <a href="{{ route('shop.category', $cat->slug) }}" 
-                       class="flex-none w-[75%] md:w-[350px] snap-center h-[380px] md:h-[480px] relative rounded-[3rem] overflow-hidden shadow-2xl shadow-slate-200/50 transition-all duration-700 bg-slate-100 group hover-glare">
+                       class="flex-none w-[70%] md:w-[280px] snap-center h-[300px] md:h-[380px] relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 transition-all duration-700 bg-slate-100 group hover-glare">
                         
                         <!-- Premium Badge -->
                         <div class="absolute top-8 left-8 z-20 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[9px] font-black text-white uppercase tracking-[0.2em]">
