@@ -115,6 +115,111 @@
         @apply absolute bottom-4 right-4 w-10 h-10 text-white rounded-none flex items-center justify-center shadow-md transition-all hover:scale-110 active:scale-90 z-10;
     }
 
+    /* Segmented Search Bar (Caawogi Style) */
+    .search-segmented {
+        display: flex;
+        border: 1px solid var(--border-main);
+        background: white;
+        height: 50px;
+        width: 100%;
+    }
+
+    .search-segmented input {
+        flex: 1;
+        border: none !important;
+        padding: 0 20px;
+        font-size: 14px;
+        font-weight: 500;
+        outline: none;
+    }
+
+    .search-segmented .category-select {
+        border-left: 1px solid var(--border-main);
+        padding: 0 15px;
+        display: flex;
+        align-items: center;
+        background: #fcfcfc;
+        min-width: 200px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        color: #666;
+    }
+
+    .search-segmented .search-btn {
+        width: 60px;
+        background: white;
+        border-left: 1px solid var(--border-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+
+    .search-segmented .search-btn:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    /* Contact Header Blocks */
+    .contact-header-block {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .contact-header-block i {
+        font-size: 24px;
+        color: #666;
+    }
+
+    .contact-header-block .label {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #333;
+        line-height: 1;
+        margin-bottom: 2px;
+    }
+
+    .contact-header-block .value {
+        font-size: 13px;
+        font-weight: 700;
+        color: #333;
+        line-height: 1.2;
+    }
+
+    /* Nav Menu Blocky */
+    .nav-link-blocky {
+        height: 100%;
+        padding: 0 25px;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #333;
+        transition: all 0.3s ease;
+        border-right: 1px solid #f0f0f0;
+    }
+
+    .nav-link-blocky:hover, .nav-link-blocky.active {
+        background: var(--primary);
+        color: white;
+    }
+
+    .nav-action-icon {
+        font-size: 18px;
+        color: #333;
+        transition: color 0.3s ease;
+    }
+
+    .nav-action-icon:hover {
+        color: var(--primary);
+    }
+
     /* Custom Navigation Link */
     .nav-link-thiotty {
         color: var(--text-muted);

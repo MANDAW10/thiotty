@@ -23,74 +23,147 @@
     }
 }" @wishlist-updated.window="wishlistCount = $event.detail.count" @cart-updated.window="cartCount = $event.detail.count" @open-login.window="showLogin = true">
 
-    <!-- LEVEL 1: Top Bar (Contact Info) -->
-    <div class="bg-[var(--primary)] text-white py-2 hidden md:block border-b border-white/10">
-        <div class="container-custom flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>+221 78 357 74 31</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-envelope"></i>
-                    <span>contact@thiotty.com</span>
-                </div>
+ <!-- Header starting directly with white background as per screenshot -->
+
+    <!-- MOBILE HEADER (Small screens only) -->
+    <div class="md:hidden bg-white border-b border-slate-100 py-4 px-4 flex justify-between items-center sticky top-0 z-[100]">
+        <button @click="showMobileMenu = true" class="text-slate-600">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+        <a href="{{ route('home') }}">
+            <x-application-logo class="h-8 w-auto" />
+        </a>
+        <a href="{{ route('cart.index') }}" class="relative text-slate-600">
+            <i class="fas fa-shopping-basket text-xl"></i>
+            <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-2 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
+        </a>
+    </div>
+
+    <!-- LEVEL 2: Middle Bar (Logo, Search & Contact) -->
+    <div class="bg-white py-6 md:py-8 border-b border-slate-100 hidden md:block">
+        <div class="container-custom flex items-center justify-between gap-12">
+            <!-- Logo -->
+            <div class="min-w-fit">
+                <a href="{{ route('home') }}" class="block">
+                    <x-application-logo class="h-10 w-auto" />
+                </a>
             </div>
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Dakar, Sénégal</span>
+
+            <!-- Segmented Search Bar -->
+            <div class="flex-1 max-w-2xl">
+                <form action="{{ route('shop.search') }}" method="GET" class="search-segmented" x-data="{ open: false, selectedCategory: 'Sélectionnez une catégorie', selectedSlug: '' }">
+                    <input type="hidden" name="category" :value="selectedSlug">
+                    <input type="text" name="query" placeholder="Rechercher" class="flex-1 px-5 outline-none font-medium h-full">
+                    
+                    <div class="category-select relative" @click="open = !open" @click.away="open = false">
+                        <span class="truncate" x-text="selectedCategory"></span>
+                        <i class="fas fa-chevron-down ml-auto text-[10px] opacity-30 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                        
+                        <!-- Dropdown -->
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100"
+                             class="absolute top-full left-0 right-0 bg-white border border-slate-200 mt-1 z-50 py-2 shadow-xl"
+                             style="display: none;">
+                            <div class="max-h-60 overflow-y-auto custom-scrollbar">
+                                <a href="#" @click.prevent="selectedCategory = 'Toutes catégories'; selectedSlug = ''; open = false" class="block px-4 py-2 text-xs font-bold uppercase hover:bg-slate-50">Toutes catégories</a>
+                                <div class="h-[1px] bg-slate-100 my-1 mx-4"></div>
+                                @foreach(App\Models\Category::all() as $cat)
+                                    <a href="#" @click.prevent="selectedCategory = '{{ $cat->display_name }}'; selectedSlug = '{{ $cat->slug }}'; open = false" class="block px-4 py-2 text-xs font-bold uppercase hover:bg-slate-50 text-slate-600">{{ $cat->display_name }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search text-xl"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Contact Blocks -->
+            <div class="flex items-center gap-10 min-w-fit">
+                <!-- Phone -->
+                <div class="contact-header-block">
+                    <i class="fas fa-phone-alt"></i>
+                    <div class="flex flex-col">
+                        <span class="label">Appelez Nous</span>
+                        <span class="value">+221 78 357 74 31</span>
+                    </div>
                 </div>
-                <div class="flex items-center bg-white/10 rounded-none p-1 border border-white/20">
-                    <a href="{{ route('language.switch', 'fr') }}" class="px-2 py-0.5 {{ App::getLocale() == 'fr' ? 'bg-white text-[var(--primary)]' : 'text-white' }}">FR</a>
-                    <a href="{{ route('language.switch', 'en') }}" class="px-2 py-0.5 {{ App::getLocale() == 'en' ? 'bg-white text-[var(--primary)]' : 'text-white' }}">EN</a>
+                <!-- Email -->
+                <div class="contact-header-block">
+                    <i class="far fa-envelope"></i>
+                    <div class="flex flex-col">
+                        <span class="label">Envoyez mail</span>
+                        <span class="value">contact@thiotty.com</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- LEVEL 2: Middle Bar (Brand & Search) -->
-    <div class="bg-white py-6 md:py-8 border-b border-[var(--border-main)]">
-        <div class="container-custom flex items-center justify-between gap-8 md:gap-12">
-            <!-- Logo -->
-            <div class="flex items-center gap-4 min-w-fit">
-                <button @click="showMobileMenu = true" class="md:hidden p-2 text-slate-500 hover:text-primary transition-colors">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-                <a href="{{ route('home') }}" class="block">
-                    <x-application-logo class="h-8 sm:h-12 w-auto" />
+    <!-- LEVEL 3: Bottom Bar (Nav Menu & Actions) -->
+    <div class="bg-white border-b border-slate-100 hidden md:block">
+        <div class="container-custom flex items-center justify-between h-[60px]">
+            <!-- Main Menu -->
+            <nav class="flex items-center h-full">
+                <a href="{{ route('home') }}" class="nav-link-blocky {{ request()->routeIs('home') ? 'active' : '' }}">
+                    ACCUEIL
                 </a>
-            </div>
+                <a href="{{ route('shop.index') }}" class="nav-link-blocky {{ request()->routeIs('shop.index') ? 'active' : '' }}">
+                    BOUTIQUE
+                </a>
+                <a href="{{ route('shop.index', ['category' => 'elevage']) }}" class="nav-link-blocky">
+                    ÉLEVAGE
+                </a>
+                <a href="{{ route('shop.index', ['category' => 'agriculture']) }}" class="nav-link-blocky">
+                    AGRICULTURE
+                </a>
+                <a href="{{ route('contact') }}" class="nav-link-blocky {{ request()->routeIs('contact') ? 'active' : '' }}">
+                    CONTACT
+                </a>
+            </nav>
 
-            <!-- Search Bar (Centered) -->
-            <div class="flex-1 hidden md:block max-w-2xl mx-auto">
-                <form action="{{ route('shop.search') }}" method="GET" class="relative group">
-                    <input type="text" name="query" placeholder="{{ __('messages.search_placeholder') }}" 
-                           class="w-full h-[50px] border border-[var(--border-main)] rounded-none px-6 py-3 text-sm focus:ring-1 focus:ring-[var(--primary)] focus:border-[var(--primary)] transition-all outline-none">
-                    <button type="submit" class="absolute right-0 top-0 h-full w-[60px] bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] transition-colors">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-            </div>
+            <!-- Action Icons & Auth -->
+            <div class="flex items-center gap-8 h-full pl-6">
+                <!-- Wishlist -->
+                <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth 
+                   class="relative group">
+                    <i class="far fa-heart nav-action-icon"></i>
+                    <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-3 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
+                </a>
 
-            <!-- Actions -->
-            <div class="flex items-center gap-2 sm:gap-6 min-w-fit">
+                <!-- Compare (Placeholder) -->
+                <a href="#" class="group">
+                    <i class="fas fa-random nav-action-icon"></i>
+                </a>
+
+                <!-- Cart -->
+                <a href="{{ route('cart.index') }}" class="flex items-center gap-3 group">
+                    <div class="relative">
+                        <i class="fas fa-shopping-basket nav-action-icon"></i>
+                        <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-3 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
+                    </div>
+                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-800">
+                        CFA <span x-text="new Intl.NumberFormat('fr-FR').format({{ app(\App\Services\CartService::class)->getTotalBalance() }})">0</span>
+                    </span>
+                </a>
+
+                <!-- Auth -->
+                <div class="h-4 w-[1px] bg-slate-200"></div>
+
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="flex items-center gap-3 p-2 group">
-                                <i class="fas fa-user text-xl text-slate-400 group-hover:text-[var(--primary)] transition-colors"></i>
-                                <div class="hidden lg:block text-left">
-                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Mon Compte</p>
-                                    <p class="text-[11px] font-bold text-slate-800 leading-none">{{ Auth::user()->name }}</p>
-                                </div>
+                            <button class="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest hover:text-primary transition-colors">
+                                <span>{{ Auth::user()->name }}</span>
+                                <i class="fas fa-chevron-down text-[8px]"></i>
                             </button>
                         </x-slot>
                         <x-slot name="content">
                             <x-dropdown-link href="javascript:void(0)" @click="showProfile = true">{{ __('messages.profile') }}</x-dropdown-link>
-                            @if(Auth::user()->is_admin)
-                                <x-dropdown-link :href="route('admin.dashboard')" class="text-primary font-black">Administration</x-dropdown-link>
-                            @endif
                             <x-dropdown-link :href="route('orders.index')">{{ __('messages.my_orders') }}</x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -99,65 +172,11 @@
                         </x-slot>
                     </x-dropdown>
                 @else
-                    <button @click="showLogin = true" class="flex items-center gap-3 p-2 group">
-                        <i class="fas fa-user-circle text-2xl text-slate-400 group-hover:text-[var(--primary)] transition-colors"></i>
-                        <div class="hidden lg:block text-left">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Connexion</p>
-                            <p class="text-[11px] font-bold text-slate-800 leading-none">S'identifier</p>
-                        </div>
+                    <button @click="showLogin = true" class="text-[11px] font-black uppercase tracking-[0.1em] hover:text-primary transition-colors">
+                        LOGIN / REGISTER
                     </button>
                 @endauth
-
-                <!-- Wishlist -->
-                <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth 
-                   class="relative p-2 group">
-                    <i class="fas fa-heart text-xl text-slate-400 group-hover:text-[var(--primary)] transition-colors"></i>
-                    <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-1 -right-1 bg-[var(--primary)] text-white text-[9px] font-bold w-4 h-5 flex items-center justify-center"></span>
-                </a>
-
-                <!-- Cart -->
-                <a href="{{ route('cart.index') }}" class="relative p-2 group">
-                    <div class="flex items-center gap-3">
-                        <div class="relative">
-                            <i class="fas fa-shopping-basket text-xl text-slate-400 group-hover:text-[var(--primary)] transition-colors"></i>
-                            <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-1 -right-1 bg-[var(--primary)] text-white text-[9px] font-bold w-4 h-5 flex items-center justify-center"></span>
-                        </div>
-                        <div class="hidden lg:block text-left">
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Mon Panier</p>
-                            <p class="text-[11px] font-bold text-slate-800 leading-none">Panier</p>
-                        </div>
-                    </div>
-                </a>
             </div>
-        </div>
-    </div>
-
-    <!-- LEVEL 3: Bottom Bar (Navigation Menu) -->
-    <div class="bg-[var(--primary)] hidden md:block">
-        <div class="container-custom">
-            <nav class="flex items-center">
-                <a href="{{ route('home') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10 {{ request()->routeIs('home') ? 'bg-white/20' : '' }}">
-                    {{ __('messages.home') }}
-                </a>
-                <a href="{{ route('shop.index') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10 {{ request()->routeIs('shop.index') ? 'bg-white/20' : '' }}">
-                    {{ __('messages.shop') }}
-                </a>
-                <a href="{{ route('gallery') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10 {{ request()->routeIs('gallery') ? 'bg-white/20' : '' }}">
-                    {{ __('messages.gallery') }}
-                </a>
-                <a href="{{ route('contact') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10 {{ request()->routeIs('contact') ? 'bg-white/20' : '' }}">
-                    {{ __('messages.contact') }}
-                </a>
-                @auth
-                    <a href="{{ route('orders.index') }}" class="px-8 py-4 text-[13px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors border-r border-white/10">
-                        {{ __('messages.my_orders') }}
-                    </a>
-                @endauth
-                <div class="ml-auto flex items-center gap-4 text-white text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">
-                    <i class="fas fa-shipping-fast"></i>
-                    <span>Livraison rapide partout au Sénégal</span>
-                </div>
-            </nav>
         </div>
     </div>
 
