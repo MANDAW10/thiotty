@@ -108,7 +108,7 @@
                 ],
                 handleAction(action) {
                     if (action === 'track') {
-                        this.messages.push({ role: 'user', text: {!! json_encode(__('messages.track_order')) !!} });
+                        this.messages.push({ role: 'user', text: {{ json_encode(__('messages.track_order')) }} });
                         setTimeout(() => {
                             this.messages.push({ role: 'bot', text: {{ json_encode(__('messages.track_order_response') ?? 'Pour suivre votre commande, merci de vous connecter à votre compte.') }} });
                         }, 500);
