@@ -70,37 +70,57 @@
             </div>
 
             <!-- Luxury Horizontal Category Slider -->
-            <div class="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-10 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+            <div class="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-12 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
                 @php
                     $slugs = ['vaches', 'chevaux', 'poulets', 'aliments', 'lait'];
                 @endphp
 
                 @foreach($categories->sortBy(fn($c) => array_search($c->slug, $slugs)) as $cat)
                     <a href="{{ route('shop.category', $cat->slug) }}" 
-                       class="flex-none w-[70%] md:w-[280px] snap-center h-[300px] md:h-[380px] relative rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 transition-all duration-700 bg-slate-100 group hover-glare">
+                       class="flex-none w-[75%] md:w-[320px] snap-center h-[350px] md:h-[450px] relative rounded-[3rem] overflow-hidden shadow-2xl shadow-slate-200/50 transition-all duration-700 bg-slate-100 group">
                         
+                        <!-- Texture Overlay (Grain) -->
+                        <div class="absolute inset-0 opacity-20 mix-blend-overlay z-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/p6.png')]"></div>
+
                         <!-- Premium Badge -->
-                        <div class="absolute top-8 left-8 z-20 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[9px] font-black text-white uppercase tracking-[0.2em]">
+                        <div class="absolute top-10 left-10 z-20 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-[9px] font-black text-white uppercase tracking-[0.2em]">
                             {{ $cat->products_count }} {{ __('messages.articles_count') }}
                         </div>
 
                         <img src="{{ $cat->image_url }}" 
                              class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="{{ $cat->display_name }}">
                         
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent"></div>
+                        <!-- Dynamic Gradient -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent transition-opacity duration-700 group-hover:opacity-80"></div>
                         
-                        <div class="absolute bottom-10 left-10 right-10 z-10 transform transition-transform duration-500 group-hover:-translate-y-4">
-                            <div class="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-white mb-4 border border-white/20">
-                                <i class="{{ $cat->icon }} text-base"></i>
-                            </div>
-                            <h4 class="text-3xl font-black text-white serif-heading mb-2">{{ $cat->display_name }}</h4>
-                            <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{{ __('messages.discover_range') }}</span>
-                                <div class="w-8 h-[1px] bg-primary"></div>
+                        <!-- Glassmorphism Card -->
+                        <div class="absolute bottom-8 left-8 right-8 z-30 p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] transform transition-all duration-500 group-hover:-translate-y-4">
+                            <div class="flex items-center justify-between gap-4">
+                                <div>
+                                    <h4 class="text-2xl font-black text-white serif-heading leading-none">{{ $cat->display_name }}</h4>
+                                    <div class="flex items-center gap-3 mt-3 overflow-hidden">
+                                        <div class="w-8 h-[1px] bg-primary transform -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
+                                        <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em] transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 delay-100">{{ __('messages.discover_range') }}</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white border border-white/10">
+                                    <i class="{{ $cat->icon }} text-base"></i>
+                                </div>
                             </div>
                         </div>
                     </a>
                 @endforeach
+
+                <!-- "See All" Luxury Card -->
+                <a href="{{ route('shop.index') }}" 
+                   class="flex-none w-[75%] md:w-[320px] snap-center h-[350px] md:h-[450px] relative rounded-[3rem] overflow-hidden bg-slate-900 flex flex-col items-center justify-center text-center p-12 group">
+                    <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/p6.png')]"></div>
+                    <div class="w-20 h-20 bg-primary/10 rounded-[30px] flex items-center justify-center text-primary mb-8 border border-primary/20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+                        <i class="fas fa-plus text-3xl"></i>
+                    </div>
+                    <h4 class="text-2xl font-black text-white serif-heading mb-4">{{ __('messages.explore_all') ?? 'Tout Explorer' }}</h4>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest leading-loose">{{ __('messages.discover_collection_text') ?? 'Découvrez l\'intégralité de notre collection premium' }}</p>
+                </a>
             </div>
         </div>
     </section>

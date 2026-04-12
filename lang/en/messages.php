@@ -188,4 +188,6 @@ return [
     'testimonial_2_role' => 'Gourmet',
     'testimonial_3_text' => "Our customers keep asking for Thiotty poultry. Freshness and tenderness are always there.",
     'testimonial_3_role' => 'Restaurateur',
+    'explore_all' => 'Explore All',
+    'discover_collection_text' => 'Discover our full premium collection and fresh products.',
 ];

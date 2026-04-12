@@ -188,4 +188,6 @@ return [
     'testimonial_2_role' => 'Gastronome',
     'testimonial_3_text' => "Nos clients redemandent de la volaille Thiotty. La fraîcheur et la tendreté sont toujours au rendez-vous.",
     'testimonial_3_role' => 'Restauratrice',
+    'explore_all' => 'Tout Explorer',
+    'discover_collection_text' => "Découvrez l'intégralité de notre collection premium et produits frais.",
 ];
