@@ -66,9 +66,19 @@
 
     <!-- Content -->
     <div class="p-5 flex flex-col items-center text-center">
-        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">
+        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-3">
             {{ $product->category->display_name }}
         </p>
+
+        <!-- Rating Stars -->
+        <div class="flex items-center gap-2 mb-3">
+            <div class="flex text-[var(--secondary)] text-[10px]">
+                @for($i = 1; $i <= 5; $i++)
+                    <i class="fa{{ $i <= round($product->average_rating) ? 's' : 'r' }} fa-star"></i>
+                @endfor
+            </div>
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">({{ $product->reviews_count }})</span>
+        </div>
         
         <a href="{{ route('shop.product', $product->slug) }}" class="block mb-3 min-h-[48px] flex flex-col justify-center">
             <h3 class="text-[14px] font-extrabold text-slate-900 uppercase tracking-tight group-hover:text-[var(--primary)] transition-colors line-clamp-2 leading-tight">

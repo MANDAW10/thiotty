@@ -100,9 +100,33 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function wishlists()
+    public function reviews()
     {
-        return $this->hasMany(Wishlist::class);
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get average rating (1-5)
+     */
+    protected function averageRating(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return round($this->reviews()->where('is_approved', true)->avg('rating') ?: 5, 1);
+            }
+        );
+    }
+
+    /**
+     * Get review count
+     */
+    protected function reviewsCount(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return $this->reviews()->where('is_approved', true)->count();
+            }
+        );
     }
 
     public function isFavoritedBy(?User $user): bool

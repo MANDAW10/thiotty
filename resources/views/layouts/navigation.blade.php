@@ -49,38 +49,15 @@
                 </a>
             </div>
 
-            <!-- Segmented Search Bar -->
-            <div class="flex-1 max-w-2xl">
-                <form action="{{ route('shop.search') }}" method="GET" class="search-segmented" x-data="{ open: false, selectedCategory: 'Sélectionnez une catégorie', selectedSlug: '' }">
-                    <input type="hidden" name="category" :value="selectedSlug">
-                    <input type="text" name="query" placeholder="Rechercher" class="flex-1 px-5 outline-none font-medium h-full">
-                    
-                    <div class="category-select relative" @click="open = !open" @click.away="open = false">
-                        <span class="truncate" x-text="selectedCategory"></span>
-                        <i class="fas fa-chevron-down ml-auto text-[10px] opacity-30 transition-transform" :class="open ? 'rotate-180' : ''"></i>
-                        
-                        <!-- Dropdown -->
-                        <div x-show="open" 
-                             x-transition:enter="transition ease-out duration-100"
-                             x-transition:enter-start="opacity-0 transform scale-95"
-                             x-transition:enter-end="opacity-100 transform scale-100"
-                             class="absolute top-full left-0 right-0 bg-white border border-slate-200 mt-1 z-50 py-2 shadow-xl"
-                             style="display: none;">
-                            <div class="max-h-60 overflow-y-auto custom-scrollbar">
-                                <a href="#" @click.prevent="selectedCategory = 'Toutes catégories'; selectedSlug = ''; open = false" class="block px-4 py-2 text-xs font-bold uppercase hover:bg-slate-50">Toutes catégories</a>
-                                <div class="h-[1px] bg-slate-100 my-1 mx-4"></div>
-                                @foreach(App\Models\Category::all() as $cat)
-                                    <a href="#" @click.prevent="selectedCategory = '{{ $cat->display_name }}'; selectedSlug = '{{ $cat->slug }}'; open = false" class="block px-4 py-2 text-xs font-bold uppercase hover:bg-slate-50 text-slate-600">{{ $cat->display_name }}</a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="search-btn">
-                        <i class="fas fa-search text-xl"></i>
-                    </button>
-                </form>
+            <!-- Premium Search Trigger -->
+            <div class="flex-1 flex justify-center">
+                <button @click="showSearch = true" class="flex items-center gap-4 px-8 py-4 bg-slate-50 border border-slate-100 text-slate-400 hover:bg-white hover:border-[var(--primary)] hover:text-slate-900 transition-all w-full max-w-xl group">
+                    <i class="fas fa-search text-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-[11px] font-black uppercase tracking-widest">{{ __('messages.search_placeholder') ?? 'Que cherchez-vous ?' }}</span>
+                    <span class="ml-auto text-[9px] font-black opacity-30 group-hover:opacity-100 transition-opacity">CLIQUEZ POUR RECHERCHER</span>
+                </button>
             </div>
+v>
 
             <!-- Contact Blocks -->
             <div class="flex items-center gap-10 min-w-fit">

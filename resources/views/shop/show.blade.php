@@ -69,8 +69,13 @@
                 <div class="lg:col-span-5 sticky top-36">
                     <div class="space-y-12 border-l-8 border-[var(--primary)] pl-12 py-4">
                         <div class="space-y-4">
-                            <div class="flex items-center gap-2 text-amber-500">
-                                <i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i><i class="fas fa-star text-xs"></i>
+                            <div class="flex items-center gap-3">
+                                <div class="flex text-[var(--secondary)] text-xs">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <i class="fa{{ $i <= round($product->average_rating) ? 's' : 'r' }} fa-star"></i>
+                                    @endfor
+                                </div>
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">({{ $product->reviews_count }} avis)</span>
                             </div>
                             <h1 class="text-4xl md:text-6xl font-black text-slate-800 uppercase tracking-tight leading-[1.1]">
                                 {{ $product->display_name }}
@@ -129,6 +134,115 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews & Customer Feedback Section -->
+            <div class="mt-32 border-t border-slate-100 pt-24">
+                <div class="grid lg:grid-cols-12 gap-16">
+                    <!-- Left: Review Summary -->
+                    <div class="lg:col-span-4 space-y-12">
+                        <div class="border-l-4 border-[var(--primary)] pl-6">
+                            <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tight mb-2">Avis Clients</h2>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Retours d'expérience sur ce produit</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-10 border border-slate-100 flex flex-col items-center text-center">
+                            <span class="text-7xl font-black text-slate-900 tracking-tighter mb-4">{{ $product->average_rating }}</span>
+                            <div class="flex text-[var(--secondary)] text-lg mb-6 tracking-widest">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="fa{{ $i <= round($product->average_rating) ? 's' : 'r' }} fa-star"></i>
+                                @endfor
+                            </div>
+                            <p class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Sur {{ $product->reviews_count }} avis vérifiés</p>
+                        </div>
+
+                        @auth
+                            <div class="space-y-6 pt-6" x-data="{ openForm: false }">
+                                <button @click="openForm = !openForm" class="w-full py-5 bg-slate-900 text-white text-[11px] font-black uppercase tracking-widest hover:bg-[var(--primary)] transition-all">
+                                    Laisser un Avis
+                                </button>
+
+                                <div x-show="openForm" x-transition class="p-8 bg-white border-2 border-slate-100 shadow-xl" style="display: none;">
+                                    <form action="{{ route('reviews.store', $product) }}" method="POST" class="space-y-6">
+                                        @csrf
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Votre Note</label>
+                                            <div class="flex flex-row-reverse justify-end gap-2 text-2xl" x-data="{ hovered: 0, selected: 5 }">
+                                                <input type="hidden" name="rating" :value="selected">
+                                                <template x-for="i in [5,4,3,2,1]">
+                                                    <i class="cursor-pointer transition-colors"
+                                                       :class="(hovered >= i || selected >= i) ? 'fas fa-star text-[var(--secondary)]' : 'far fa-star text-slate-200'"
+                                                       @mouseenter="hovered = i"
+                                                       @mouseleave="hovered = 0"
+                                                       @click="selected = i"></i>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Commentaire</label>
+                                            <textarea name="comment" rows="4" class="w-full bg-slate-50 border-none p-4 font-bold text-slate-900 focus:ring-2 focus:ring-[var(--primary)]/20 transition-all text-sm uppercase placeholder:text-slate-300" placeholder="PARTAGEZ VOTRE EXPÉRIENCE..."></textarea>
+                                        </div>
+                                        <button type="submit" class="w-full py-4 bg-[var(--primary)] text-white text-[11px] font-black uppercase tracking-widest shadow-lg shadow-[var(--primary)]/20 hover:scale-[1.02] transition-all">
+                                            Publier mon Avis
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @else
+                            <div class="p-8 bg-slate-50 border border-slate-100 flex flex-col items-center text-center gap-4">
+                                <i class="fas fa-lock text-slate-300"></i>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Connectez-vous pour laisser un avis sur ce produit.</p>
+                                <button @click="$dispatch('open-login')" class="text-[10px] font-black text-[var(--primary)] uppercase tracking-widest border-b-2 border-[var(--primary)] hover:opacity-70 transition-opacity">Se Connecter</button>
+                            </div>
+                        @endauth
+                    </div>
+
+                    <!-- Right: Review List -->
+                    <div class="lg:col-span-8">
+                        @php
+                            $approvedReviews = $product->reviews()->where('is_approved', true)->latest()->get();
+                        @endphp
+
+                        @if($approvedReviews->count() > 0)
+                            <div class="space-y-8">
+                                @foreach($approvedReviews as $review)
+                                    <div class="bg-white p-8 sm:p-12 border border-slate-50 shadow-sm relative group overflow-hidden">
+                                        <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                                            <i class="fas fa-quote-right text-6xl"></i>
+                                        </div>
+                                        
+                                        <div class="flex items-center gap-4 mb-6">
+                                            <div class="w-10 h-10 bg-[var(--primary)] text-white font-black flex items-center justify-center text-xs">
+                                                {{ substr($review->user->name, 0, 1) }}
+                                            </div>
+                                            <div>
+                                                <h4 class="text-xs font-black text-slate-900 uppercase tracking-widest">{{ $review->user->name }}</h4>
+                                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ $review->created_at->format('d M Y') }}</p>
+                                            </div>
+                                            <div class="ml-auto flex text-[var(--secondary)] text-[10px]">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <i class="fa{{ $i <= $review->rating ? 's' : 'r' }} fa-star"></i>
+                                                @endfor
+                                            </div>
+                                        </div>
+
+                                        <p class="text-sm font-bold text-slate-600 leading-relaxed uppercase tracking-tight">
+                                            {{ $review->comment ?: "Ce client n'a pas laissé de message mais a attribué une note de " . $review->rating . " étoiles." }}
+                                        </p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="h-full flex flex-col items-center justify-center bg-slate-50/50 border-2 border-dashed border-slate-100 p-20 text-center">
+                                <div class="w-20 h-20 bg-white rounded-none flex items-center justify-center text-slate-200 mb-6 shadow-sm">
+                                    <i class="far fa-star text-4xl"></i>
+                                </div>
+                                <h3 class="text-xl font-black text-slate-800 uppercase tracking-tight mb-2">Aucun avis pour le moment</h3>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Soyez le premier à partager votre expérience avec la communauté.</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

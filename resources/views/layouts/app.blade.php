@@ -57,7 +57,7 @@
             </div>
         @endif
 
-        <div class="min-h-screen" x-data="{}">
+        <div class="min-h-screen" x-data="{ showSearch: false }">
             @include('layouts.navigation')
 
             <!-- Page Content -->
@@ -162,6 +162,50 @@
                     <i class="fas fa-comment-dots text-xl sm:text-2xl transition-transform" :class="open ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100'"></i>
                     <i class="fas fa-times text-xl sm:text-2xl absolute transition-transform" :class="open ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'"></i>
                 </button>
+            </div>
+
+            <!-- Premium Search Overlay (Alpine.js) -->
+            <div x-show="showSearch" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 backdrop-blur-0"
+                 x-transition:enter-end="opacity-100 backdrop-blur-md"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 backdrop-blur-md"
+                 x-transition:leave-end="opacity-0 backdrop-blur-0"
+                 class="fixed inset-0 z-[200] flex flex-col bg-slate-900/95 p-6 sm:p-20"
+                 style="display: none;"
+                 @keydown.window.escape="showSearch = false">
+                
+                <div class="flex justify-end mb-10">
+                    <button @click="showSearch = false" class="text-white/50 hover:text-white transition-colors group">
+                        <i class="fas fa-times text-2xl sm:text-4xl group-hover:rotate-90 transition-transform duration-300"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 flex flex-col items-center justify-start mt-20">
+                    <h2 class="text-[10px] font-black uppercase tracking-[0.5em] text-[var(--primary)] mb-8 animate-bounce">Que cherchez-vous ?</h2>
+                    <form action="{{ route('shop.search') }}" method="GET" class="w-full max-w-4xl relative">
+                        <input type="text" name="query" autofocus
+                               placeholder="Saisissez un produit, une catégorie..."
+                               class="w-full bg-transparent border-0 border-b-2 border-white/10 py-8 px-4 text-3xl sm:text-6xl font-black text-white focus:ring-0 focus:border-[var(--primary)] transition-all placeholder:text-white/10 uppercase tracking-tighter">
+                        <button type="submit" class="absolute right-4 bottom-8 text-white/20 hover:text-[var(--primary)] transition-colors">
+                            <i class="fas fa-arrow-right text-3xl sm:text-5xl"></i>
+                        </button>
+                    </form>
+
+                    <div class="mt-16 flex flex-wrap justify-center gap-4 sm:gap-8 animate-fade-in">
+                        <p class="w-full text-center text-white/30 text-[9px] font-black uppercase tracking-widest mb-4">Recherches Populaires</p>
+                        @foreach(['Poulet', 'Boeuf', 'Gaine', 'Miel', 'Poussins'] as $tag)
+                            <a href="{{ route('shop.search', ['query' => $tag]) }}" class="px-6 py-3 bg-white/5 hover:bg-[var(--primary)] text-white/50 hover:text-white border border-white/10 text-xs font-black uppercase tracking-widest transition-all">
+                                {{ $tag }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="py-10 text-center">
+                    <p class="text-[9px] font-black text-white/20 uppercase tracking-[0.4em]">THIOTTY ENTERPRISE INDUSTRY &copy; {{ date('Y') }}</p>
+                </div>
             </div>
 
             <!-- INDUSTRIAL PREMIUM FOOTER -->

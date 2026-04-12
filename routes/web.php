@@ -123,6 +123,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/favoris', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/favoris/toggle/{product}', [\App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::post('/favoris/clear', [\App\Http\Controllers\WishlistController::class, 'clear'])->name('wishlist.clear');
+
+    // Review Routes
+    Route::post('/product/{product}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
 });
 
 // Admin Routes
