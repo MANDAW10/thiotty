@@ -66,13 +66,43 @@
         </div>
     </section>
 
-    <!-- CAAWOGI POPULAR PRODUCTS -->
+    <!-- CAAWOGI SPLIT SECTION (IMAGE + GRID) -->
+    <section class="py-20 bg-white overflow-hidden">
+        <div class="container-custom">
+            <div class="flex flex-col lg:flex-row gap-0 border border-slate-100">
+                <!-- Left: Big Image -->
+                <div class="lg:w-2/5 relative h-[450px] lg:h-auto overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="Héritage Terroir">
+                    <div class="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-slate-900/80 to-transparent">
+                        <h2 class="text-3xl font-black text-white uppercase tracking-tight leading-tight">
+                            Découvrez le pouvoir de la beauté naturelle
+                        </h2>
+                        <a href="{{ route('shop.index') }}" class="inline-block mt-8 px-10 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all">
+                            Voir la Boutique
+                        </a>
+                    </div>
+                </div>
+                <!-- Right: Product Grid -->
+                <div class="lg:w-3/5 p-8 lg:p-12 bg-slate-50">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach($featuredProducts->skip(4)->take(3) as $product)
+                            <x-product-card :product="$product" />
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAAWOGI VEDETTE SECTION (REFINED) -->
     <section class="py-24 bg-white">
         <div class="container-custom">
-            <div class="flex flex-col items-center mb-16">
-                <h2 class="text-[12px] font-black text-[var(--primary)] uppercase tracking-[0.4em] mb-4">La Sélection</h2>
-                <h3 class="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tight">Produits Populaires</h3>
-                <div class="h-1.5 w-24 bg-[var(--primary)] mt-6"></div>
+            <div class="flex flex-col items-center mb-16 text-center">
+                <h3 class="text-4xl md:text-5xl font-black text-[var(--caawogi-blue)] uppercase tracking-tight mb-6">Produits en vedette</h3>
+                <p class="text-slate-400 text-sm md:text-base max-w-2xl font-medium">
+                    Chez Caawogi, nous mettons en avant des produits de qualité, pensés pour répondre à vos besoins au quotidien.
+                </p>
+                <div class="h-1.5 w-24 bg-[var(--caawogi-blue)] mt-8"></div>
             </div>
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
@@ -85,6 +115,20 @@
                 <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-6 px-16 py-6 bg-slate-900 text-white font-black text-[12px] uppercase tracking-widest hover:bg-[var(--primary)] transition-all">
                     Explorer Notre Boutique
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAAWOGI ICON BAR (TRUST BAR) -->
+    <section class="py-12 border-y border-slate-100 bg-[#F9F9F9]">
+        <div class="container-custom">
+            <div class="flex flex-wrap items-center justify-around gap-12 opacity-40">
+                <i class="fas fa-star text-3xl hover:opacity-100 transition-opacity"></i>
+                <i class="fas fa-gem text-3xl hover:opacity-100 transition-opacity"></i>
+                <i class="fas fa-leaf text-3xl hover:opacity-100 transition-opacity"></i>
+                <i class="fas fa-phone-flip text-3xl hover:opacity-100 transition-opacity"></i>
+                <i class="fas fa-envelope text-3xl hover:opacity-100 transition-opacity"></i>
+                <i class="fas fa-crown text-3xl hover:opacity-100 transition-opacity"></i>
             </div>
         </div>
     </section>

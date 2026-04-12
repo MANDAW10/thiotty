@@ -77,7 +77,7 @@
         </a>
 
         <div class="mb-5">
-            <span class="text-lg font-black text-slate-900">
+            <span class="text-lg font-black text-[var(--primary)]">
                 {{ number_format($product->price, 0, ',', ' ') }} <span class="text-[11px] font-bold">CFA</span>
             </span>
         </div>
