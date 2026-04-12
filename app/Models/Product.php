@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
@@ -17,10 +19,10 @@ class Product extends Model
         'price',
         'stock',
         'image',
-        'is_featured'
+        'is_featured',
     ];
 
-    protected $appends = ['image_url', 'display_name'];
+    protected $appends = ['image_url', 'display_name', 'average_rating'];
 
     /**
      * Get the translated name.
@@ -29,8 +31,25 @@ class Product extends Model
     {
         return Attribute::make(
             get: function () {
-                $key = 'messages.' . str_replace('-', '_', $this->slug);
-                return \Illuminate\Support\Facades\Lang::has($key) ? __($key) : $this->name;
+                $key = 'messages.'.str_replace('-', '_', $this->slug);
+
+                return Lang::has($key) ? __($key) : $this->name;
+            }
+        );
+    }
+
+    /**
+     * Average rating from approved reviews only.
+     */
+    protected function averageRating(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $avg = $this->reviews()
+                    ->where('is_approved', true)
+                    ->avg('rating');
+
+                return $avg !== null ? round((float) $avg, 2) : null;
             }
         );
     }
@@ -63,13 +82,13 @@ class Product extends Model
 
                 // 2. Check for legacy local image in public/img/products/
                 if ($this->image) {
-                    $localPath = 'img/products/' . $this->image;
-                    
+                    $localPath = 'img/products/'.$this->image;
+
                     // Try exact match in the public directory
                     if (file_exists(public_path($localPath))) {
                         return asset($localPath);
                     }
-                    
+
                     // Try .png version if .jpg was specified (for our AI generated ones)
                     $pngPath = str_replace('.jpg', '.png', $localPath);
                     if (file_exists(public_path($pngPath))) {
@@ -100,38 +119,22 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function reviews()
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
-    /**
-     * Get average rating (1-5)
-     */
-    protected function averageRating(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                return round($this->reviews()->where('is_approved', true)->avg('rating') ?: 5, 1);
-            }
-        );
-    }
-
-    /**
-     * Get review count
-     */
-    protected function reviewsCount(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                return $this->reviews()->where('is_approved', true)->count();
-            }
-        );
-    }
-
     public function isFavoritedBy(?User $user): bool
     {
-        if (!$user) return false;
+        if (! $user) {
+            return false;
+        }
+
         return $this->wishlists()->where('user_id', $user->id)->exists();
     }
 }

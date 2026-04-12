@@ -9,6 +9,32 @@
     accent: '#2B7A0B',
     wishlistCount: {{ Auth::check() ? Auth::user()->wishlists()->count() : 0 }},
     cartCount: {{ app(\App\Services\CartService::class)->getCount() }},
+    compareCount: {{ count(session('compare', [])) }},
+    showCartDrawer: false,
+    cartDrawerItems: [],
+    cartDrawerTotal: 0,
+    quickViewOpen: false,
+    quickViewLoading: false,
+    quickViewProduct: null,
+    loadCartDrawer() {
+        fetch('{{ route('cart.summary') }}', { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }})
+            .then(r => r.json())
+            .then(d => { this.cartDrawerItems = d.items; this.cartDrawerTotal = d.total; this.cartCount = d.count; });
+    },
+    removeCartItem(id) {
+        fetch('{{ url('/cart/remove') }}/' + id, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(r => r.json()).then(d => {
+            this.cartDrawerItems = d.items;
+            this.cartDrawerTotal = d.total;
+            this.cartCount = d.count;
+        });
+    },
     formatPhone(e) {
         let val = e.target.value.replace(/\D/g, '');
         if (val.length > 9) val = val.substring(0, 9);
@@ -21,9 +47,18 @@
         }
         e.target.value = formatted;
     }
-}" @wishlist-updated.window="wishlistCount = $event.detail.count" @cart-updated.window="cartCount = $event.detail.count" @open-login.window="showLogin = true">
+}" @wishlist-updated.window="wishlistCount = $event.detail.count" @cart-updated.window="cartCount = $event.detail.count; if(showCartDrawer) loadCartDrawer()" @compare-updated.window="compareCount = $event.detail.count" @open-login.window="showLogin = true" @open-quick-view.window="quickViewOpen = true; quickViewLoading = true; quickViewProduct = null; fetch($event.detail.url, { headers: { 'Accept': 'application/json' } }).then(r => r.json()).then(d => { quickViewProduct = d; quickViewLoading = false; }).catch(() => { quickViewLoading = false; })">
 
- <!-- Header starting directly with white background as per screenshot -->
+    <div class="hidden md:block bg-slate-900 text-white">
+        <div class="container-custom flex justify-between items-center py-2.5 text-[9px] font-black uppercase tracking-[0.2em]">
+            <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors">{{ __('messages.privacy_terms') }}</a>
+            <div class="flex items-center gap-3 text-white/80">
+                <a href="{{ route('language.switch', ['locale' => 'fr']) }}" class="hover:text-[var(--secondary)] transition-colors">FR</a>
+                <span class="text-white/30">|</span>
+                <a href="{{ route('language.switch', ['locale' => 'en']) }}" class="hover:text-[var(--secondary)] transition-colors">EN</a>
+            </div>
+        </div>
+    </div>
 
     <!-- MOBILE HEADER (Small screens only) -->
     <div class="md:hidden bg-white border-b border-slate-100 py-4 px-4 flex justify-between items-center sticky top-0 z-[100]">
@@ -33,10 +68,10 @@
         <a href="{{ route('home') }}">
             <x-application-logo class="h-8 w-auto" />
         </a>
-        <a href="{{ route('cart.index') }}" class="relative text-slate-600">
+        <button type="button" @click="showCartDrawer = true; loadCartDrawer()" class="relative text-slate-600">
             <i class="fas fa-shopping-basket text-xl"></i>
             <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-2 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
-        </a>
+        </button>
     </div>
 
     <!-- LEVEL 2: Middle Bar (Logo, Search & Contact) -->
@@ -49,15 +84,38 @@
                 </a>
             </div>
 
-            <!-- Premium Search Trigger -->
-            <div class="flex-1 flex justify-center">
-                <button @click="showSearch = true" class="flex items-center gap-4 px-8 py-4 bg-slate-50 border border-slate-100 text-slate-400 hover:bg-white hover:border-[var(--primary)] hover:text-slate-900 transition-all w-full max-w-xl group">
-                    <i class="fas fa-search text-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="text-[11px] font-black uppercase tracking-widest">{{ __('messages.search_placeholder') ?? 'Que cherchez-vous ?' }}</span>
-                    <span class="ml-auto text-[9px] font-black opacity-30 group-hover:opacity-100 transition-opacity">CLIQUEZ POUR RECHERCHER</span>
-                </button>
+            <!-- Segmented Search Bar -->
+            <div class="flex-1 max-w-2xl">
+                <form action="{{ route('shop.search') }}" method="GET" class="search-segmented" x-data="{ open: false, selectedCategory: 'Sélectionnez une catégorie', selectedSlug: '' }">
+                    <input type="hidden" name="category" :value="selectedSlug">
+                    <input type="text" name="query" placeholder="Rechercher" class="flex-1 px-5 outline-none font-medium h-full">
+                    
+                    <div class="category-select relative" @click="open = !open" @click.away="open = false">
+                        <span class="truncate" x-text="selectedCategory"></span>
+                        <i class="fas fa-chevron-down ml-auto text-[10px] opacity-30 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                        
+                        <!-- Dropdown -->
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100"
+                             class="absolute top-full left-0 right-0 bg-white border border-slate-200 mt-1 z-50 py-2 shadow-xl"
+                             style="display: none;">
+                            <div class="max-h-60 overflow-y-auto custom-scrollbar">
+                                <a href="#" @click.prevent="selectedCategory = 'Toutes catégories'; selectedSlug = ''; open = false" class="block px-4 py-2 text-xs font-bold uppercase hover:bg-slate-50">Toutes catégories</a>
+                                <div class="h-[1px] bg-slate-100 my-1 mx-4"></div>
+                                @foreach(App\Models\Category::all() as $cat)
+                                    <a href="#" @click.prevent="selectedCategory = '{{ $cat->display_name }}'; selectedSlug = '{{ $cat->slug }}'; open = false" class="block px-4 py-2 text-xs font-bold uppercase hover:bg-slate-50 text-slate-600">{{ $cat->display_name }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search text-xl"></i>
+                    </button>
+                </form>
             </div>
-v>
 
             <!-- Contact Blocks -->
             <div class="flex items-center gap-10 min-w-fit">
@@ -85,24 +143,24 @@ v>
     <div class="bg-white border-b border-slate-100 hidden md:block">
         <div class="container-custom flex items-center justify-between h-[60px]">
             <!-- Main Menu (Industrial Style) -->
-            <nav class="flex items-center h-full">
-                <a href="{{ route('home') }}" class="nav-link-blocky {{ request()->routeIs('home') ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
-                    ACCUEIL
+            <nav class="flex items-center h-full flex-wrap gap-x-1">
+                <a href="{{ route('home') }}" class="nav-link-blocky {{ request()->routeIs('home') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
+                    {{ __('messages.home') }}
                 </a>
-                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'agro-alimentaire'])) ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
-                    AGRO-ALIMENTAIRE
+                <a href="{{ route('shop.index') }}" class="nav-link-blocky {{ request()->routeIs('shop.index') && !request('category') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
+                    {{ __('messages.shop') }}
                 </a>
-                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'volaille'])) ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
-                    VOLAILLE
+                <a href="{{ route('blog.index') }}" class="nav-link-blocky {{ request()->routeIs('blog.index') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
+                    Blog
                 </a>
-                <a href="{{ route('shop.index', ['category' => 'elevage']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'elevage'])) ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
-                    ÉLEVAGE
+                <a href="{{ route('about') }}" class="nav-link-blocky {{ request()->routeIs('about') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
+                    {{ __('messages.about_title') }}
                 </a>
-                <a href="{{ route('gallery') }}" class="nav-link-blocky {{ request()->routeIs('gallery') ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
-                    GALLERIE
+                <a href="{{ route('gallery') }}" class="nav-link-blocky {{ request()->routeIs('gallery') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
+                    Galerie
                 </a>
-                <a href="{{ route('contact') }}" class="nav-link-blocky {{ request()->routeIs('contact') ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
-                    CONTACT
+                <a href="{{ route('contact') }}" class="nav-link-blocky {{ request()->routeIs('contact') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
+                    {{ __('messages.contact') }}
                 </a>
             </nav>
 
@@ -115,21 +173,20 @@ v>
                     <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-3 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
                 </a>
 
-                <!-- Compare (Placeholder) -->
-                <a href="#" class="group">
+                <a href="{{ route('compare.index') }}" class="relative group" title="{{ __('messages.compare_title') }}">
                     <i class="fas fa-random nav-action-icon"></i>
+                    <span x-show="compareCount > 0" x-text="compareCount" class="absolute -top-3 -right-2 bg-[var(--caawogi-blue)] text-white text-[8px] font-bold min-w-[1rem] h-4 px-0.5 flex items-center justify-center rounded-full"></span>
                 </a>
 
-                <!-- Cart -->
-                <a href="{{ route('cart.index') }}" class="flex items-center gap-3 group">
+                <button type="button" @click="showCartDrawer = true; loadCartDrawer()" class="flex items-center gap-3 group text-left">
                     <div class="relative">
                         <i class="fas fa-shopping-basket nav-action-icon"></i>
                         <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-3 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
                     </div>
-                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-800">
-                        CFA <span x-text="new Intl.NumberFormat('fr-FR').format({{ app(\App\Services\CartService::class)->getTotalBalance() }})">0</span>
+                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-800 hidden lg:inline">
+                        CFA <span x-text="new Intl.NumberFormat('fr-FR').format(cartDrawerTotal || {{ app(\App\Services\CartService::class)->getTotalBalance() }})">0</span>
                     </span>
-                </a>
+                </button>
 
                 <!-- Auth -->
                 <div class="h-4 w-[1px] bg-slate-200"></div>
@@ -176,7 +233,13 @@ v>
                     <i class="fas fa-home w-5 text-[var(--primary)]"></i> Accueil
                 </a>
                 <a href="{{ route('shop.index') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
-                    <i class="fas fa-shopping-bag w-5 text-[var(--primary)]"></i> Boutique
+                    <i class="fas fa-shopping-bag w-5 text-[var(--primary)]"></i> {{ __('messages.shop') }}
+                </a>
+                <a href="{{ route('blog.index') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                    <i class="fas fa-newspaper w-5 text-[var(--primary)]"></i> Blog
+                </a>
+                <a href="{{ route('about') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                    <i class="fas fa-circle-info w-5 text-[var(--primary)]"></i> {{ __('messages.about_title') }}
                 </a>
                 <a href="{{ route('gallery') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
                     <i class="fas fa-images w-5 text-[var(--primary)]"></i> Galerie
@@ -185,6 +248,69 @@ v>
                     <i class="fas fa-envelope w-5 text-[var(--primary)]"></i> Contact
                 </a>
             </nav>
+        </div>
+    </div>
+
+    <!-- Panier latéral (type vitrine) -->
+    <div x-show="showCartDrawer" class="fixed inset-0 z-[1200] md:justify-end flex" style="display: none;">
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="showCartDrawer = false"></div>
+        <div x-show="showCartDrawer" x-transition:enter="transition transform ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+             class="relative ml-auto w-full max-w-md h-full bg-white shadow-2xl flex flex-col border-l border-slate-100">
+            <div class="flex items-center justify-between p-5 border-b border-slate-100 bg-slate-50">
+                <h2 class="text-sm font-black uppercase tracking-widest text-slate-900">{{ __('messages.cart_drawer_title') }}</h2>
+                <button type="button" @click="showCartDrawer = false" class="text-slate-400 hover:text-slate-900"><i class="fas fa-times text-lg"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar">
+                <p x-show="cartDrawerItems.length === 0" class="text-center text-slate-500 text-sm font-medium py-12">{{ __('messages.cart_drawer_empty') }}</p>
+                <template x-for="item in cartDrawerItems" :key="item.id">
+                    <div class="flex gap-3 border-b border-slate-100 pb-4">
+                        <a :href="'/product/' + item.slug" class="w-20 h-20 shrink-0 border border-slate-100 bg-slate-50 overflow-hidden">
+                            <img :src="item.image" :alt="item.name" class="w-full h-full object-cover">
+                        </a>
+                        <div class="flex-1 min-w-0">
+                            <a :href="'/product/' + item.slug" class="font-black text-xs uppercase text-slate-900 line-clamp-2 hover:text-[var(--primary)]" x-text="item.name"></a>
+                            <p class="text-[10px] text-slate-500 mt-1"><span x-text="item.quantity"></span> × <span x-text="new Intl.NumberFormat('fr-FR').format(item.price)"></span> CFA</p>
+                            <button type="button" @click="removeCartItem(item.id)" class="text-[10px] font-black uppercase text-red-500 mt-2 hover:underline">{{ __('messages.remove_line') }}</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div class="p-5 border-t border-slate-100 space-y-3 bg-slate-50">
+                <div class="flex justify-between text-sm font-black uppercase tracking-widest">
+                    <span>Total</span>
+                    <span class="text-[var(--primary)]">CFA <span x-text="new Intl.NumberFormat('fr-FR').format(cartDrawerTotal)"></span></span>
+                </div>
+                <a href="{{ route('cart.index') }}" class="block w-full text-center py-3.5 bg-white border-2 border-slate-200 text-slate-900 font-black text-[10px] uppercase tracking-widest hover:border-[var(--primary)] transition-colors">{{ __('messages.cart_drawer_view') }}</a>
+                @auth
+                <a href="{{ route('checkout.index') }}" class="block w-full text-center py-3.5 bg-[var(--primary)] text-white font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-colors">{{ __('messages.cart_drawer_checkout') }}</a>
+                @else
+                <button type="button" @click="showCartDrawer = false; showLogin = true" class="w-full py-3.5 bg-[var(--primary)] text-white font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-colors">{{ __('messages.cart_drawer_checkout') }}</button>
+                @endauth
+            </div>
+        </div>
+    </div>
+
+    <!-- Aperçu rapide -->
+    <div x-show="quickViewOpen" class="fixed inset-0 z-[1200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" style="display: none;" @click.self="quickViewOpen = false">
+        <div class="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl relative custom-scrollbar" @click.stop>
+            <button type="button" @click="quickViewOpen = false" class="absolute top-4 right-4 z-10 text-slate-400 hover:text-slate-900"><i class="fas fa-times text-xl"></i></button>
+            <div x-show="quickViewLoading" class="p-16 flex justify-center text-[var(--primary)]"><i class="fas fa-circle-notch fa-spin text-3xl"></i></div>
+            <div x-show="!quickViewLoading && quickViewProduct">
+                <div class="aspect-square bg-slate-50">
+                    <img :src="quickViewProduct.image" :alt="quickViewProduct.name" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6 space-y-3">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-[var(--primary)]" x-text="quickViewProduct.category"></p>
+                    <h3 class="text-xl font-black uppercase text-slate-900" x-text="quickViewProduct.name"></h3>
+                    <p class="text-2xl font-black text-[var(--primary)]">CFA <span x-text="new Intl.NumberFormat('fr-FR').format(quickViewProduct.price)"></span></p>
+                    <p class="text-sm text-slate-600 leading-relaxed" x-text="quickViewProduct.description"></p>
+                    <p class="text-xs font-bold text-green-600" x-show="quickViewProduct.stock > 0">{{ __('messages.in_stock') }} : <span x-text="quickViewProduct.stock"></span></p>
+                    <p class="text-xs font-bold text-red-500" x-show="quickViewProduct.stock <= 0">{{ __('messages.out_of_stock') }}</p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a :href="quickViewProduct.url" class="flex-1 min-w-[140px] text-center py-3 bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest hover:bg-[var(--primary)] transition-colors">{{ __('messages.view_items') }}</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </header>

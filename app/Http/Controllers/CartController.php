@@ -18,9 +18,21 @@ class CartController extends Controller
     public function index()
     {
         $cart = $this->cartService->getItems();
-        $total = array_sum(array_map(fn($item) => $item['price'] * $item['quantity'], $cart));
-        
+        $total = array_sum(array_map(fn ($item) => $item['price'] * $item['quantity'], $cart));
+
         return view('cart.index', compact('cart', 'total'));
+    }
+
+    /**
+     * JSON pour le panier latéral (style vitrine type Caawogi).
+     */
+    public function summary()
+    {
+        return response()->json([
+            'items' => array_values($this->cartService->getItems()),
+            'count' => $this->cartService->getCount(),
+            'total' => $this->cartService->getTotalBalance(),
+        ]);
     }
 
     public function add(Product $product)
@@ -32,7 +44,7 @@ class CartController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Produit ajouté au panier !',
-                'count' => count($cart)
+                'count' => count($cart),
             ]);
         }
 
@@ -43,6 +55,7 @@ class CartController extends Controller
     {
         if ($request->quantity > 0) {
             $this->cartService->update($product, $request->quantity);
+
             return back()->with('success', 'Panier mis à jour !');
         }
 
@@ -52,6 +65,16 @@ class CartController extends Controller
     public function remove(Product $product)
     {
         $this->cartService->remove($product);
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'count' => $this->cartService->getCount(),
+                'total' => $this->cartService->getTotalBalance(),
+                'items' => array_values($this->cartService->getItems()),
+            ]);
+        }
+
         return back()->with('success', 'Produit retiré du panier.');
     }
 }

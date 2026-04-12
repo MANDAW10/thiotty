@@ -123,4 +123,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    | Optional secret for one-off deploy routes (migrate, seed helpers). When unset, those routes return 404.
+    */
+    'deploy_setup_token' => env('DEPLOY_SETUP_TOKEN'),
+
 ];

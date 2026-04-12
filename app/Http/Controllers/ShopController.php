@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\ContactMessage;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ShopController extends Controller
 {
@@ -14,7 +17,21 @@ class ShopController extends Controller
         $featuredProducts = Product::where('is_featured', true)->latest()->take(8)->get();
         $recentProducts = Product::latest()->take(8)->get();
 
-        return view('welcome', compact('categories', 'featuredProducts', 'recentProducts'));
+        $bestSellerIds = DB::table('order_items')
+            ->select('product_id', DB::raw('SUM(quantity) as qty'))
+            ->groupBy('product_id')
+            ->orderByDesc('qty')
+            ->limit(8)
+            ->pluck('product_id');
+
+        if ($bestSellerIds->isEmpty()) {
+            $bestSellers = Product::with('category')->latest()->take(8)->get();
+        } else {
+            $byId = Product::with('category')->whereIn('id', $bestSellerIds)->get()->keyBy('id');
+            $bestSellers = $bestSellerIds->map(fn ($id) => $byId->get($id))->filter();
+        }
+
+        return view('welcome', compact('categories', 'featuredProducts', 'recentProducts', 'bestSellers'));
     }
 
     public function shop(Request $request)
@@ -23,7 +40,7 @@ class ShopController extends Controller
 
         // Filter by Category
         if ($request->has('category') && $request->category != 'all') {
-            $query->whereHas('category', function($q) use ($request) {
+            $query->whereHas('category', function ($q) use ($request) {
                 $q->where('slug', $request->category);
             });
         }
@@ -38,13 +55,17 @@ class ShopController extends Controller
 
         // Sorting
         $sort = $request->get('sort', 'latest');
-        if ($sort == 'price_asc') $query->orderBy('price', 'asc');
-        elseif ($sort == 'price_desc') $query->orderBy('price', 'desc');
-        else $query->latest();
+        if ($sort == 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($sort == 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } else {
+            $query->latest();
+        }
 
         $products = $query->paginate(12)->withQueryString();
         $categories = Category::withCount('products')->get();
-        
+
         return view('shop.index', compact('products', 'categories'));
     }
 
@@ -52,6 +73,7 @@ class ShopController extends Controller
     {
         $products = $category->products()->paginate(12);
         $categories = Category::all();
+
         return view('shop.index', compact('category', 'products', 'categories'));
     }
 
@@ -61,8 +83,42 @@ class ShopController extends Controller
             ->where('id', '!=', $product->id)
             ->take(4)
             ->get();
-            
+
         return view('shop.show', compact('product', 'relatedProducts'));
+    }
+
+    /**
+     * Données JSON pour la fenêtre « aperçu rapide » (type vitrine).
+     */
+    public function productQuick(Product $product)
+    {
+        return response()->json([
+            'id' => $product->id,
+            'slug' => $product->slug,
+            'name' => $product->display_name,
+            'price' => (float) $product->price,
+            'image' => $product->image_url,
+            'description' => Str::limit(strip_tags((string) $product->description), 280),
+            'stock' => (int) $product->stock,
+            'url' => route('shop.product', $product),
+            'category' => $product->category?->display_name ?? '',
+        ]);
+    }
+
+    public function newsletterSubscribe(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'max:255'],
+        ]);
+
+        ContactMessage::create([
+            'name' => 'Newsletter',
+            'email' => $validated['email'],
+            'subject' => 'Inscription newsletter',
+            'message' => '—',
+        ]);
+
+        return redirect()->route('home')->with('newsletter_ok', true);
     }
 
     public function search(Request $request)
@@ -71,8 +127,9 @@ class ShopController extends Controller
         $products = Product::where('name', 'like', "%{$query}%")
             ->orWhere('description', 'like', "%{$query}%")
             ->paginate(12);
-            
+
         $categories = Category::all();
+
         return view('shop.index', compact('products', 'categories', 'query'));
     }
 
@@ -85,7 +142,7 @@ class ShopController extends Controller
             'message' => 'required|string',
         ]);
 
-        \App\Models\ContactMessage::create($request->all());
+        ContactMessage::create($request->all());
 
         return back()->with('success', 'Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.');
     }

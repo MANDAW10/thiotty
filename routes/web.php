@@ -1,60 +1,87 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AlertController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ZoneController;
 use App\Http\Controllers\Auth\PasswordRecoveryController;
-use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
-use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\CompareController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\WishlistController;
+use App\Models\GalleryItem;
+use App\Models\User;
+use Database\Seeders\CategorySeeder;
+use Database\Seeders\ProductSeeder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+
+$deploySetupGate = static function (Request $request): void {
+    $token = config('app.deploy_setup_token');
+    if (! is_string($token) || $token === '' || ! hash_equals($token, (string) $request->query('token', ''))) {
+        abort(404);
+    }
+};
 
 // Language Switch Route
 Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
 
-// EMERGENCY FINAL ADMIN SETUP (TEMPORARY)
-Route::get('/setup-final-admin', function () {
+// EMERGENCY FINAL ADMIN SETUP (TEMPORARY) — requires ?token= matching DEPLOY_SETUP_TOKEN
+Route::get('/setup-final-admin', function (Request $request) use ($deploySetupGate) {
+    $deploySetupGate($request);
     try {
         // Create Admin
-        \App\Models\User::updateOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@thiotty.com'],
             [
                 'name' => 'Adama Thiotty',
-                'password' => \Illuminate\Support\Facades\Hash::make('thiotty2026'),
-                'is_admin' => true
+                'password' => Hash::make('thiotty2026'),
+                'is_admin' => true,
             ]
         );
 
         // Seed Categories and Products
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        Artisan::call('db:seed', ['--force' => true]);
 
         return "Boutique configurée ! <br>✅ Compte Admin : <b>admin@thiotty.com</b> (Pass: thiotty2026) <br>✅ Catégories & Produits insérés ! <br><a href='/login'>Aller à la connexion</a>";
-    } catch (\Exception $e) {
-        return "Erreur : " . $e->getMessage();
+    } catch (Exception $e) {
+        return 'Erreur : '.$e->getMessage();
     }
 });
 
 // Update Premium Visuals (One-time run)
-Route::get('/update-visuals', function () {
+Route::get('/update-visuals', function (Request $request) use ($deploySetupGate) {
+    $deploySetupGate($request);
     try {
-        (new \Database\Seeders\CategorySeeder)->run();
-        (new \Database\Seeders\ProductSeeder)->run();
-        return "✨ Visuels Premium activés avec succès ! <br>Les images haute définition sont maintenant opérationnelles sur toute la plateforme.";
-    } catch (\Exception $e) {
-        return "Erreur lors de la mise à jour : " . $e->getMessage();
+        (new CategorySeeder)->run();
+        (new ProductSeeder)->run();
+
+        return '✨ Visuels Premium activés avec succès ! <br>Les images haute définition sont maintenant opérationnelles sur toute la plateforme.';
+    } catch (Exception $e) {
+        return 'Erreur lors de la mise à jour : '.$e->getMessage();
     }
 });
 
-// Activate Universal Sync (One-time run)
-Route::get('/sync-setup', function () {
+// Run migrations (one-time / after deploy) — requires ?token= matching DEPLOY_SETUP_TOKEN
+Route::get('/sync-setup', function (Request $request) use ($deploySetupGate) {
+    $deploySetupGate($request);
     try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return "✨ Synchronisation Universelle activée ! <br>✅ Base de données mise à jour. <br>✅ Panier & Thème persistants opérationnels.";
-    } catch (\Exception $e) {
-        return "Erreur lors de l'activation : " . $e->getMessage();
+        Artisan::call('migrate', ['--force' => true]);
+
+        return '✨ Synchronisation Universelle activée ! <br>✅ Base de données mise à jour. <br>✅ Panier & Thème persistants opérationnels.';
+    } catch (Exception $e) {
+        return "Erreur lors de l'activation : ".$e->getMessage();
     }
 });
 
@@ -64,14 +91,22 @@ Route::get('/shop', [ShopController::class, 'shop'])->name('shop.index');
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
-Route::post('/contact', [\App\Http\Controllers\ShopController::class, 'contactStore'])->name('contact.store');
+Route::post('/contact', [ShopController::class, 'contactStore'])->name('contact.store');
 Route::get('/category/{category:slug}', [ShopController::class, 'category'])->name('shop.category');
+Route::get('/product/{product:slug}/quick', [ShopController::class, 'productQuick'])->name('shop.product.quick');
 Route::get('/product/{product:slug}', [ShopController::class, 'product'])->name('shop.product');
 Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
+Route::post('/newsletter', [ShopController::class, 'newsletterSubscribe'])->name('newsletter.subscribe');
+Route::get('/a-propos', function () {
+    return view('about');
+})->name('about');
+Route::get('/blog', function () {
+    return view('blog');
+})->name('blog.index');
 
 Route::get('/galerie', function () {
     // Auto-seed if empty for a seamless experience
-    if (\App\Models\GalleryItem::count() === 0) {
+    if (GalleryItem::count() === 0) {
         $items = [
             ['image' => 'https://images.unsplash.com/photo-1543160732-23700b1b13b1?q=80&w=1200&auto=format&fit=crop', 'title' => 'Majesté Gobra', 'category' => 'Élevage', 'description' => 'Notre troupeau de zébus Gobra pur-sang sous le soleil du Sénégal.'],
             ['image' => 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1200&auto=format&fit=crop', 'title' => 'Récolte du Matin', 'category' => 'Terroir', 'description' => 'Des produits frais, bio et locaux cueillis chaque jour pour votre table.'],
@@ -82,11 +117,12 @@ Route::get('/galerie', function () {
         ];
 
         foreach ($items as $item) {
-            \App\Models\GalleryItem::updateOrCreate(['title' => $item['title']], $item);
+            GalleryItem::updateOrCreate(['title' => $item['title']], $item);
         }
     }
 
-    $items = \App\Models\GalleryItem::latest()->get();
+    $items = GalleryItem::latest()->get();
+
     return view('gallery', compact('items'));
 })->name('gallery');
 
@@ -96,7 +132,10 @@ Route::post('/password/custom-reset', [PasswordRecoveryController::class, 'reset
 
 // Cart Routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/cart/summary', [CartController::class, 'summary'])->name('cart.summary');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::get('/comparer', [CompareController::class, 'index'])->name('compare.index');
+Route::post('/compare/toggle/{product}', [CompareController::class, 'toggle'])->name('compare.toggle');
 Route::patch('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
 
@@ -114,45 +153,42 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/theme', [ProfileController::class, 'updateTheme'])->name('profile.theme.update');
-    
+
     // User Order History
     Route::get('/my-orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/my-orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
     // Wishlist Routes
-    Route::get('/favoris', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
-    Route::post('/favoris/toggle/{product}', [\App\Http\Controllers\WishlistController::class, 'toggle'])->name('wishlist.toggle');
-    Route::post('/favoris/clear', [\App\Http\Controllers\WishlistController::class, 'clear'])->name('wishlist.clear');
-
-    // Review Routes
-    Route::post('/product/{product}/review', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/favoris', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/favoris/toggle/{product}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::post('/favoris/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
 });
 
 // Admin Routes
 Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('products', AdminProductController::class);
-    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+    Route::resource('categories', CategoryController::class);
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
     // NEW MODULES
-    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
-    Route::post('/users/{user}/toggle-admin', [\App\Http\Controllers\Admin\UserController::class, 'toggleAdmin'])->name('users.toggle-admin');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/{user}/toggle-admin', [UserController::class, 'toggleAdmin'])->name('users.toggle-admin');
 
-    Route::resource('zones', \App\Http\Controllers\Admin\ZoneController::class);
-    Route::resource('gallery', \App\Http\Controllers\Admin\GalleryController::class);
+    Route::resource('zones', ZoneController::class);
+    Route::resource('gallery', GalleryController::class);
 
-    Route::get('/contacts', [\App\Http\Controllers\Admin\ContactController::class, 'index'])->name('contacts.index');
-    Route::get('/contacts/{message}', [\App\Http\Controllers\Admin\ContactController::class, 'show'])->name('contacts.show');
-    Route::post('/contacts/{message}/reply', [\App\Http\Controllers\Admin\ContactController::class, 'reply'])->name('contacts.reply');
-    Route::delete('/contacts/{message}', [\App\Http\Controllers\Admin\ContactController::class, 'destroy'])->name('contacts.destroy');
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::get('/contacts/{message}', [ContactController::class, 'show'])->name('contacts.show');
+    Route::post('/contacts/{message}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
+    Route::delete('/contacts/{message}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 
-    Route::get('/alerts', [\App\Http\Controllers\Admin\AlertController::class, 'index'])->name('alerts.index');
-    Route::get('/alerts/create', [\App\Http\Controllers\Admin\AlertController::class, 'create'])->name('alerts.create');
-    Route::post('/alerts', [\App\Http\Controllers\Admin\AlertController::class, 'store'])->name('alerts.store');
-    Route::post('/alerts/{alert}/toggle', [\App\Http\Controllers\Admin\AlertController::class, 'toggle'])->name('alerts.toggle');
-    Route::delete('/alerts/{alert}', [\App\Http\Controllers\Admin\AlertController::class, 'destroy'])->name('alerts.destroy');
+    Route::get('/alerts', [AlertController::class, 'index'])->name('alerts.index');
+    Route::get('/alerts/create', [AlertController::class, 'create'])->name('alerts.create');
+    Route::post('/alerts', [AlertController::class, 'store'])->name('alerts.store');
+    Route::post('/alerts/{alert}/toggle', [AlertController::class, 'toggle'])->name('alerts.toggle');
+    Route::delete('/alerts/{alert}', [AlertController::class, 'destroy'])->name('alerts.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -66,6 +66,50 @@
         </div>
     </section>
 
+    <!-- Meilleures ventes (type Caawogi) -->
+    <section class="py-20 bg-[var(--light-bg)] border-y border-slate-100">
+        <div class="container-custom">
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tight mb-4">{{ __('messages.best_sellers_title') }}</h2>
+                <p class="text-slate-500 text-sm md:text-base font-medium leading-relaxed">{{ __('messages.best_sellers_intro') }}</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+                @foreach($bestSellers->take(6) as $product)
+                    <x-product-card :product="$product" />
+                @endforeach
+            </div>
+            <div class="mt-12 text-center">
+                <a href="{{ route('shop.index') }}" class="inline-flex px-12 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-slate-900 transition-colors">
+                    {{ __('messages.shop') }}
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blocs valeurs (NOS CATÉGORIES / promesses) -->
+    <section class="py-16 bg-white">
+        <div class="container-custom">
+            <h2 class="text-center text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-900 mb-12">{{ __('messages.our_universes') }}</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
+                    <div class="w-14 h-14 bg-[var(--primary)]/10 text-[var(--primary)] flex items-center justify-center text-xl mb-6"><i class="fas fa-cow"></i></div>
+                    <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.vaches') }}</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">{{ __('messages.quality_text') }}</p>
+                </div>
+                <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
+                    <div class="w-14 h-14 bg-[var(--caawogi-blue)]/15 text-[var(--caawogi-blue)] flex items-center justify-center text-xl mb-6"><i class="fas fa-shield-halved"></i></div>
+                    <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.quality_certified') }}</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">{{ __('messages.trust_secure_pay_desc') }}</p>
+                </div>
+                <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
+                    <div class="w-14 h-14 bg-[var(--secondary)]/20 text-amber-700 flex items-center justify-center text-xl mb-6"><i class="fas fa-handshake"></i></div>
+                    <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.client_trust') }}</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">{{ __('messages.trust_refund_desc') }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CAAWOGI SPLIT SECTION (IMAGE + GRID) -->
     <section class="py-20 bg-white overflow-hidden">
         <div class="container-custom">
@@ -100,7 +144,7 @@
             <div class="flex flex-col items-center mb-16 text-center">
                 <h3 class="text-4xl md:text-5xl font-black text-[var(--caawogi-blue)] uppercase tracking-tight mb-6">Produits en vedette</h3>
                 <p class="text-slate-400 text-sm md:text-base max-w-2xl font-medium">
-                    Chez Caawogi, nous mettons en avant des produits de qualité, pensés pour répondre à vos besoins au quotidien.
+                    Chez Thiotty, nous mettons en avant des produits de qualité, pensés pour répondre à vos besoins au quotidien.
                 </p>
                 <div class="h-1.5 w-24 bg-[var(--caawogi-blue)] mt-8"></div>
             </div>
@@ -129,6 +173,53 @@
                 <i class="fas fa-phone-flip text-3xl hover:opacity-100 transition-opacity"></i>
                 <i class="fas fa-envelope text-3xl hover:opacity-100 transition-opacity"></i>
                 <i class="fas fa-crown text-3xl hover:opacity-100 transition-opacity"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter + confiance -->
+    <section class="py-20 bg-white border-t border-slate-100">
+        <div class="container-custom grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <h3 class="text-3xl font-black uppercase text-slate-900 mb-2">{{ __('messages.newsletter_title') }}</h3>
+                <p class="text-slate-500 mb-6 font-medium">{{ __('messages.newsletter_subtitle') }}</p>
+                @if(session('newsletter_ok'))
+                    <p class="text-green-600 font-bold text-sm mb-4">{{ __('messages.newsletter_success') }}</p>
+                @endif
+                <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex flex-col sm:flex-row gap-3">
+                    @csrf
+                    <input type="email" name="email" required placeholder="{{ __('messages.newsletter_placeholder') }}"
+                           class="flex-1 px-5 py-4 border border-slate-200 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none"
+                           value="{{ old('email') }}">
+                    <button type="submit" class="px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-slate-900 transition-colors">
+                        {{ __('messages.newsletter_cta') }}
+                    </button>
+                </form>
+                @error('email')
+                    <p class="text-red-500 text-xs font-bold mt-2">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="grid sm:grid-cols-2 gap-6">
+                <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
+                    <i class="fas fa-truck-fast text-[var(--primary)] text-xl mb-3"></i>
+                    <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_free_shipping') }}</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">{{ __('messages.trust_free_shipping_desc') }}</p>
+                </div>
+                <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
+                    <i class="fas fa-lock text-[var(--caawogi-blue)] text-xl mb-3"></i>
+                    <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_secure_pay') }}</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">{{ __('messages.trust_secure_pay_desc') }}</p>
+                </div>
+                <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
+                    <i class="fas fa-headset text-[var(--secondary)] text-xl mb-3"></i>
+                    <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_support') }}</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">{{ __('messages.trust_support_desc') }}</p>
+                </div>
+                <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
+                    <i class="fas fa-rotate-left text-slate-700 text-xl mb-3"></i>
+                    <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_refund') }}</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">{{ __('messages.trust_refund_desc') }}</p>
+                </div>
             </div>
         </div>
     </section>
