@@ -109,22 +109,22 @@
         <div class="container-custom flex items-center justify-between h-[60px]">
             <!-- Main Menu (Industrial Style) -->
             <nav class="flex items-center h-full">
-                <a href="{{ route('home') }}" class="nav-link-blocky {{ request()->routeIs('home') ? 'active' : '' }}">
+                <a href="{{ route('home') }}" class="nav-link-blocky {{ request()->routeIs('home') ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
                     ACCUEIL
                 </a>
-                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'agro-alimentaire'])) ? 'active' : '' }}">
+                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'agro-alimentaire'])) ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
                     AGRO-ALIMENTAIRE
                 </a>
-                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'volaille'])) ? 'active' : '' }}">
+                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'volaille'])) ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
                     VOLAILLE
                 </a>
-                <a href="{{ route('shop.index', ['category' => 'elevage']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'elevage'])) ? 'active' : '' }}">
+                <a href="{{ route('shop.index', ['category' => 'elevage']) }}" class="nav-link-blocky {{ request()->fullUrlIs(route('shop.index', ['category' => 'elevage'])) ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
                     ÉLEVAGE
                 </a>
-                <a href="{{ route('gallery') }}" class="nav-link-blocky {{ request()->routeIs('gallery') ? 'active' : '' }}">
+                <a href="{{ route('gallery') }}" class="nav-link-blocky {{ request()->routeIs('gallery') ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
                     GALLERIE
                 </a>
-                <a href="{{ route('contact') }}" class="nav-link-blocky {{ request()->routeIs('contact') ? 'active' : '' }}">
+                <a href="{{ route('contact') }}" class="nav-link-blocky {{ request()->routeIs('contact') ? 'active' : '' }} font-black uppercase tracking-[0.2em] text-[11px]">
                     CONTACT
                 </a>
             </nav>

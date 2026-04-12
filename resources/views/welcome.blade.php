@@ -1,130 +1,125 @@
 <x-app-layout>
-    <!-- INDUSTRIAL HERO SECTION -->
-    <section class="relative h-[600px] lg:h-[750px] overflow-hidden bg-slate-100">
-        <img src="{{ asset('img/banners/hero-agro.png') }}" class="absolute inset-0 w-full h-full object-cover" alt="Thiotty Industry">
-        <div class="absolute inset-0 bg-slate-900/40"></div>
-        
-        <div class="container-custom relative h-full flex items-center z-10">
-            <div class="max-w-3xl">
-                <div class="inline-block bg-[var(--primary)] text-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] mb-6 border-l-4 border-[var(--secondary)]">
-                    {{ __('messages.art_agriculture') }}
-                </div>
-                <h1 class="text-4xl md:text-7xl font-black text-white leading-[1.1] mb-8 uppercase tracking-tight">
-                    {{ __('messages.excellence_signature') }}
-                </h1>
-                <p class="text-lg md:text-xl text-white/90 font-medium mb-12 max-w-xl leading-relaxed">
-                    {{ __('messages.hero_text') }}
-                </p>
-                <div class="flex flex-col sm:flex-row items-center gap-6">
-                    <a href="{{ route('shop.index') }}" class="w-full sm:w-auto px-10 py-5 bg-[var(--primary)] text-white font-bold text-sm uppercase tracking-widest hover:bg-[var(--primary-hover)] transition-all flex items-center justify-center gap-3">
-                        {{ __('messages.explore_collection') }}
-                        <i class="fas fa-chevron-right text-[10px]"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- CAAWOGI 1:1 HERO SECTION (TWO-COLUMN INDUSTRIAL) -->
+    <section class="relative bg-white pt-2 sm:pt-4">
+        <div class="container-custom px-2 sm:px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
+                <!-- LEFT: VIANDE DE BOEUF -->
+                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265da4?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Viande de Boeuf">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                        <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">VIANDE DE BOEUF</h2>
+                        <span class="inline-block px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
+                            Voir Plus
+                        </span>
+                    </div>
+                </a>
 
-    <!-- SPOTLIGHT: AGRO-ALIMENTAIRE -->
-    <section class="relative h-[600px] flex items-center overflow-hidden">
-        <div class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Agro-Alimentaire">
-            <div class="absolute inset-0 bg-slate-900/60"></div>
-        </div>
-        <div class="container-custom relative z-10">
-            <div class="max-w-2xl">
-                <div class="inline-block bg-[var(--primary)] text-white px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.3em] mb-6 border-l-4 border-[var(--secondary)]">
-                    Transformation
-                </div>
-                <h2 class="text-4xl md:text-6xl font-black text-white leading-tight uppercase tracking-tight mb-8">
-                    Agro-<span class="text-[var(--primary)]">Alimentaire</span>
-                </h2>
-                <p class="text-white/70 text-lg mb-12 font-medium">
-                    De la terre à la table, nous garantissons une traçabilité totale et une qualité nutritionnelle irréprochable. Nos produits locaux sont transformés avec les plus hautes normes industrielles.
-                </p>
-                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="inline-flex items-center gap-6 bg-white text-slate-900 px-10 py-5 font-black text-[11px] uppercase tracking-widest hover:bg-[var(--primary)] hover:text-white transition-all group">
-                    Explorer la gamme <i class="fas fa-chevron-right transition-transform group-hover:translate-x-2"></i>
+                <!-- RIGHT: POULET DE CHAIR -->
+                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Poulet de Chair">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                        <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">POULET DE CHAIR</h2>
+                        <span class="inline-block px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
+                            Voir Plus
+                        </span>
+                    </div>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- SPOTLIGHT: VOLAILLE (Alternating) -->
-    <section class="relative h-[600px] flex items-center overflow-hidden">
-        <div class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Volaille">
-            <div class="absolute inset-0 bg-slate-100/90"></div>
-        </div>
-        <div class="container-custom relative z-10 flex justify-end text-right">
-            <div class="max-w-2xl">
-                <div class="inline-block bg-[var(--primary)] text-white px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.3em] mb-6 border-r-4 border-[var(--secondary)]">
-                    Aviculture Moderne
-                </div>
-                <h2 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight uppercase tracking-tight mb-8">
-                    Filière <span class="text-[var(--primary)]">Volaille</span>
-                </h2>
-                <p class="text-slate-500 text-lg mb-12 font-medium">
-                    Une production avicole rigoureuse pour une viande saine et savoureuse. Nos installations respectent le bien-être animal et les protocoles sanitaires les plus stricts.
-                </p>
-                <div class="flex justify-end">
-                    <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="inline-flex items-center gap-6 bg-slate-900 text-white px-10 py-5 font-black text-[11px] uppercase tracking-widest hover:bg-[var(--primary)] transition-all group">
-                        Découvrir la sélection <i class="fas fa-chevron-right transition-transform group-hover:translate-x-2"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SPOTLIGHT: ÉLEVAGE -->
-    <section class="relative h-[600px] flex items-center overflow-hidden">
-        <div class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Élevage">
-            <div class="absolute inset-0 bg-slate-900/60"></div>
-        </div>
-        <div class="container-custom relative z-10">
-            <div class="max-w-2xl">
-                <div class="inline-block bg-[var(--primary)] text-white px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.3em] mb-6 border-l-4 border-[var(--secondary)]">
-                    Bétail d'Excellence
-                </div>
-                <h2 class="text-4xl md:text-6xl font-black text-white leading-tight uppercase tracking-tight mb-8">
-                    Notre <span class="text-[var(--primary)]">Élevage</span>
-                </h2>
-                <p class="text-white/70 text-lg mb-12 font-medium">
-                    Le Gobra et nos races locales sont au coeur de notre héritage. Un élevage en plein air, nourri au terroir pour une expérience gustative authentique.
-                </p>
-                <a href="{{ route('shop.index', ['category' => 'elevage']) }}" class="inline-flex items-center gap-6 bg-white text-slate-900 px-10 py-5 font-black text-[11px] uppercase tracking-widest hover:bg-[var(--primary)] hover:text-white transition-all group">
-                    Voir les produits <i class="fas fa-chevron-right transition-transform group-hover:translate-x-2"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- GALLERY TEASER (Replacing About) -->
-    <section class="py-24 bg-white overflow-hidden">
+    <!-- CAAWOGI FEATURES SECTION -->
+    <section class="py-12 border-b border-slate-100 bg-white">
         <div class="container-custom">
-            <div class="flex flex-col md:flex-row items-end justify-between mb-16 gap-8">
-                <div class="border-l-8 border-[var(--primary)] pl-8">
-                    <h2 class="text-[12px] font-black text-[var(--primary)] uppercase tracking-[0.4em] mb-2">Notre Univers</h2>
-                    <h3 class="text-4xl font-black text-slate-800 uppercase tracking-tight">Immersion Visuelle</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center text-[var(--primary)] text-2xl mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
+                        <i class="fas fa-truck-fast"></i>
+                    </div>
+                    <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800">Livraison Express</h3>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Sénégal & Sous-région</p>
                 </div>
-                <a href="{{ route('gallery') }}" class="text-[11px] font-bold uppercase tracking-widest text-[var(--primary)] border-b-2 border-[var(--primary)] pb-2 hover:text-slate-900 hover:border-slate-900 transition-all">
-                    Voir toute la gallerie
-                </a>
+                <div class="flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center text-[var(--primary)] text-2xl mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800">Qualité Certifiée</h3>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Contrôles Stricts</p>
+                </div>
+                <div class="flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center text-[var(--primary)] text-2xl mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800">Produits Bio</h3>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Héritage Terroir</p>
+                </div>
+                <div class="flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center text-[var(--primary)] text-2xl mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800">Support Client</h3>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Assistance 24/7</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAAWOGI POPULAR PRODUCTS -->
+    <section class="py-24 bg-white">
+        <div class="container-custom">
+            <div class="flex flex-col items-center mb-16">
+                <h2 class="text-[12px] font-black text-[var(--primary)] uppercase tracking-[0.4em] mb-4">La Sélection</h2>
+                <h3 class="text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tight">Produits Populaires</h3>
+                <div class="h-1.5 w-24 bg-[var(--primary)] mt-6"></div>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-0 border border-slate-100 bg-slate-100">
-                <div class="aspect-square relative overflow-hidden group">
-                    <img src="https://images.unsplash.com/photo-1543160732-23700b1b13b1?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
-                </div>
-                <div class="aspect-square relative overflow-hidden group">
-                    <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
-                </div>
-                <div class="aspect-square relative overflow-hidden group">
-                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
-                </div>
-                <div class="aspect-square relative overflow-hidden group">
-                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
-                </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+                @foreach($featuredProducts->take(8) as $product)
+                    <x-product-card :product="$product" />
+                @endforeach
+            </div>
+
+            <div class="mt-20 text-center">
+                <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-6 px-16 py-6 bg-slate-900 text-white font-black text-[12px] uppercase tracking-widest hover:bg-[var(--primary)] transition-all">
+                    Explorer Notre Boutique
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAAWOGI MASSIVE BRAND BANNER -->
+    <section class="relative h-[500px] flex items-center overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Héritage Thiotty">
+            <div class="absolute inset-0 bg-[var(--primary)]/80 mix-blend-multiply"></div>
+        </div>
+        <div class="container-custom relative z-10 text-center text-white">
+            <h2 class="text-4xl md:text-7xl font-black uppercase tracking-tight mb-8">L'EXCELLENCE À<br>PORTÉE DE MAIN</h2>
+            <p class="text-lg md:text-xl font-medium mb-12 max-w-3xl mx-auto text-white/80">
+                Thiotty Enterprise s'engage pour une agriculture moderne, durable et respectueuse de l'environnement au Sénégal.
+            </p>
+            <a href="{{ route('gallery') }}" class="inline-flex items-center gap-4 px-12 py-5 border-2 border-white text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
+                VOIR NOTRE HISTOIRE
+            </a>
+        </div>
+    </section>
+
+    <!-- CATEGORIES GRID (INDUSTRIAL) -->
+    <section class="py-24 bg-slate-50">
+        <div class="container-custom">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach($categories->take(3) as $cat)
+                    <a href="{{ route('shop.category', $cat->slug) }}" class="relative group h-[350px] overflow-hidden border border-slate-200">
+                        <img src="{{ $cat->image_url }}" class="absolute inset-0 w-full h-full object-cover grayscale brightness-75 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110" alt="{{ $cat->display_name }}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+                        <div class="absolute bottom-10 left-10">
+                            <h4 class="text-3xl font-black text-white uppercase tracking-tight mb-4">{{ $cat->display_name }}</h4>
+                            <div class="h-1 w-12 bg-[var(--primary)] group-hover:w-full transition-all duration-500"></div>
+                        </div>
+                    </a>
+                @endforeach
             </div>
         </div>
     </section>

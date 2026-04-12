@@ -65,27 +65,27 @@
     </div>
 
     <!-- Content -->
-    <div class="p-4 flex flex-col items-center text-center">
-        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">
+    <div class="p-5 flex flex-col items-center text-center">
+        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">
             {{ $product->category->display_name }}
         </p>
         
-        <a href="{{ route('shop.product', $product->slug) }}" class="block mb-2 min-h-[40px] flex flex-col justify-center">
-            <h3 class="text-[13px] font-bold text-slate-800 uppercase tracking-tight group-hover:text-[var(--primary)] transition-colors line-clamp-2">
+        <a href="{{ route('shop.product', $product->slug) }}" class="block mb-3 min-h-[48px] flex flex-col justify-center">
+            <h3 class="text-[14px] font-extrabold text-slate-900 uppercase tracking-tight group-hover:text-[var(--primary)] transition-colors line-clamp-2 leading-tight">
                 {{ $product->display_name }}
             </h3>
         </a>
 
-        <div class="mb-4">
-            <span class="text-base font-black text-[var(--secondary)]">
-                {{ number_format($product->price, 0, ',', ' ') }} <span class="text-[10px] font-bold">CFA</span>
+        <div class="mb-5">
+            <span class="text-lg font-black text-slate-900">
+                {{ number_format($product->price, 0, ',', ' ') }} <span class="text-[11px] font-bold">CFA</span>
             </span>
         </div>
         
         <button @click.prevent="addToCart()" 
-                class="w-full py-2.5 bg-[var(--primary)] text-white font-bold text-[10px] uppercase tracking-widest hover:bg-[var(--primary-hover)] transition-colors disabled:opacity-50"
+                class="w-full py-3.5 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-900 transition-all disabled:opacity-50"
                 :disabled="cartLoading">
-            <span x-show="!cartLoading">Ajouter au panier</span>
+            <span x-show="!cartLoading">Ajouter au Panier</span>
             <span x-show="cartLoading"><i class="fas fa-circle-notch animate-spin"></i></span>
         </button>
     </div>

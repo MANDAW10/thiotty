@@ -4,10 +4,17 @@
 
 :root {
     /* Base Colors - Switched to Caawogi Forest Green & Gold */
-    --primary: #2B7A0B;
-    --primary-hover: #236109;
+    /* CAAWOGI PREMIUM PALETTE */
+    --primary: #206B13;
+    --primary-hover: #18520E;
     --secondary: #F09D23;
+    --accent: #58C26E; /* Caawogi Action Green */
+    --dark: #1F1F1F;
+    --light-bg: #F9F9F9;
+    --border-color: #EAEAEA;
     
+    --font-main: 'Montserrat', sans-serif;
+    --font-secondary: 'Roboto', sans-serif;
     --bg-page: #F3F4F7;
     --bg-surface: #FFFFFF;
     --bg-muted: #F8FAFC;
