@@ -190,4 +190,5 @@ return [
     'testimonial_3_role' => 'Restauratrice',
     'explore_all' => 'Tout Explorer',
     'discover_collection_text' => "Découvrez l'intégralité de notre collection premium et produits frais.",
+    'track_order_response' => 'Pour suivre votre commande, merci de vous connecter à votre compte.',
 ];
