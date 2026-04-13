@@ -62,12 +62,6 @@
     }
 }" @wishlist-updated.window="wishlistCount = $event.detail.count" @cart-updated.window="cartCount = $event.detail.count; if(showCartDrawer) loadCartDrawer()" @compare-updated.window="compareCount = $event.detail.count" @open-login.window="showLogin = true" @open-quick-view.window="quickViewOpen = true; quickViewLoading = true; quickViewProduct = null; fetch($event.detail.url, { headers: { 'Accept': 'application/json' } }).then(r => r.json()).then(d => { quickViewProduct = d; quickViewLoading = false; }).catch(() => { quickViewLoading = false; })">
 
-    <div class="hidden md:block bg-slate-900 text-white">
-        <div class="container-custom flex justify-between items-center py-2.5 text-[9px] font-black uppercase tracking-[0.2em]">
-            <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors">{{ __('messages.privacy_terms') }}</a>
-        </div>
-    </div>
-
     <!-- MOBILE HEADER (Small screens only) -->
     <div class="md:hidden bg-white border-b border-slate-100 py-4 px-4 flex justify-between items-center sticky top-0 z-[100]">
         <button @click="showMobileMenu = true" class="text-slate-600">
