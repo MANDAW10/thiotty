@@ -17,12 +17,9 @@ class SetLocaleMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Session::has('locale')) {
-            App::setLocale(Session::get('locale'));
-        } else {
-            // Default to French if not set, or stay with English from config
-            App::setLocale(config('app.locale', 'fr'));
-        }
+        // Toujours forcer en Français comme demandé par l'utilisateur
+        App::setLocale('fr');
+        Session::put('locale', 'fr');
 
         return $next($request);
     }

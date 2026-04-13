@@ -1,3 +1,4 @@
+<x-app-layout>
     <div x-data="{ 
         isOpen: false, 
         currentImg: '', 
@@ -59,7 +60,7 @@
                     @empty
                         <div class="col-span-full py-32 text-center bg-white border border-slate-100">
                             <i class="fas fa-camera text-4xl text-slate-100 mb-6"></i>
-                            <p class="text-slate-300 font-bold uppercase tracking-widest text-[10px]">Chargement des visuels...</p>
+                            <p class="text-slate-300 font-bold uppercase tracking-widest text-[10px]">Aucun visuel disponible pour le moment.</p>
                         </div>
                     @endforelse
                 </div>
@@ -113,30 +114,20 @@
     <!-- Custom CSS for Masonry and Animations -->
     <style>
         .serif-font { font-family: 'Playfair Display', serif; }
-        .italic-font { font-family: 'Outfit', sans-serif; font-style: italic; }
-        
         .fade-in { 
             animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
             opacity: 0; 
         }
-        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .animate-fade-in-up {
             animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Custom Hover Effect for Cards */
-        .group:hover .serif-font {
-            color: var(--primary);
         }
     </style>
 </x-app-layout>

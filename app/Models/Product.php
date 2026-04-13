@@ -125,7 +125,7 @@ class Product extends Model
 
                 // 1. Check if the image is stored in the public disk (new authenticated uploads)
                 if ($this->image && Storage::disk('public')->exists($this->image)) {
-                    return Storage::disk('public')->url($this->image);
+                    return asset('storage/' . $this->image);
                 }
 
                 // 2. Check for legacy local image in public/img/products/

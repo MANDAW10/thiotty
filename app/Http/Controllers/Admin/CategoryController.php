@@ -11,14 +11,16 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('products')->get();
-        return view('admin.categories.index', compact('categories'));
+        $categories = Category::with(['parent'])->withCount('products')->get();
+        $parentCategories = Category::whereNull('parent_id')->get();
+        return view('admin.categories.index', compact('categories', 'parentCategories'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
+            'parent_id' => 'nullable|exists:categories,id',
             'icon' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
@@ -37,13 +39,15 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        return view('admin.categories.edit', compact('category'));
+        $parentCategories = Category::whereNull('parent_id')->where('id', '!=', $category->id)->get();
+        return view('admin.categories.edit', compact('category', 'parentCategories'));
     }
 
     public function update(Request $request, Category $category)
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'parent_id' => 'nullable|exists:categories,id',
             'icon' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
@@ -52,7 +56,6 @@ class CategoryController extends Controller
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
-            // Delete old image if it exists in storage
             if ($category->image && \Illuminate\Support\Facades\Storage::disk('public')->exists($category->image)) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($category->image);
             }

@@ -56,6 +56,15 @@
             <h3 class="text-3xl font-black text-slate-900 mb-4">{{ $stats['pending_reviews'] }}</h3>
             <a href="{{ route('admin.reviews.index', ['filter' => 'pending']) }}" class="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">Modérer →</a>
         </div>
+
+        <div class="bg-white p-6 md:p-8 rounded-[28px] md:rounded-[32px] border border-slate-100 shadow-sm transition-all hover:shadow-md group">
+            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <i class="fas fa-images text-xl"></i>
+            </div>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Slider Hero</p>
+            <h3 class="text-3xl font-black text-slate-900 mb-4">{{ \App\Models\Slide::count() }}</h3>
+            <a href="{{ route('admin.slides.index') }}" class="text-[10px] font-black text-emerald-600 uppercase tracking-widest hover:underline">Gérer →</a>
+        </div>
     </div>
 
     <!-- Quick Actions / Bottom Grid -->

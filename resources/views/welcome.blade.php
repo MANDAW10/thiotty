@@ -1,11 +1,86 @@
 <x-app-layout>
+    <!-- PREMIUM DYNAMIC HERO SLIDER (ALPINJS) -->
+    <section class="relative bg-white overflow-hidden shadow-sm"
+             x-data="{
+                activeSlide: 0,
+                slides: @js($slides),
+                next() { this.activeSlide = (this.activeSlide + 1) % this.slides.length },
+                start() { if(this.slides.length > 1) setInterval(() => this.next(), 6500) }
+             }"
+             x-init="start()">
+
+        <!-- Slides Container -->
+        <div class="relative h-[550px] md:h-[850px] w-full bg-slate-100">
+            <template x-for="(slide, index) in slides" :key="index">
+                <div x-show="activeSlide === index"
+                     x-transition:enter="transition ease-out duration-1000"
+                     x-transition:enter-start="opacity-0 scale-105"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-800"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95"
+                     class="absolute inset-0 w-full h-full">
+
+                    <img :src="slide.image_url" :alt="slide.title" class="w-full h-full object-cover">
+                    <!-- Overlay with Text -->
+                    <div class="absolute inset-0 bg-slate-900/20 flex flex-col justify-center px-10 md:px-24">
+                        <div class="max-w-3xl"
+                             x-show="activeSlide === index"
+                             x-transition:enter="transition ease-out delay-500 duration-1000"
+                             x-transition:enter-start="opacity-0 translate-y-10"
+                             x-transition:enter-end="opacity-100 translate-y-0">
+                            <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.1] mb-6 drop-shadow-2xl" x-text="slide.title"></h2>
+                            <p class="text-base md:text-2xl text-white/95 font-medium mb-10 drop-shadow-xl max-w-xl" x-text="slide.subtitle"></p>
+                            <a :href="slide.button_url || '/shop'"
+                               class="inline-block bg-[#206B13] hover:bg-[#1a550f] text-white px-10 py-5 rounded-full text-xs font-black uppercase tracking-[0.2em] transition-all transform hover:scale-105 shadow-xl"
+                               x-text="slide.button_text || 'Voir Boutique'">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- DOUBLE WAVE LAYER (THE "GAME") -->
+        <div class="absolute bottom-[-2px] left-0 w-full overflow-hidden leading-[0] z-20">
+            <!-- Semi-transparent Wave -->
+            <svg class="absolute bottom-0 left-0 w-full h-[80px] md:h-[150px] opacity-40 translate-y-2 md:translate-y-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5,73.84-4.36,147.54,16.88,218.2,35.26,69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="#ffffff"></path>
+            </svg>
+            <!-- Solid White Wave -->
+            <svg class="relative block w-full h-[60px] md:h-[120px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C58.42,86.36,125.17,92.32,185.06,94.75,232,96.53,276.7,65.34,321.39,56.44Z" fill="#ffffff"></path>
+            </svg>
+        </div>
+
+        <!-- Floating Chat Icon (as requested in the image) -->
+        <div class="fixed bottom-10 right-10 z-[100] group">
+            <a href="https://wa.me/221770000000" target="_blank" class="w-16 h-16 md:w-20 md:h-20 bg-[#0099D9] text-white rounded-full shadow-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:rotate-12 border-4 border-white/20">
+                <i class="far fa-comment-dots text-3xl md:text-4xl"></i>
+            </a>
+            <div class="absolute right-24 top-1/2 -translate-y-1/2 bg-white px-6 py-3 rounded-2xl border border-slate-100 shadow-2xl opacity-0 translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all pointer-events-none whitespace-nowrap">
+                <p class="text-xs font-black text-slate-900 uppercase tracking-[0.2em]">Parler avec nous ?</p>
+                <div class="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-white rotate-45 border-r border-t border-slate-100"></div>
+            </div>
+        </div>
+
+        <!-- Slider Pagination Dots -->
+        <div class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+            <template x-for="(slide, index) in slides" :key="index">
+                <button @click="activeSlide = index"
+                        class="w-3 h-3 rounded-full transition-all border-2 border-white shadow-sm"
+                        :class="activeSlide === index ? 'bg-white w-10' : 'bg-white/30 hover:bg-white/50'"></button>
+            </template>
+        </div>
+    </section>
+
     <!-- CAAWOGI 1:1 HERO SECTION (TWO-COLUMN INDUSTRIAL) -->
     <section class="relative bg-white pt-2 sm:pt-4">
         <div class="container-custom px-2 sm:px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
                 <!-- LEFT: VIANDE DE BOEUF -->
                 <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1607623814075-e41dfee430ef?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Viande de Boeuf">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Viande de Boeuf">
                     <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
                         <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">VIANDE DE BOEUF</h2>
@@ -94,59 +169,28 @@
                 <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
                     <div class="w-14 h-14 bg-[var(--primary)]/10 text-[var(--primary)] flex items-center justify-center text-xl mb-6"><i class="fas fa-cow"></i></div>
                     <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.vaches') }}</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed">{{ __('messages.quality_text') }}</p>
                 </div>
                 <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
                     <div class="w-14 h-14 bg-[var(--caawogi-blue)]/15 text-[var(--caawogi-blue)] flex items-center justify-center text-xl mb-6"><i class="fas fa-shield-halved"></i></div>
                     <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.quality_certified') }}</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed">{{ __('messages.trust_secure_pay_desc') }}</p>
                 </div>
                 <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
                     <div class="w-14 h-14 bg-[var(--secondary)]/20 text-amber-700 flex items-center justify-center text-xl mb-6"><i class="fas fa-handshake"></i></div>
                     <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.client_trust') }}</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed">{{ __('messages.trust_refund_desc') }}</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CAAWOGI SPLIT SECTION (IMAGE + GRID) -->
-    <section class="py-20 bg-white overflow-hidden">
-        <div class="container-custom">
-            <div class="flex flex-col lg:flex-row gap-0 border border-slate-100">
-                <!-- Left: Big Image -->
-                <div class="lg:w-2/5 relative h-[450px] lg:h-auto overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="Héritage Terroir">
-                    <div class="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-slate-900/80 to-transparent">
-                        <h2 class="text-3xl font-black text-white uppercase tracking-tight leading-tight">
-                            Découvrez le pouvoir de la beauté naturelle
-                        </h2>
-                        <a href="{{ route('shop.index') }}" class="inline-block mt-8 px-10 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all">
-                            Voir la Boutique
-                        </a>
-                    </div>
-                </div>
-                <!-- Right: Product Grid -->
-                <div class="lg:w-3/5 p-8 lg:p-12 bg-slate-50">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach($featuredProducts->skip(4)->take(3) as $product)
-                            <x-product-card :product="$product" />
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- CAAWOGI VEDETTE SECTION (REFINED) -->
     <section class="py-24 bg-white">
         <div class="container-custom">
-            <div class="flex flex-col items-center mb-16 text-center">
-                <h3 class="text-4xl md:text-5xl font-black text-[var(--caawogi-blue)] uppercase tracking-tight mb-6">Produits en vedette</h3>
-                <p class="text-slate-400 text-sm md:text-base max-w-2xl font-medium">
-                    Chez Thiotty, nous mettons en avant des produits de qualité, pensés pour répondre à vos besoins au quotidien.
+            <div class="flex flex-col items-center mb-20 text-center">
+                <h3 class="text-3xl md:text-4xl font-black text-[#5BC0DE] mb-5">Produits en vedette</h3>
+                <p class="text-slate-800 text-[15px] md:text-base max-w-3xl font-medium leading-relaxed">
+                    Chez <strong>Thiotty</strong>, nous mettons en avant des produits de qualité, pensés pour répondre à vos besoins au quotidien.
                 </p>
-                <div class="h-1.5 w-24 bg-[var(--caawogi-blue)] mt-8"></div>
             </div>
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">

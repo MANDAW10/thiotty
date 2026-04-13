@@ -13,50 +13,73 @@
                 </h1>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+
                 <!-- Sidebar Filters (Structured) -->
                 <aside class="hidden lg:block lg:col-span-3 space-y-12 h-fit sticky top-36">
-                    <!-- Categories -->
-                    <div class="bg-slate-50 border border-slate-100 p-8">
-                        <h3 class="text-[11px] font-black text-slate-800 uppercase tracking-[0.3em] mb-8 border-b border-slate-200 pb-4">{{ __('messages.collections') }}</h3>
-                        <div class="space-y-1">
-                             <a href="{{ route('shop.index') }}" 
-                                class="flex items-center justify-between p-3 px-4 transition-all {{ !request('category') || request('category') == 'all' ? 'bg-[var(--primary)] text-white' : 'text-slate-600 hover:bg-white hover:border-slate-200 border border-transparent' }}">
-                                <span class="text-[10px] font-bold uppercase tracking-widest">{{ __('messages.view_all') }}</span>
-                                <span class="text-[9px] font-bold opacity-60">({{ \App\Models\Product::count() }})</span>
+                    <!-- Categories (New Industrial Design) -->
+                    <div class="bg-white border-b-2 border-slate-100 pb-8">
+                        <h3 class="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em] mb-6 flex items-center justify-between">
+                            {{ __('messages.collections') }}
+                            <span class="w-8 h-[2px] bg-[var(--primary)]"></span>
+                        </h3>
+                        <div class="space-y-3">
+                            <a href="{{ route('shop.index') }}" class="group flex items-center justify-between text-[11px] font-bold uppercase tracking-widest {{ !request('category') || request('category') == 'all' ? 'text-[var(--primary)]' : 'text-slate-500 hover:text-slate-900' }}">
+                                <span>{{ __('messages.view_all') }}</span>
+                                <span class="text-[9px] opacity-40 group-hover:opacity-100">({{ \App\Models\Product::count() }})</span>
                             </a>
                             @foreach($categories as $cat)
-                                <a href="{{ route('shop.index', ['category' => $cat->slug] + request()->except('category', 'page')) }}" 
-                                   class="flex items-center justify-between p-3 px-4 transition-all {{ request('category') == $cat->slug ? 'bg-[var(--primary)] text-white' : 'text-slate-600 hover:bg-white hover:border-slate-200 border border-transparent' }}">
-                                    <span class="text-[10px] font-bold uppercase tracking-widest truncate">{{ $cat->display_name }}</span>
-                                    <span class="text-[9px] font-bold opacity-60">({{ $cat->products_count }})</span>
+                                <a href="{{ route('shop.index', ['category' => $cat->slug] + request()->except('category', 'page')) }}"
+                                   class="group flex items-center justify-between text-[11px] font-bold uppercase tracking-widest {{ request('category') == $cat->slug ? 'text-[var(--primary)]' : 'text-slate-500 hover:text-slate-900' }}">
+                                    <span>{{ $cat->name }}</span>
+                                    <span class="text-[9px] opacity-40 group-hover:opacity-100">({{ $cat->products_count }})</span>
                                 </a>
                             @endforeach
                         </div>
                     </div>
 
-                    <!-- Price Filter -->
-                    <div class="bg-slate-50 border border-slate-100 p-8">
-                        <h3 class="text-[11px] font-black text-slate-800 uppercase tracking-[0.3em] mb-8 border-b border-slate-200 pb-4">{{ __('messages.budget') }}</h3>
-                        <form action="{{ route('shop.index') }}" method="GET" class="space-y-4">
-                             @if(request('category')) <input type="hidden" name="category" value="{{ request('category') }}"> @endif
-                             
-                             <div class="grid grid-cols-1 gap-4">
-                                <div class="space-y-1">
-                                    <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Min (CFA)</label>
-                                    <input type="number" name="min_price" value="{{ request('min_price') }}" class="w-full bg-white border border-slate-200 rounded-none py-3 px-4 text-xs font-bold focus:ring-1 focus:ring-[var(--primary)]">
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Max (CFA)</label>
-                                    <input type="number" name="max_price" value="{{ request('max_price') }}" class="w-full bg-white border border-slate-200 rounded-none py-3 px-4 text-xs font-bold focus:ring-1 focus:ring-[var(--primary)]">
-                                </div>
-                             </div>
-                             
-                             <button type="submit" class="w-full py-4 bg-slate-800 text-white rounded-none text-[10px] font-black uppercase tracking-widest hover:bg-[var(--primary)] transition-all">
-                                {{ __('messages.apply_filter') }}
-                             </button>
-                        </form>
+                    <!-- Price Filter (Price Slider Style) -->
+                    <div class="bg-white border-b-2 border-slate-100 pb-10" x-data="{ min: {{ request('min_price', 0) }}, max: {{ request('max_price', $maxPriceInDb) }}, maxLimit: {{ $maxPriceInDb }} }">
+                        <h3 class="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em] mb-10 flex items-center justify-between">
+                            Filter By Price
+                            <span class="w-8 h-[2px] bg-[var(--primary)]"></span>
+                        </h3>
+
+                        <div class="px-2">
+                            <!-- Dual Range Slider Simulation -->
+                            <div class="relative h-1 w-full bg-slate-100 rounded-full mb-8">
+                                <div class="absolute h-full bg-[var(--primary)] rounded-full" :style="'left:' + (min/maxLimit*100) + '%; right:' + (100 - (max/maxLimit*100)) + '%'"></div>
+                                <input type="range" x-model="min" min="0" :max="maxLimit" step="100" class="absolute inset-0 w-full h-1 bg-transparent appearance-none pointer-events-auto cursor-pointer accent-[var(--primary)]" @change="window.location.href = '{{ route('shop.index', request()->except(['min_price', 'page'])) }}' + '&min_price=' + min + '&max_price=' + max">
+                                <input type="range" x-model="max" min="0" :max="maxLimit" step="100" class="absolute inset-0 w-full h-1 bg-transparent appearance-none pointer-events-auto cursor-pointer accent-[var(--primary)]" @change="window.location.href = '{{ route('shop.index', request()->except(['max_price', 'page'])) }}' + '&min_price=' + min + '&max_price=' + max">
+                            </div>
+
+                            <div class="flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-slate-800">
+                                <span>Prix: <span class="text-[var(--primary)]">CFA <span x-text="new Intl.NumberFormat('fr-FR').format(min)"></span></span></span>
+                                <span>-</span>
+                                <span class="text-[var(--primary)]">CFA <span x-text="new Intl.NumberFormat('fr-FR').format(max)"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Best Selling Products -->
+                    <div class="bg-white">
+                        <h3 class="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em] mb-8 flex items-center justify-between">
+                            Best Selling Products
+                            <span class="w-8 h-[2px] bg-[var(--primary)]"></span>
+                        </h3>
+                        <div class="space-y-6">
+                            @foreach($bestSellers as $bs)
+                                <a href="{{ route('shop.product', $bs->slug) }}" class="flex items-center gap-4 group">
+                                    <div class="w-16 h-16 shrink-0 bg-slate-50 overflow-hidden border border-slate-100">
+                                        <img src="{{ $bs->image_url }}" alt="{{ $bs->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-[11px] font-black uppercase tracking-widest text-slate-800 group-hover:text-[var(--primary)] transition-colors truncate">{{ $bs->display_name }}</h4>
+                                        <p class="text-[10px] font-bold text-[#206B13] mt-1 uppercase">CFA {{ number_format($bs->selling_price, 0, ',', ' ') }}</p>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
                 </aside>
 
@@ -67,7 +90,7 @@
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">
                             {{ __('messages.showing') }} {{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }} / {{ $products->total() }}
                         </p>
-                        
+
                         <div class="flex items-center gap-4">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ __('messages.sort_by') }} :</label>
                             <select onchange="window.location.href = this.value" class="bg-white border border-slate-200 rounded-none py-2 pl-4 pr-10 text-[10px] font-bold uppercase tracking-widest focus:ring-1 focus:ring-[var(--primary)] cursor-pointer">
@@ -84,9 +107,9 @@
                              <a href="{{ route('shop.index') }}" class="text-[10px] font-black text-[var(--primary)] uppercase tracking-[0.3em] hover:underline">{{ __('messages.reset_all') }}</a>
                         </div>
                     @else
-                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-0 border-t border-l border-slate-100">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-y-24 gap-x-20">
                             @foreach($products as $product)
-                                <div class="border-r border-b border-slate-100 p-4 bg-white hover:bg-slate-50 transition-colors">
+                                <div class="bg-white group transition-all duration-300 p-4">
                                     <x-product-card :product="$product" />
                                 </div>
                             @endforeach

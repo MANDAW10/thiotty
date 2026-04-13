@@ -1,3 +1,6 @@
+@php
+    $categoriesMenu = \App\Models\Category::with('children')->whereNull('parent_id')->get();
+@endphp
 <header class="header-main" x-data="{ 
     showLogin: {{ ($errors->any() && !old('name') && !old('phone') && !session('identity_verified') && !session('reset_user_id')) ? 'true' : 'false' }}, 
     showRegister: {{ (!Auth::check() && $errors->any() && (old('name') || old('phone'))) ? 'true' : 'false' }},
@@ -52,11 +55,6 @@
     <div class="hidden md:block bg-slate-900 text-white">
         <div class="container-custom flex justify-between items-center py-2.5 text-[9px] font-black uppercase tracking-[0.2em]">
             <a href="{{ route('contact') }}" class="text-white/60 hover:text-white transition-colors">{{ __('messages.privacy_terms') }}</a>
-            <div class="flex items-center gap-3 text-white/80">
-                <a href="{{ route('language.switch', ['locale' => 'fr']) }}" class="hover:text-[var(--secondary)] transition-colors">FR</a>
-                <span class="text-white/30">|</span>
-                <a href="{{ route('language.switch', ['locale' => 'en']) }}" class="hover:text-[var(--secondary)] transition-colors">EN</a>
-            </div>
         </div>
     </div>
 
@@ -85,37 +83,35 @@
             </div>
 
             <!-- Segmented Search Bar -->
+            <!-- LEVEL 2: UNIFIED INDUSTRIAL SEARCH BAR -->
             <div class="flex-1 max-w-2xl">
-                <form action="{{ route('shop.search') }}" method="GET" class="search-segmented" x-data="{ open: false, selectedCategory: 'Sélectionnez une catégorie', selectedSlug: '' }">
-                    <input type="hidden" name="category" :value="selectedSlug">
-                    <input type="text" name="query" placeholder="Rechercher" class="flex-1 px-5 outline-none font-medium h-full">
+                <form action="{{ route('shop.search') }}" method="GET" class="flex items-center bg-slate-50 border border-slate-200 focus-within:border-[#206B13] focus-within:bg-white transition-all duration-300">
                     
-                    <div class="category-select relative" @click="open = !open" @click.away="open = false">
-                        <span class="truncate" x-text="selectedCategory"></span>
-                        <i class="fas fa-chevron-down ml-auto text-[10px] opacity-30 transition-transform" :class="open ? 'rotate-180' : ''"></i>
-                        
-                        <!-- Dropdown -->
-                        <div x-show="open" 
-                             x-transition:enter="transition ease-out duration-100"
-                             x-transition:enter-start="opacity-0 transform scale-95"
-                             x-transition:enter-end="opacity-100 transform scale-100"
-                             class="absolute top-full left-0 right-0 bg-white border border-slate-200 mt-1 z-50 py-2 shadow-xl"
-                             style="display: none;">
-                            <div class="max-h-60 overflow-y-auto custom-scrollbar">
-                                <a href="#" @click.prevent="selectedCategory = 'Toutes catégories'; selectedSlug = ''; open = false" class="block px-4 py-2 text-xs font-bold uppercase hover:bg-slate-50">Toutes catégories</a>
-                                <div class="h-[1px] bg-slate-100 my-1 mx-4"></div>
-                                @foreach(App\Models\Category::all() as $cat)
-                                    <a href="#" @click.prevent="selectedCategory = '{{ $cat->display_name }}'; selectedSlug = '{{ $cat->slug }}'; open = false" class="block px-4 py-2 text-xs font-bold uppercase hover:bg-slate-50 text-slate-600">{{ $cat->display_name }}</a>
-                                @endforeach
-                            </div>
-                        </div>
+                    <!-- Category Selection (Left) -->
+                    <div class="relative min-w-[180px] border-r border-slate-200">
+                        <select name="category" 
+                                class="w-full pl-5 pr-8 bg-transparent border-none text-[10px] font-black uppercase tracking-widest text-slate-500 focus:ring-0 cursor-pointer py-4">
+                            <option value="">{{ __('messages.all_categories') }}</option>
+                            @foreach(App\Models\Category::all() as $cat)
+                                <option value="{{ $cat->slug }}" {{ request('category') == $cat->slug ? 'selected' : '' }}>
+                                    {{ $cat->display_name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    <button type="submit" class="search-btn">
-                        <i class="fas fa-search text-xl"></i>
+                    <!-- Input Field (Center) -->
+                    <input type="text" name="query" value="{{ request('query') }}" 
+                           placeholder="Rechercher un produit..."
+                           class="flex-1 px-5 py-4 bg-transparent border-none text-sm font-bold text-slate-900 placeholder:text-slate-300 focus:ring-0 outline-none">
+                    
+                    <!-- Search Button (Right) -->
+                    <button type="submit" class="px-8 flex items-center justify-center text-slate-400 hover:text-[#206B13] transition-colors">
+                        <i class="fas fa-search text-lg"></i>
                     </button>
                 </form>
             </div>
+
 
             <!-- Contact Blocks -->
             <div class="flex items-center gap-10 min-w-fit">
@@ -144,18 +140,38 @@
         <div class="container-custom flex items-center justify-between h-[60px]">
             <!-- Main Menu (Industrial Style) -->
             <nav class="flex items-center h-full flex-wrap gap-x-1">
+                <!-- ACCUEIL -->
                 <a href="{{ route('home') }}" class="nav-link-blocky {{ request()->routeIs('home') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
                     {{ __('messages.home') }}
                 </a>
-                <a href="{{ route('shop.index') }}" class="nav-link-blocky {{ request()->routeIs('shop.index') && !request('category') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
-                    {{ __('messages.shop') }}
-                </a>
-                <a href="{{ route('blog.index') }}" class="nav-link-blocky {{ request()->routeIs('blog.index') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
-                    Blog
-                </a>
-                <a href="{{ route('about') }}" class="nav-link-blocky {{ request()->routeIs('about') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
-                    {{ __('messages.about_title') }}
-                </a>
+
+                @foreach($categoriesMenu as $parent)
+                    <div class="relative h-full group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                        <a href="{{ route('shop.index', ['category' => $parent->slug]) }}" 
+                           class="nav-link-blocky flex items-center gap-2 {{ request('category') == $parent->slug ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
+                            {{ $parent->name }}
+                            @if($parent->children->count())
+                                <i class="fas fa-chevron-down text-[8px] transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                            @endif
+                        </a>
+                        @if($parent->children->count())
+                            <div x-show="open" 
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 translate-y-2"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 class="absolute top-full left-0 w-56 bg-white border-t-2 border-[var(--primary)] shadow-2xl z-50 py-3"
+                                 style="display: none;">
+                                @foreach($parent->children as $child)
+                                    <a href="{{ route('shop.index', ['category' => $child->slug]) }}" class="block px-6 py-3 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-[var(--primary)] hover:bg-slate-50 transition-colors">
+                                        {{ $child->name }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+
+                <!-- AUTRES -->
                 <a href="{{ route('gallery') }}" class="nav-link-blocky {{ request()->routeIs('gallery') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
                     Galerie
                 </a>
@@ -232,18 +248,35 @@
                 </button>
             </div>
             <nav class="flex-1 overflow-y-auto p-0">
+                <!-- ACCUEIL -->
                 <a href="{{ route('home') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
                     <i class="fas fa-home w-5 text-[var(--primary)]"></i> Accueil
                 </a>
-                <a href="{{ route('shop.index') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
-                    <i class="fas fa-shopping-bag w-5 text-[var(--primary)]"></i> {{ __('messages.shop') }}
-                </a>
-                <a href="{{ route('blog.index') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
-                    <i class="fas fa-newspaper w-5 text-[var(--primary)]"></i> Blog
-                </a>
-                <a href="{{ route('about') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
-                    <i class="fas fa-circle-info w-5 text-[var(--primary)]"></i> {{ __('messages.about_title') }}
-                </a>
+
+                @foreach($categoriesMenu as $parent)
+                    <div x-data="{ open: false }">
+                        <button @click="open = !open" class="w-full flex items-center justify-between p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                            <span class="flex items-center gap-4">
+                                <i class="fas {{ $parent->icon ?? 'fa-folder' }} w-5 text-[var(--primary)]"></i> 
+                                {{ $parent->name }}
+                            </span>
+                            @if($parent->children->count())
+                                <i class="fas fa-chevron-down text-[10px] transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                            @endif
+                        </button>
+                        @if($parent->children->count())
+                            <div x-show="open" x-collapse class="bg-slate-50 border-b border-slate-100">
+                                @foreach($parent->children as $child)
+                                    <a href="{{ route('shop.index', ['category' => $child->slug]) }}" class="block p-4 pl-14 text-[11px] font-bold text-slate-500 uppercase tracking-widest hover:text-[var(--primary)] transition-colors">
+                                        {{ $child->name }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+
+                <!-- AUTRES -->
                 <a href="{{ route('gallery') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
                     <i class="fas fa-images w-5 text-[var(--primary)]"></i> Galerie
                 </a>
@@ -319,369 +352,10 @@
             </div>
         </div>
     </div>
-</header>
+
+    @include('layouts.navigation-modals')
 
 
-    <!-- Login Modal -->
-    <div x-show="showLogin" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-         style="display: none;"
-         @click.self="showLogin = false">
-        
-        <div x-show="showLogin"
-             x-transition:enter="transition ease-out duration-300 transform"
-             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-             class="bg-white w-full max-w-sm rounded-[40px] p-8 md:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar"
-             x-data="{ showPass: false, loading: false }">
-            
-            <button @click="showLogin = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-
-            <div class="mb-10 text-center">
-                <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/10">
-                    <i class="fas fa-user text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-black text-slate-900 mb-1">{{ __('messages.welcome_back') }}</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ __('messages.access_account') }} <span class="text-primary font-black">Thiotty</span></p>
-            </div>
-
-            <form method="POST" action="{{ route('login') }}" class="space-y-6" @submit="loading = true">
-                @csrf
-                <div class="space-y-1.5">
-                    <label for="modal_email" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">{{ __('messages.email') }}</label>
-                    <input id="modal_email" name="email" type="email" 
-                           class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 text-base md:text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
-                           placeholder="votre@email.com"
-                           required autofocus shadow-none>
-                </div>
-
-                <div class="space-y-1.5">
-                    <div class="flex justify-between items-center ml-1">
-                        <label for="modal_password" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">{{ __('messages.password') }}</label>
-                        <button type="button" @click="showLogin = false; showForgot = true" class="text-[9px] font-black text-primary uppercase tracking-widest hover:underline">{{ __('messages.forgot_password') }}</button>
-                    </div>
-                    <div class="relative group">
-                        <input id="modal_password" name="password" :type="showPass ? 'text' : 'password'" 
-                               class="w-full bg-slate-50 border-none rounded-2xl py-4 pl-6 pr-12 font-bold text-slate-900 text-base md:text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
-                               placeholder="••••••••"
-                               required>
-                        <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-5 flex items-center text-slate-400 hover:text-primary transition-colors">
-                            <i class="fas" :class="showPass ? 'fa-eye-slash' : 'fa-eye'"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <button type="submit" class="btn-thiotty w-full py-4 text-base shadow-xl shadow-primary/10 text-white relative overflow-hidden group" :disabled="loading">
-                        <span x-show="!loading">{{ __('messages.login_btn') }}</span>
-                        <span x-show="loading" class="flex items-center justify-center gap-3" style="display: none;">
-                            <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                    </button>
-                </div>
-
-                <div class="text-center pt-2">
-                    <p class="text-[11px] font-bold text-slate-400">
-                        {{ __('messages.no_account') }} 
-                        <button type="button" @click="showLogin = false; showRegister = true" class="text-primary hover:underline ml-1 font-black">{{ __('messages.register_now') }}</button>
-                    </p>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div x-show="showRegister" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-         style="display: none;"
-         @click.self="showRegister = false">
-        
-        <div x-show="showRegister"
-             x-transition:enter="transition ease-out duration-300 transform"
-             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-             class="bg-white w-full max-w-md rounded-[40px] p-8 md:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar"
-             x-data="{ showPass: false, showConfirm: false, loading: false }">
-            
-            <button @click="showRegister = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-
-            <div class="mb-8 text-center">
-                <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/10">
-                    <i class="fas fa-user-plus text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-black text-slate-900 mb-1">{{ __('messages.register_title') }}</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ __('messages.join_family') }}</p>
-            </div>
-
-            <form method="POST" action="{{ route('register') }}" class="space-y-4" @submit="loading = true">
-                @csrf
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <label for="modal_reg_name" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">{{ __('messages.full_name') }}</label>
-                        <input id="modal_reg_name" name="name" type="text" 
-                               class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
-                               required placeholder="{{ __('messages.full_name') }}" value="{{ old('name') }}">
-                    </div>
-                    <div class="space-y-1.5">
-                        <label for="modal_reg_phone" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">{{ __('messages.phone_number') }}</label>
-                        <div class="relative flex items-center">
-                            <span class="absolute left-3 text-[10px] font-black text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">+221</span>
-                            <input id="modal_reg_phone" name="phone" type="tel" x-on:input="formatPhone($event)" 
-                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-14 pr-4 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all font-sans placeholder:text-slate-300" 
-                                   required placeholder="7x xxx xx" value="{{ old('phone') }}">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="space-y-1.5">
-                    <label for="modal_reg_email" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Email</label>
-                    <input id="modal_reg_email" name="email" type="email" 
-                           class="w-full bg-slate-50 border-none rounded-xl py-3 px-5 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
-                           required placeholder="votre@email.com" value="{{ old('email') }}">
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <label for="modal_reg_password" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">{{ __('messages.password') }}</label>
-                        <div class="relative group">
-                            <input id="modal_reg_password" name="password" :type="showPass ? 'text' : 'password'" 
-                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
-                                   required placeholder="••••">
-                            <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
-                                <i class="fas text-[10px]" :class="showPass ? 'fa-eye-slash' : 'fa-eye'"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="space-y-1.5">
-                        <label for="modal_reg_confirm" class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">{{ __('messages.confirm_password') }}</label>
-                        <div class="relative group">
-                            <input id="modal_reg_confirm" name="password_confirmation" :type="showConfirm ? 'text' : 'password'" 
-                                   class="w-full bg-slate-50 border-none rounded-xl py-3 pl-5 pr-10 font-bold text-slate-900 text-base md:text-xs focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
-                                   required placeholder="••••">
-                            <button type="button" @click="showConfirm = !showConfirm" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-300 hover:text-primary transition-colors">
-                                <i class="fas text-[10px]" :class="showConfirm ? 'fa-eye-slash' : 'fa-eye'"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pt-4">
-                    <button type="submit" class="btn-thiotty w-full py-4 text-sm shadow-xl shadow-primary/10 text-white relative overflow-hidden group" :disabled="loading">
-                        <span x-show="!loading">{{ __('messages.continue') }}</span>
-                        <span x-show="loading" class="flex items-center justify-center gap-3" style="display: none;">
-                            <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                    </button>
-                </div>
-
-                <div class="text-center pt-2">
-                    <p class="text-[11px] font-bold text-slate-400">
-                        {{ __('messages.already_registered') }} 
-                        <button type="button" @click="showRegister = false; showLogin = true" class="text-primary hover:underline ml-1 font-black">{{ __('messages.login') }}</button>
-                    </p>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- Forgot Password Modal -->
-    <div x-show="showForgot" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-         style="display: none;"
-         @click.self="showForgot = false">
-        
-        <div x-show="showForgot"
-             x-transition:enter="transition ease-out duration-300 transform"
-             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-             class="bg-white w-full max-w-md rounded-[40px] p-8 md:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
-            
-            <button @click="showForgot = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-
-            <div class="mb-6 text-center">
-                <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-shield-halved text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-black text-slate-900 mb-1">{{ __('messages.forgot_password') }}</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest px-8">{{ __('messages.forgot_text') }}</p>
-            </div>
-
-            @if (session('status'))
-                <div class="mb-4 font-bold text-sm text-green-600 bg-green-50 p-4 rounded-2xl border border-green-100">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('password.verify-identity') }}" class="space-y-4">
-                @csrf
-                <div class="space-y-1">
-                    <label for="forgot_email" class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">{{ __('messages.email') }}</label>
-                    <input id="forgot_email" name="email" type="email" class="w-full bg-slate-50 border-none rounded-2xl py-3 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all" value="{{ old('email') }}" required autofocus>
-                </div>
-
-                <div class="space-y-1">
-                    <label for="forgot_phone" class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">{{ __('messages.phone_number') }}</label>
-                    <input id="forgot_phone" name="phone" type="tel" x-on:input="formatPhone($event)" class="w-full bg-slate-50 border-none rounded-2xl py-3 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all font-sans" required placeholder="7x xxx xx xx">
-                    <x-input-error :messages="$errors->get('phone')" class="mt-1" />
-                </div>
-
-                <x-input-error :messages="$errors->get('forgot_identity')" class="mt-1" />
-
-                <div class="pt-4">
-                    <button type="submit" class="btn-thiotty w-full py-4 text-base shadow-xl shadow-primary/10 text-white">{{ __('messages.verify_identity') }}</button>
-                </div>
-            </form>
-
-            <div class="text-center pt-2">
-                <button type="button" @click="showForgot = false; showLogin = true" class="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors">
-                    {{ __('messages.back_to_login') }}
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Reset Password Modal (Step 2) -->
-    <div x-show="showResetForm" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-         style="display: none;"
-         @click.self="showResetForm = false">
-        
-        <div x-show="showResetForm"
-             x-transition:enter="transition ease-out duration-300 transform"
-             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-             class="bg-white w-full max-w-md rounded-[40px] p-8 md:p-10 shadow-2xl relative">
-            
-            <button @click="showResetForm = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-
-            <div class="mb-6 text-center">
-                <div class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-key-skeleton text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-black text-slate-900 mb-1">{{ __('messages.reset_password') }}</h2>
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest px-8">{{ __('messages.reset_text') }}</p>
-            </div>
-
-            @if (session('password_reset_success'))
-                <div class="mb-4 text-center">
-                    <div class="text-green-600 font-bold mb-4">
-                        <i class="fas fa-check-circle text-4xl mb-2 block"></i>
-                        {{ session('password_reset_success') }}
-                    </div>
-                    <button @click="showResetForm = false; showLogin = true" class="btn-thiotty w-full py-4 text-white">Se connecter maintenant</button>
-                </div>
-            @else
-                <form method="POST" action="{{ route('password.custom-reset') }}" class="space-y-4">
-                    @csrf
-                    <div class="space-y-1">
-                        <label for="reset_password" class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Nouveau mot de passe</label>
-                        <input id="reset_password" name="password" type="password" class="w-full bg-slate-50 border-none rounded-2xl py-3 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all" required autofocus>
-                        <x-input-error :messages="$errors->get('password')" class="mt-1" />
-                    </div>
-
-                    <div class="space-y-1">
-                        <label for="reset_password_confirmation" class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Confirmer mot de passe</label>
-                        <input id="reset_password_confirmation" name="password_confirmation" type="password" class="w-full bg-slate-50 border-none rounded-2xl py-3 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all font-sans" required>
-                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1" />
-                    </div>
-
-                    <x-input-error :messages="$errors->get('reset_error')" class="mt-1" />
-
-                    <div class="pt-4">
-                        <button type="submit" class="btn-thiotty w-full py-4 text-base shadow-xl shadow-primary/10 text-white">{{ __('messages.reset_btn') }}</button>
-                    </div>
-                </form>
-            @endif
-        </div>
-    </div>
-
-    <!-- Profile Modal -->
-    @auth
-    <div x-show="showProfile" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-         style="display: none;"
-         @click.self="showProfile = false">
-        
-        <div x-show="showProfile"
-             x-transition:enter="transition ease-out duration-300 transform"
-             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-             class="bg-white w-full max-w-2xl rounded-[40px] p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
-            
-            <button @click="showProfile = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors z-10">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-
-            <div class="mb-6">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-user-gear text-xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-black text-slate-900">{{ __('messages.profile') }}</h2>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-8 pb-4">
-                <!-- Info Section -->
-                <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100">
-                    @include('profile.partials.update-profile-information-form', ['user' => Auth::user()])
-                </div>
-
-                <!-- Password Section -->
-                <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
-        </div>
-    </div>
-    @endauth
     <!-- Settings Modal (Theme Only) -->
     <div x-show="showSettings" 
          x-transition:enter="transition ease-out duration-300"

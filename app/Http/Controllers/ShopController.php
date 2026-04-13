@@ -13,9 +13,8 @@ class ShopController extends Controller
 {
     public function index()
     {
-        $categories = Category::withCount('products')->get();
-        $featuredProducts = Product::where('is_featured', true)->latest()->take(8)->get();
-        $recentProducts = Product::latest()->take(8)->get();
+        $categories = Category::withCount('products')->whereNull('parent_id')->get();
+        $featuredProducts = Product::where('is_featured', true)->latest()->take(12)->get();
 
         $bestSellerIds = DB::table('order_items')
             ->select('product_id', DB::raw('SUM(quantity) as qty'))
@@ -31,7 +30,24 @@ class ShopController extends Controller
             $bestSellers = $bestSellerIds->map(fn ($id) => $byId->get($id))->filter();
         }
 
-        return view('welcome', compact('categories', 'featuredProducts', 'recentProducts', 'bestSellers'));
+        $slides = \App\Models\Slide::where('is_active', true)->orderBy('order_priority')->get();
+
+        // Fallback: si pas de slides, créer des slides par défaut avec les featured products
+        if ($slides->isEmpty()) {
+            $slides = $featuredProducts->take(3)->map(function ($product, $index) {
+                return (object) [
+                    'title' => $product->display_name,
+                    'subtitle' => $product->description,
+                    'image_url' => $product->image_url,
+                    'button_url' => route('shop.product', $product->slug),
+                    'button_text' => 'Voir Produit'
+                ];
+            });
+        }
+
+        $recentProducts = Product::latest()->take(12)->get();
+
+        return view('welcome', compact('categories', 'featuredProducts', 'bestSellers', 'slides', 'recentProducts'));
     }
 
     public function shop(Request $request)
@@ -64,9 +80,27 @@ class ShopController extends Controller
         }
 
         $products = $query->paginate(12)->withQueryString();
-        $categories = Category::withCount('products')->get();
+        $categories = Category::withCount('products')->whereNull('parent_id')->get();
 
-        return view('shop.index', compact('products', 'categories'));
+        // Fetch Max Price for Slider
+        $maxPriceInDb = Product::max('price') ?? 100000;
+
+        // Fetch Best Sellers for Sidebar
+        $bestSellerIds = DB::table('order_items')
+            ->select('product_id', DB::raw('SUM(quantity) as qty'))
+            ->groupBy('product_id')
+            ->orderByDesc('qty')
+            ->limit(5)
+            ->pluck('product_id');
+
+        if ($bestSellerIds->isEmpty()) {
+            $bestSellers = Product::with('category')->latest()->take(5)->get();
+        } else {
+            $byId = Product::with('category')->whereIn('id', $bestSellerIds)->get()->keyBy('id');
+            $bestSellers = $bestSellerIds->map(fn ($id) => $byId->get($id))->filter();
+        }
+
+        return view('shop.index', compact('products', 'categories', 'bestSellers', 'maxPriceInDb'));
     }
 
     public function category(Category $category)

@@ -36,6 +36,17 @@
                     </div>
 
                     <div class="space-y-1.5">
+                        <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Catégorie Parente (Optionnel)</label>
+                        <select name="parent_id" class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all">
+                            <option value="">Aucune (Catégorie principale)</option>
+                            @foreach($parentCategories as $parent)
+                                <option value="{{ $parent->id }}">{{ $parent->name }}</option>
+                            @endforeach
+                        </select>
+                        <p class="text-[8px] text-slate-400 font-bold mt-1 ml-1">Choisissez si c'est une sous-catégorie.</p>
+                    </div>
+
+                    <div class="space-y-1.5">
                         <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Icône (FontAwesome class)</label>
                         <input type="text" name="icon" class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" placeholder="Ex: fa-cow, fa-leaf...">
                         <p class="text-[8px] text-slate-400 font-bold mt-1 ml-1">Utilisé dans la navigation mobile.</p>
@@ -93,6 +104,7 @@
                         <thead>
                             <tr class="bg-slate-50/50">
                                 <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Nom</th>
+                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Parente</th>
                                 <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Icône</th>
                                 <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Produits</th>
                                 <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
@@ -115,6 +127,15 @@
                                             <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ $category->slug }}</p>
                                         </div>
                                     </div>
+                                </td>
+                                <td class="px-8 py-6 text-center">
+                                    @if($category->parent)
+                                        <span class="px-3 py-1 bg-primary/5 text-primary text-[9px] font-black uppercase tracking-widest border border-primary/10 rounded-full">
+                                            {{ $category->parent->name }}
+                                        </span>
+                                    @else
+                                        <span class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Principale</span>
+                                    @endif
                                 </td>
                                 <td class="px-8 py-6 text-center">
                                     @if($category->icon)

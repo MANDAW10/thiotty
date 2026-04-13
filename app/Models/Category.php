@@ -7,8 +7,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'slug', 'icon', 'image'];
+    protected $fillable = ['name', 'slug', 'icon', 'image', 'parent_id'];
     protected $appends = ['image_url', 'display_name'];
+
+    public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
 
     /**
      * Get the translated name.

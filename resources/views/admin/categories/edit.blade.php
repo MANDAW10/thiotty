@@ -26,6 +26,18 @@
                     @error('name') <p class="text-[10px] text-red-500 font-bold mt-1 ml-1">{{ $message }}</p> @enderror
                 </div>
 
+                <div class="space-y-1.5">
+                    <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Catégorie Parente (Optionnel)</label>
+                    <select name="parent_id" class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-2 focus:ring-primary/20 transition-all">
+                        <option value="">Aucune (Catégorie principale)</option>
+                        @foreach($parentCategories as $parent)
+                            <option value="{{ $parent->id }}" {{ old('parent_id', $category->parent_id) == $parent->id ? 'selected' : '' }}>
+                                {{ $parent->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-1.5">
                         <label class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-1">Icône (FontAwesome)</label>
