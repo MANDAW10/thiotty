@@ -74,50 +74,36 @@
         </div>
     </section>
 
-    <!-- CAAWOGI THREE-COLUMN HERO SECTION -->
+    <!-- CAAWOGI 1:1 HERO SECTION (TWO-COLUMN INDUSTRIAL) -->
     <section class="relative bg-white pt-2 sm:pt-4">
         <div class="container-custom px-2 sm:px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4">
-                <!-- CHEVAUX -->
-                <a href="{{ route('shop.index', ['category' => 'chevaux']) }}" class="relative group h-[350px] md:h-[480px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Chevaux">
-                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                        <div class="w-20 h-20 rounded-full bg-slate-400/40 backdrop-blur flex items-center justify-center text-white text-3xl mb-6 group-hover:bg-slate-400/60 transition-all">
-                            <i class="fas fa-horse"></i>
-                        </div>
-                        <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4">CHEVAUX</h2>
-                        <div class="h-1 w-12 bg-[var(--primary)] mx-auto"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
+                <!-- LEFT: VIANDE DE BOEUF -->
+                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Viande de Boeuf">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                        <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">VIANDE DE BOEUF</h2>
+                        <span class="inline-block px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
+                            Voir Plus
+                        </span>
                     </div>
                 </a>
 
-                <!-- AGRO-ALIMENTAIRE -->
-                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="relative group h-[350px] md:h-[480px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad576?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Agro-Alimentaire">
-                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                        <div class="w-20 h-20 rounded-full bg-slate-400/40 backdrop-blur flex items-center justify-center text-white text-3xl mb-6 group-hover:bg-slate-400/60 transition-all">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4">AGRO-ALIMENTAIRE</h2>
-                        <div class="h-1 w-12 bg-[var(--primary)] mx-auto"></div>
-                    </div>
-                </a>
-
-                <!-- VOLAILLE -->
-                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="relative group h-[350px] md:h-[480px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Volaille">
-                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                        <div class="w-20 h-20 rounded-full bg-slate-400/40 backdrop-blur flex items-center justify-center text-white text-3xl mb-6 group-hover:bg-slate-400/60 transition-all">
-                            <i class="fas fa-feather"></i>
-                        </div>
-                        <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4">VOLAILLE</h2>
-                        <div class="h-1 w-12 bg-[var(--primary)] mx-auto"></div>
+                <!-- RIGHT: POULET DE CHAIR -->
+                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Poulet de Chair">
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                        <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">POULET DE CHAIR</h2>
+                        <span class="inline-block px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
+                            Voir Plus
+                        </span>
                     </div>
                 </a>
             </div>
         </div>
+    </section>
     </section>
 
     <!-- CAAWOGI FEATURES SECTION -->
@@ -176,23 +162,47 @@
         </div>
     </section>
 
-    <!-- Blocs valeurs (NOS CATÉGORIES / promesses) -->
+    <!-- CATÉGORIES PRINCIPALES -->
     <section class="py-16 bg-white">
         <div class="container-custom">
             <h2 class="text-center text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-900 mb-12">{{ __('messages.our_universes') }}</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
-                    <div class="w-14 h-14 bg-[var(--primary)]/10 text-[var(--primary)] flex items-center justify-center text-xl mb-6"><i class="fas fa-cow"></i></div>
-                    <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.vaches') }}</h3>
-                </div>
-                <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
-                    <div class="w-14 h-14 bg-[var(--caawogi-blue)]/15 text-[var(--caawogi-blue)] flex items-center justify-center text-xl mb-6"><i class="fas fa-shield-halved"></i></div>
-                    <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.quality_certified') }}</h3>
-                </div>
-                <div class="border border-slate-100 p-8 bg-slate-50/50 hover:border-[var(--primary)]/30 transition-colors">
-                    <div class="w-14 h-14 bg-[var(--secondary)]/20 text-amber-700 flex items-center justify-center text-xl mb-6"><i class="fas fa-handshake"></i></div>
-                    <h3 class="text-lg font-black uppercase text-slate-900 mb-3">{{ __('messages.client_trust') }}</h3>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a href="{{ route('shop.index', ['category' => 'chevaux']) }}" class="group block relative overflow-hidden rounded-3xl shadow-xl">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/20 to-transparent"></div>
+                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Chevaux" class="w-full h-[420px] object-cover transition-transform duration-1000 group-hover:scale-105">
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <span class="text-xs font-semibold uppercase tracking-[0.35em] text-white/80 mb-3">Catégorie</span>
+                        <h3 class="text-3xl font-black uppercase text-white tracking-tight">Chevaux</h3>
+                        <span class="mt-6 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.35em] text-white">
+                            Voir plus
+                            <i class="fas fa-arrow-right text-sm"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="group block relative overflow-hidden rounded-3xl shadow-xl">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/20 to-transparent"></div>
+                    <img src="https://images.unsplash.com/photo-1506086679524-6f6f3d5b5db7?q=80&w=1600&auto=format&fit=crop" alt="Agro-Alimentaire" class="w-full h-[420px] object-cover transition-transform duration-1000 group-hover:scale-105">
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <span class="text-xs font-semibold uppercase tracking-[0.35em] text-white/80 mb-3">Catégorie</span>
+                        <h3 class="text-3xl font-black uppercase text-white tracking-tight">Agro-Alimentaire</h3>
+                        <span class="mt-6 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.35em] text-white">
+                            Voir plus
+                            <i class="fas fa-arrow-right text-sm"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="group block relative overflow-hidden rounded-3xl shadow-xl">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/20 to-transparent"></div>
+                    <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?q=80&w=1600&auto=format&fit=crop" alt="Volaille" class="w-full h-[420px] object-cover transition-transform duration-1000 group-hover:scale-105">
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <span class="text-xs font-semibold uppercase tracking-[0.35em] text-white/80 mb-3">Catégorie</span>
+                        <h3 class="text-3xl font-black uppercase text-white tracking-tight">Volaille</h3>
+                        <span class="mt-6 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.35em] text-white">
+                            Voir plus
+                            <i class="fas fa-arrow-right text-sm"></i>
+                        </span>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
