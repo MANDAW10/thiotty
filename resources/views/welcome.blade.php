@@ -11,6 +11,21 @@
 
         <!-- Slides Container -->
         <div class="relative h-[550px] md:h-[850px] w-full bg-slate-100">
+            @if($slides->count())
+                <div x-show="slides.length === 0" class="absolute inset-0 w-full h-full">
+                    <img src="{{ $slides->first()->image_url }}" alt="{{ $slides->first()->title }}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-slate-900/20 flex flex-col justify-center px-10 md:px-24">
+                        <div class="max-w-3xl">
+                            <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.1] mb-6 drop-shadow-2xl">{{ $slides->first()->title }}</h2>
+                            <p class="text-base md:text-2xl text-white/95 font-medium mb-10 drop-shadow-xl max-w-xl">{{ $slides->first()->subtitle }}</p>
+                            <a href="{{ $slides->first()->button_url ?? '/shop' }}"
+                               class="inline-block bg-[#206B13] hover:bg-[#1a550f] text-white px-10 py-5 rounded-full text-xs font-black uppercase tracking-[0.2em] transition-all transform hover:scale-105 shadow-xl">
+                                {{ $slides->first()->button_text ?? 'Voir Boutique' }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endif
             <template x-for="(slide, index) in slides" :key="index">
                 <div x-show="activeSlide === index"
                      x-transition:enter="transition ease-out duration-1000"
