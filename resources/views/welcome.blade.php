@@ -113,34 +113,50 @@
     <!-- CAAWOGI FEATURES SECTION -->
     <section class="py-12 border-b border-slate-100 bg-white">
         <div class="container-custom">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="flex flex-col items-center text-center group">
-                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center text-[var(--primary)] text-2xl mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
-                        <i class="fas fa-truck-fast"></i>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="group overflow-hidden rounded-[32px] border border-slate-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1523966211572-3c6b0cf63ac0?q=80&w=1200&auto=format&fit=crop" alt="Livraison Express" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-slate-950/40"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                            <span class="text-[10px] uppercase tracking-[0.35em] text-white/70 mb-2">Livraison</span>
+                            <h3 class="text-xl font-black uppercase tracking-tight">Livraison Express</h3>
+                            <p class="mt-3 text-[11px] uppercase tracking-[0.25em] text-white/80">Sénégal & Sous-région</p>
+                        </div>
                     </div>
-                    <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800">Livraison Express</h3>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Sénégal & Sous-région</p>
                 </div>
-                <div class="flex flex-col items-center text-center group">
-                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center text-[var(--primary)] text-2xl mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
-                        <i class="fas fa-shield-halved"></i>
+                <div class="group overflow-hidden rounded-[32px] border border-slate-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop" alt="Qualité Certifiée" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-slate-950/40"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                            <span class="text-[10px] uppercase tracking-[0.35em] text-white/70 mb-2">Garantie</span>
+                            <h3 class="text-xl font-black uppercase tracking-tight">Qualité Certifiée</h3>
+                            <p class="mt-3 text-[11px] uppercase tracking-[0.25em] text-white/80">Contrôles Stricts</p>
+                        </div>
                     </div>
-                    <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800">Qualité Certifiée</h3>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Contrôles Stricts</p>
                 </div>
-                <div class="flex flex-col items-center text-center group">
-                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center text-[var(--primary)] text-2xl mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
-                        <i class="fas fa-leaf"></i>
+                <div class="group overflow-hidden rounded-[32px] border border-slate-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1500336624523-d727130c3328?q=80&w=1200&auto=format&fit=crop" alt="Produits Bio" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-slate-950/40"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                            <span class="text-[10px] uppercase tracking-[0.35em] text-white/70 mb-2">Nature</span>
+                            <h3 class="text-xl font-black uppercase tracking-tight">Produits Bio</h3>
+                            <p class="mt-3 text-[11px] uppercase tracking-[0.25em] text-white/80">Héritage Terroir</p>
+                        </div>
                     </div>
-                    <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800">Produits Bio</h3>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Héritage Terroir</p>
                 </div>
-                <div class="flex flex-col items-center text-center group">
-                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center text-[var(--primary)] text-2xl mb-4 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">
-                        <i class="fas fa-headset"></i>
+                <div class="group overflow-hidden rounded-[32px] border border-slate-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="relative h-72 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1556740720-88f23c3a7d3b?q=80&w=1200&auto=format&fit=crop" alt="Support Client" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-slate-950/40"></div>
+                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                            <span class="text-[10px] uppercase tracking-[0.35em] text-white/70 mb-2">Assistance</span>
+                            <h3 class="text-xl font-black uppercase tracking-tight">Support Client</h3>
+                            <p class="mt-3 text-[11px] uppercase tracking-[0.25em] text-white/80">Assistance 24/7</p>
+                        </div>
                     </div>
-                    <h3 class="text-[11px] font-black uppercase tracking-widest text-slate-800">Support Client</h3>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Assistance 24/7</p>
                 </div>
             </div>
         </div>
@@ -227,6 +243,14 @@
                 @enderror
             </div>
             <div class="grid sm:grid-cols-2 gap-6">
+                <div class="relative overflow-hidden rounded-[32px] h-[280px] bg-slate-100 shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop" alt="Service client" class="w-full h-full object-cover transition-transform duration-1000 hover:scale-105">
+                    <div class="absolute inset-0 bg-slate-900/40"></div>
+                    <div class="absolute inset-0 p-8 flex flex-col justify-end text-white">
+                        <span class="text-[10px] uppercase tracking-[0.35em] text-white/80 mb-2">Confiance</span>
+                        <h4 class="text-xl font-black uppercase tracking-tight">Engagement client</h4>
+                    </div>
+                </div>
                 <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
                     <i class="fas fa-truck-fast text-[var(--primary)] text-xl mb-3"></i>
                     <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_free_shipping') }}</h4>
