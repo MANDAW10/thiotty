@@ -53,17 +53,6 @@
             </svg>
         </div>
 
-        <!-- Floating Chat Icon (as requested in the image) -->
-        <div class="fixed bottom-10 right-10 z-[100] group">
-            <a href="https://wa.me/221770000000" target="_blank" class="w-16 h-16 md:w-20 md:h-20 bg-[#0099D9] text-white rounded-full shadow-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:rotate-12 border-4 border-white/20">
-                <i class="far fa-comment-dots text-3xl md:text-4xl"></i>
-            </a>
-            <div class="absolute right-24 top-1/2 -translate-y-1/2 bg-white px-6 py-3 rounded-2xl border border-slate-100 shadow-2xl opacity-0 translate-x-10 group-hover:opacity-100 group-hover:translate-x-0 transition-all pointer-events-none whitespace-nowrap">
-                <p class="text-xs font-black text-slate-900 uppercase tracking-[0.2em]">Parler avec nous ?</p>
-                <div class="absolute right-[-8px] top-1/2 -translate-y-1/2 w-4 h-4 bg-white rotate-45 border-r border-t border-slate-100"></div>
-            </div>
-        </div>
-
         <!-- Slider Pagination Dots -->
         <div class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-3">
             <template x-for="(slide, index) in slides" :key="index">
