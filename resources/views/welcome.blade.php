@@ -74,31 +74,46 @@
         </div>
     </section>
 
-    <!-- CAAWOGI 1:1 HERO SECTION (TWO-COLUMN INDUSTRIAL) -->
+    <!-- CAAWOGI THREE-COLUMN HERO SECTION -->
     <section class="relative bg-white pt-2 sm:pt-4">
         <div class="container-custom px-2 sm:px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
-                <!-- LEFT: VIANDE DE BOEUF -->
-                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Viande de Boeuf">
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                        <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">VIANDE DE BOEUF</h2>
-                        <span class="inline-block px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
-                            Voir Plus
-                        </span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4">
+                <!-- CHEVAUX -->
+                <a href="{{ route('shop.index', ['category' => 'chevaux']) }}" class="relative group h-[350px] md:h-[480px] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Chevaux">
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                        <div class="w-20 h-20 rounded-full bg-slate-400/40 backdrop-blur flex items-center justify-center text-white text-3xl mb-6 group-hover:bg-slate-400/60 transition-all">
+                            <i class="fas fa-horse"></i>
+                        </div>
+                        <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4">CHEVAUX</h2>
+                        <div class="h-1 w-12 bg-[var(--primary)] mx-auto"></div>
                     </div>
                 </a>
 
-                <!-- RIGHT: POULET DE CHAIR -->
-                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Poulet de Chair">
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                        <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">POULET DE CHAIR</h2>
-                        <span class="inline-block px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
-                            Voir Plus
-                        </span>
+                <!-- AGRO-ALIMENTAIRE -->
+                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="relative group h-[350px] md:h-[480px] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad576?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Agro-Alimentaire">
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                        <div class="w-20 h-20 rounded-full bg-slate-400/40 backdrop-blur flex items-center justify-center text-white text-3xl mb-6 group-hover:bg-slate-400/60 transition-all">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4">AGRO-ALIMENTAIRE</h2>
+                        <div class="h-1 w-12 bg-[var(--primary)] mx-auto"></div>
+                    </div>
+                </a>
+
+                <!-- VOLAILLE -->
+                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="relative group h-[350px] md:h-[480px] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Volaille">
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                        <div class="w-20 h-20 rounded-full bg-slate-400/40 backdrop-blur flex items-center justify-center text-white text-3xl mb-6 group-hover:bg-slate-400/60 transition-all">
+                            <i class="fas fa-feather"></i>
+                        </div>
+                        <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4">VOLAILLE</h2>
+                        <div class="h-1 w-12 bg-[var(--primary)] mx-auto"></div>
                     </div>
                 </a>
             </div>
