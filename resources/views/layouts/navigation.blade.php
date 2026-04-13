@@ -1,8 +1,8 @@
 @php
     $categoriesMenu = \App\Models\Category::with('children')->whereNull('parent_id')->get();
 @endphp
-<header class="header-main" x-data="{ 
-    showLogin: {{ ($errors->any() && !old('name') && !old('phone') && !session('identity_verified') && !session('reset_user_id')) ? 'true' : 'false' }}, 
+<header class="header-main" x-data="{
+    showLogin: {{ ($errors->any() && !old('name') && !old('phone') && !session('identity_verified') && !session('reset_user_id')) ? 'true' : 'false' }},
     showRegister: {{ (!Auth::check() && $errors->any() && (old('name') || old('phone'))) ? 'true' : 'false' }},
     showForgot: {{ session('status') && !str_contains(session('status'), 'profile') ? 'true' : 'false' }},
     showProfile: {{ (Auth::check() && ($errors->any() || session('status') === 'profile-updated')) ? 'true' : 'false' }},
@@ -18,7 +18,17 @@
     cartDrawerTotal: 0,
     quickViewOpen: false,
     quickViewLoading: false,
-    quickViewProduct: null,
+    quickViewProduct: {
+        image: '',
+        name: '',
+        category: '',
+        price: 0,
+        selling_price: 0,
+        description: '',
+        stock: 0,
+        url: '#',
+        has_sale: false
+    },
     loadCartDrawer() {
         fetch('{{ route('cart.summary') }}', { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }})
             .then(r => r.json())
@@ -86,10 +96,10 @@
             <!-- LEVEL 2: UNIFIED INDUSTRIAL SEARCH BAR -->
             <div class="flex-1 max-w-2xl">
                 <form action="{{ route('shop.search') }}" method="GET" class="flex items-center bg-slate-50 border border-slate-200 focus-within:border-[#206B13] focus-within:bg-white transition-all duration-300">
-                    
+
                     <!-- Category Selection (Left) -->
                     <div class="relative min-w-[180px] border-r border-slate-200">
-                        <select name="category" 
+                        <select name="category"
                                 class="w-full pl-5 pr-8 bg-transparent border-none text-[10px] font-black uppercase tracking-widest text-slate-500 focus:ring-0 cursor-pointer py-4">
                             <option value="">{{ __('messages.all_categories') }}</option>
                             @foreach(App\Models\Category::all() as $cat)
@@ -101,10 +111,10 @@
                     </div>
 
                     <!-- Input Field (Center) -->
-                    <input type="text" name="query" value="{{ request('query') }}" 
+                    <input type="text" name="query" value="{{ request('query') }}"
                            placeholder="Rechercher un produit..."
                            class="flex-1 px-5 py-4 bg-transparent border-none text-sm font-bold text-slate-900 placeholder:text-slate-300 focus:ring-0 outline-none">
-                    
+
                     <!-- Search Button (Right) -->
                     <button type="submit" class="px-8 flex items-center justify-center text-slate-400 hover:text-[#206B13] transition-colors">
                         <i class="fas fa-search text-lg"></i>
@@ -147,7 +157,7 @@
 
                 @foreach($categoriesMenu as $parent)
                     <div class="relative h-full group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                        <a href="{{ route('shop.index', ['category' => $parent->slug]) }}" 
+                        <a href="{{ route('shop.index', ['category' => $parent->slug]) }}"
                            class="nav-link-blocky flex items-center gap-2 {{ request('category') == $parent->slug ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
                             {{ $parent->name }}
                             @if($parent->children->count())
@@ -155,7 +165,7 @@
                             @endif
                         </a>
                         @if($parent->children->count())
-                            <div x-show="open" 
+                            <div x-show="open"
                                  x-transition:enter="transition ease-out duration-200"
                                  x-transition:enter-start="opacity-0 translate-y-2"
                                  x-transition:enter-end="opacity-100 translate-y-0"
@@ -183,7 +193,7 @@
             <!-- Action Icons & Auth -->
             <div class="flex items-center gap-8 h-full pl-6">
                 <!-- Wishlist -->
-                <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth 
+                <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth
                    class="relative group">
                     <i class="far fa-heart nav-action-icon"></i>
                     <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-3 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
@@ -257,7 +267,7 @@
                     <div x-data="{ open: false }">
                         <button @click="open = !open" class="w-full flex items-center justify-between p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
                             <span class="flex items-center gap-4">
-                                <i class="fas {{ $parent->icon ?? 'fa-folder' }} w-5 text-[var(--primary)]"></i> 
+                                <i class="fas {{ $parent->icon ?? 'fa-folder' }} w-5 text-[var(--primary)]"></i>
                                 {{ $parent->name }}
                             </span>
                             @if($parent->children->count())
@@ -331,7 +341,7 @@
         <div class="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl relative custom-scrollbar" @click.stop>
             <button type="button" @click="quickViewOpen = false" class="absolute top-4 right-4 z-10 text-slate-400 hover:text-slate-900"><i class="fas fa-times text-xl"></i></button>
             <div x-show="quickViewLoading" class="p-16 flex justify-center text-[var(--primary)]"><i class="fas fa-circle-notch fa-spin text-3xl"></i></div>
-            <div x-show="!quickViewLoading && quickViewProduct">
+            <div x-show="!quickViewLoading && quickViewProduct.name">
                 <div class="aspect-square bg-slate-50">
                     <img :src="quickViewProduct.image" :alt="quickViewProduct.name" class="w-full h-full object-cover">
                 </div>
@@ -343,8 +353,8 @@
                         <p class="text-2xl font-black text-[var(--primary)]">CFA <span x-text="new Intl.NumberFormat('fr-FR').format(quickViewProduct.selling_price)"></span></p>
                     </div>
                     <p class="text-sm text-slate-600 leading-relaxed" x-text="quickViewProduct.description"></p>
-                    <p class="text-xs font-bold text-green-600" x-show="quickViewProduct.stock > 0">{{ __('messages.in_stock') }} : <span x-text="quickViewProduct.stock"></span></p>
-                    <p class="text-xs font-bold text-red-500" x-show="quickViewProduct.stock <= 0">{{ __('messages.out_of_stock') }}</p>
+                    <p class="text-xs font-bold text-green-600" x-show="quickViewProduct.name && quickViewProduct.stock > 0">{{ __('messages.in_stock') }} : <span x-text="quickViewProduct.stock"></span></p>
+                    <p class="text-xs font-bold text-red-500" x-show="quickViewProduct.name && quickViewProduct.stock <= 0">{{ __('messages.out_of_stock') }}</p>
                     <div class="flex flex-wrap gap-3 pt-2">
                         <a :href="quickViewProduct.url" class="flex-1 min-w-[140px] text-center py-3 bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest hover:bg-[var(--primary)] transition-colors">{{ __('messages.view_items') }}</a>
                     </div>
@@ -357,7 +367,7 @@
 
 
     <!-- Settings Modal (Theme Only) -->
-    <div x-show="showSettings" 
+    <div x-show="showSettings"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
@@ -367,13 +377,13 @@
          class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
          style="display: none;"
          @click.self="showSettings = false">
-        
+
         <div x-show="showSettings"
              x-transition:enter="transition ease-out duration-300 transform"
              x-transition:enter-start="opacity-0 scale-95 translate-y-4"
              x-transition:enter-end="opacity-100 scale-100 translate-y-0"
              class="bg-white w-full max-w-md rounded-[40px] p-8 shadow-2xl relative overflow-hidden">
-            
+
             <button @click="showSettings = false" class="absolute top-6 right-6 text-slate-300 hover:text-primary transition-colors">
                 <i class="fas fa-times text-xl"></i>
             </button>
@@ -390,7 +400,7 @@
             <div class="space-y-6">
                 <div class="grid grid-cols-3 gap-4">
                     <!-- Thiotty Orange -->
-                    <button @click="setAccent('#FF5722', '255, 87, 34')" 
+                    <button @click="setAccent('#FF5722', '255, 87, 34')"
                             class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
                             :class="accent === '#FF5722' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
                         <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #FF5722"></div>
@@ -401,7 +411,7 @@
                     </button>
 
                     <!-- Emerald -->
-                    <button @click="setAccent('#10B981', '16, 185, 129')" 
+                    <button @click="setAccent('#10B981', '16, 185, 129')"
                             class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
                             :class="accent === '#10B981' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
                         <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #10B981"></div>
@@ -412,7 +422,7 @@
                     </button>
 
                     <!-- Indigo -->
-                    <button @click="setAccent('#4F46E5', '79, 70, 229')" 
+                    <button @click="setAccent('#4F46E5', '79, 70, 229')"
                             class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
                             :class="accent === '#4F46E5' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
                         <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #4F46E5"></div>
@@ -423,7 +433,7 @@
                     </button>
 
                     <!-- Rose -->
-                    <button @click="setAccent('#E11D48', '225, 29, 72')" 
+                    <button @click="setAccent('#E11D48', '225, 29, 72')"
                             class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
                             :class="accent === '#E11D48' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
                         <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #E11D48"></div>
@@ -434,7 +444,7 @@
                     </button>
 
                     <!-- Amber -->
-                    <button @click="setAccent('#D97706', '217, 119, 6')" 
+                    <button @click="setAccent('#D97706', '217, 119, 6')"
                             class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
                             :class="accent === '#D97706' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
                         <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #D97706"></div>
@@ -445,7 +455,7 @@
                     </button>
 
                     <!-- Slate -->
-                    <button @click="setAccent('#475569', '71, 85, 105')" 
+                    <button @click="setAccent('#475569', '71, 85, 105')"
                             class="group relative flex flex-col items-center gap-3 p-4 rounded-3xl transition-all border-2"
                             :class="accent === '#475569' ? 'border-primary bg-primary/5' : 'border-slate-50 bg-slate-50/50 hover:border-slate-200'">
                         <div class="w-10 h-10 rounded-full shadow-lg" style="background-color: #475569"></div>
