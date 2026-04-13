@@ -287,6 +287,15 @@
                 <a href="{{ route('contact') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
                     <i class="fas fa-envelope w-5 text-[var(--primary)]"></i> Contact
                 </a>
+                @guest
+                    <button @click="showLogin = true; showMobileMenu = false" class="flex items-center gap-4 p-5 border-b border-slate-100 w-full text-[12px] font-black uppercase tracking-widest text-slate-700">
+                        <i class="fas fa-user w-5 text-[var(--primary)]"></i> Connexion / Inscription
+                    </button>
+                @else
+                    <a href="{{ route('profile') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                        <i class="fas fa-user w-5 text-[var(--primary)]"></i> Mon compte
+                    </a>
+                @endguest
             </nav>
         </div>
     </div>
