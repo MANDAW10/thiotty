@@ -12,7 +12,7 @@
         <!-- Slides Container -->
         <div class="relative h-[550px] md:h-[850px] w-full bg-slate-100">
             @if($slides->count())
-                <div x-show="slides.length === 0" class="absolute inset-0 w-full h-full">
+                <div class="absolute inset-0 w-full h-full">
                     <img src="{{ $slides->first()->image_url }}" alt="{{ $slides->first()->title }}" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-slate-900/20 flex flex-col justify-center px-10 md:px-24">
                         <div class="max-w-3xl">
