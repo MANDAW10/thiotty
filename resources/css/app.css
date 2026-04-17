@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-    /* Base Colors - Switched to Caawogi Forest Green & Gold */
+    /* Base Colors - Switched to Thiotty Forest Green & Gold */
     /* CAAWOGI PREMIUM PALETTE */
     --primary: #206B13;
     --primary-hover: #18520E;
     --secondary: #F09D23;
-    --accent: #58C26E; /* Caawogi Action Green */
-    --caawogi-blue: #5EBBE3;
+    --accent: #58C26E; /* Thiotty Action Green */
+    --thiotty-blue: #5EBBE3;
     --dark: #1F1F1F;
     --light-bg: #F9F9F9;
     --border-color: #EAEAEA;
@@ -123,7 +123,7 @@
         @apply absolute bottom-4 right-4 w-10 h-10 text-white rounded-none flex items-center justify-center shadow-md transition-all hover:scale-110 active:scale-90 z-10;
     }
 
-    /* Segmented Search Bar (Caawogi Style) */
+    /* Segmented Search Bar (Thiotty Style) */
     .search-segmented {
         display: flex;
         border: 1px solid var(--border-main);

@@ -36,6 +36,15 @@ class OrderController extends Controller
             $data['shipped_at'] = now();
         }
 
+        // Restore stock if transitioning to cancelled
+        if ($request->status === 'cancelled' && $order->status !== 'cancelled') {
+            foreach($order->items as $item) {
+                if ($item->product_id) {
+                    \App\Models\Product::where('id', $item->product_id)->increment('stock', $item->quantity);
+                }
+            }
+        }
+
         $order->update($data);
 
         return back()->with('success', 'Statut de la commande #' . $order->id . ' et informations de suivi mis à jour.');

@@ -30,7 +30,7 @@ class TelegramService
             $itemsText = "";
             foreach($order->items as $item) {
                 // Ensure product name is bold and price is formatted
-                $itemsText .= "• <b>" . ($item->product->name ?? 'Produit') . "</b> x" . $item->quantity . " (<code>" . number_format($item->unit_price * $item->quantity, 0, ',', ' ') . " XOF</code>)\n";
+                $itemsText .= "• <b>" . ($item->product?->name ?? 'Produit supprimé') . "</b> x" . $item->quantity . " (<code>" . number_format($item->unit_price * $item->quantity, 0, ',', ' ') . " XOF</code>)\n";
             }
 
             // Message formaté en HTML pour Telegram

@@ -51,10 +51,10 @@
                                     <div class="flex items-center justify-between gap-6">
                                         <div class="flex items-center gap-6">
                                             <div class="w-16 h-16 bg-slate-50 rounded-2xl overflow-hidden shrink-0 border border-slate-100">
-                                                <img src="{{ $item->product->image ?? 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=200&auto=format&fit=crop' }}" class="w-full h-full object-cover">
+                                                <img src="{{ $item->product?->image_url ?? 'https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=200&auto=format&fit=crop' }}" class="w-full h-full object-cover">
                                             </div>
                                             <div>
-                                                <h4 class="text-lg font-bold text-slate-900 mb-1">{{ $item['product_name'] ?? $item->product->name }}</h4>
+                                                <h4 class="text-lg font-bold text-slate-900 mb-1">{{ $item->product?->name ?? 'Produit supprimé' }}</h4>
                                                 <p class="text-xs font-bold text-slate-400">
                                                     {{ number_format($item->unit_price, 0, ',', ' ') }} CFA <span class="mx-2 opacity-50">×</span> {{ $item->quantity }}
                                                 </p>

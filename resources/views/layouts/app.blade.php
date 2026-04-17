@@ -1,25 +1,119 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="fr">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        {{-- ═══════════════════════════════════════════════ --}}
+        {{-- SEO : Title & Description                        --}}
+        {{-- ═══════════════════════════════════════════════ --}}
+        @php
+            $seoTitle       = $seoTitle       ?? (isset($product) ? $product->name . ' — Thiotty Enterprise' : (isset($category) ? $category->display_name . ' — Thiotty Enterprise' : 'Thiotty Enterprise | Bétail, Chevaux & Agro-alimentaire au Sénégal'));
+            $seoDescription = $seoDescription ?? (isset($product) ? Str::limit(strip_tags($product->description ?? ''), 155, '…') : 'Thiotty Enterprise : achetez du bétail, des chevaux, des volailles et des produits agro-alimentaires de qualité en ligne au Sénégal. Livraison à domicile.');
+            $seoImage       = $seoImage       ?? asset('assets/images/branding/vaches/troupeau vache.jpg');
+            $seoUrl         = $seoUrl         ?? url()->current();
+            $seoType        = $seoType        ?? (isset($product) ? 'product' : 'website');
+        @endphp
 
-        <!-- Fonts -->
+        <title>{{ $seoTitle }}</title>
+        <meta name="description" content="{{ $seoDescription }}">
+        <meta name="keywords" content="bétail Sénégal, chevaux Sénégal, volailles, agro-alimentaire, acheter bétail en ligne, Thiotty Enterprise, élevage Dakar">
+        <meta name="author" content="Thiotty Enterprise">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="{{ $seoUrl }}">
+
+        {{-- ═══════════════════════════════════════════════ --}}
+        {{-- Open Graph (Facebook, WhatsApp, LinkedIn)       --}}
+        {{-- ═══════════════════════════════════════════════ --}}
+        <meta property="og:type"        content="{{ $seoType }}">
+        <meta property="og:url"         content="{{ $seoUrl }}">
+        <meta property="og:title"       content="{{ $seoTitle }}">
+        <meta property="og:description" content="{{ $seoDescription }}">
+        <meta property="og:image"       content="{{ $seoImage }}">
+        <meta property="og:image:width"  content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:site_name"   content="Thiotty Enterprise">
+        <meta property="og:locale"      content="fr_SN">
+
+        {{-- ═══════════════════════════════════════════════ --}}
+        {{-- Twitter Cards                                   --}}
+        {{-- ═══════════════════════════════════════════════ --}}
+        <meta name="twitter:card"        content="summary_large_image">
+        <meta name="twitter:title"       content="{{ $seoTitle }}">
+        <meta name="twitter:description" content="{{ $seoDescription }}">
+        <meta name="twitter:image"       content="{{ $seoImage }}">
+
+        {{-- ═══════════════════════════════════════════════ --}}
+        {{-- Données structurées JSON-LD (Google Rich Snippets) --}}
+        {{-- ═══════════════════════════════════════════════ --}}
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Organization",
+                    "name": "Thiotty Enterprise",
+                    "url": "{{ url('/') }}",
+                    "logo": "{{ asset('assets/images/branding/vaches/troupeau vache.jpg') }}",
+                    "description": "Plateforme e-commerce spécialisée dans le bétail, les chevaux, les volailles et les produits agro-alimentaires au Sénégal.",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "Dakar",
+                        "addressCountry": "SN"
+                    },
+                    "contactPoint": {
+                        "@type": "ContactPoint",
+                        "telephone": "+221-78-357-74-31",
+                        "contactType": "customer service",
+                        "availableLanguage": ["French", "Wolof"]
+                    },
+                    "sameAs": []
+                }
+                @isset($product)
+                ,{
+                    "@type": "Product",
+                    "name": "{{ $product->name }}",
+                    "description": "{{ Str::limit(strip_tags($product->description ?? ''), 200) }}",
+                    "image": "{{ $seoImage }}",
+                    "offers": {
+                        "@type": "Offer",
+                        "priceCurrency": "XOF",
+                        "price": "{{ $product->price }}",
+                        "availability": "{{ $product->stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' }}",
+                        "seller": {
+                            "@type": "Organization",
+                            "name": "Thiotty Enterprise"
+                        }
+                    }
+                }
+                @endisset
+                @isset($category)
+                ,{
+                    "@type": "CollectionPage",
+                    "name": "{{ $category->display_name }} — Thiotty Enterprise",
+                    "description": "Découvrez notre sélection de {{ $category->display_name }} disponibles en ligne.",
+                    "url": "{{ $seoUrl }}"
+                }
+                @endisset
+            ]
+        }
+        </script>
+
+        {{-- ═══════════════════════════════════════════════ --}}
+        {{-- Fonts                                           --}}
+        {{-- ═══════════════════════════════════════════════ --}}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-        
-        <!-- FontAwesome -->
+
+        {{-- FontAwesome --}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-
-        <!-- Scripts -->
+        {{-- Scripts --}}
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Hotwire Turbo for SPA-like navigation -->
+        {{-- Hotwire Turbo for SPA-like navigation --}}
         <script src="https://unpkg.com/@hotwired/turbo@8.0.0/dist/turbo.es2017-umd.js" defer></script>
         <style>
             .turbo-progress-bar {
@@ -28,6 +122,9 @@
                 box-shadow: 0 0 10px rgba(43, 122, 11, 0.5);
             }
         </style>
+
+        {{-- Slot pour les balises SEO spécifiques à chaque page --}}
+        @stack('seo')
     </head>
     <body class="font-sans antialiased text-slate-900 bg-[#FDFDFD]">
         <!-- Global Toast Notifications -->

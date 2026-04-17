@@ -62,18 +62,36 @@
     }
 }" @wishlist-updated.window="wishlistCount = $event.detail.count" @cart-updated.window="cartCount = $event.detail.count; if(showCartDrawer) loadCartDrawer()" @compare-updated.window="compareCount = $event.detail.count" @open-login.window="showLogin = true" @open-quick-view.window="quickViewOpen = true; quickViewLoading = true; quickViewProduct = null; fetch($event.detail.url, { headers: { 'Accept': 'application/json' } }).then(r => r.json()).then(d => { quickViewProduct = d; quickViewLoading = false; }).catch(() => { quickViewLoading = false; })">
 
+    <!-- MOBILE SEARCH (Small screens only, Above Navbar) -->
+    <div class="md:hidden bg-white border-b border-slate-100 py-3 px-4">
+        <form action="{{ route('shop.search') }}" method="GET" class="flex items-center bg-slate-50 border border-slate-200 focus-within:border-[var(--primary)] transition-colors rounded-none">
+            <input type="text" name="query" value="{{ request('query') }}"
+                   placeholder="Rechercher un produit..."
+                   class="flex-1 px-4 py-3 bg-transparent border-none text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:ring-0 outline-none">
+            <button type="submit" class="px-5 text-slate-400 hover:text-[var(--primary)] transition-colors">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+
     <!-- MOBILE HEADER (Small screens only) -->
-    <div class="md:hidden bg-white border-b border-slate-100 py-4 px-4 flex justify-between items-center sticky top-0 z-[100]">
+    <div class="md:hidden bg-white border-b border-slate-100 py-4 px-4 flex justify-between items-center sticky top-0" style="z-index: 100;">
         <button @click="showMobileMenu = true" class="text-slate-600">
             <i class="fas fa-bars text-xl"></i>
         </button>
         <a href="{{ route('home') }}">
             <x-application-logo class="h-8 w-auto" />
         </a>
-        <button type="button" @click="showCartDrawer = true; loadCartDrawer()" class="relative text-slate-600">
-            <i class="fas fa-shopping-basket text-xl"></i>
-            <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-2 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
-        </button>
+        <div class="flex items-center gap-3">
+            <a @auth href="{{ route('wishlist.index') }}" @else href="javascript:void(0)" @click="showLogin = true" @endauth class="relative text-slate-600">
+                <i class="far fa-heart text-xl"></i>
+                <span x-show="wishlistCount > 0" x-text="wishlistCount" class="absolute -top-2 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
+            </a>
+            <button type="button" @click="showCartDrawer = true; loadCartDrawer()" class="relative text-slate-600">
+                <i class="fas fa-shopping-basket text-xl"></i>
+                <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-2 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
+            </button>
+        </div>
     </div>
 
     <!-- LEVEL 2: Middle Bar (Logo, Search & Contact) -->
@@ -143,7 +161,7 @@
     <div class="bg-white border-b border-slate-100 hidden md:block">
         <div class="container-custom flex items-center justify-between h-[60px]">
             <!-- Main Menu (Industrial Style) -->
-            <nav class="flex items-center h-full flex-wrap gap-x-1">
+            <nav class="flex items-center h-full gap-x-1 whitespace-nowrap">
                 <!-- ACCUEIL -->
                 <a href="{{ route('home') }}" class="nav-link-blocky {{ request()->routeIs('home') ? 'active' : '' }} font-black uppercase tracking-[0.15em] text-[10px]">
                     {{ __('messages.home') }}
@@ -195,17 +213,14 @@
 
                 <a href="{{ route('compare.index') }}" class="relative group" title="{{ __('messages.compare_title') }}">
                     <i class="fas fa-random nav-action-icon"></i>
-                    <span x-show="compareCount > 0" x-text="compareCount" class="absolute -top-3 -right-2 bg-[var(--caawogi-blue)] text-white text-[8px] font-bold min-w-[1rem] h-4 px-0.5 flex items-center justify-center rounded-full"></span>
+                    <span x-show="compareCount > 0" x-text="compareCount" class="absolute -top-3 -right-2 bg-[var(--thiotty-blue)] text-white text-[8px] font-bold min-w-[1rem] h-4 px-0.5 flex items-center justify-center rounded-full"></span>
                 </a>
 
-                <button type="button" @click="showCartDrawer = true; loadCartDrawer()" class="flex items-center gap-3 group text-left">
+                <button type="button" @click="showCartDrawer = true; loadCartDrawer()" class="flex items-center group text-left">
                     <div class="relative">
                         <i class="fas fa-shopping-basket nav-action-icon"></i>
                         <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-3 -right-2 bg-[var(--primary)] text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
                     </div>
-                    <span class="text-[11px] font-black uppercase tracking-widest text-slate-800 hidden lg:inline">
-                        CFA <span x-text="new Intl.NumberFormat('fr-FR').format(cartDrawerTotal || {{ app(\App\Services\CartService::class)->getTotalBalance() }})">0</span>
-                    </span>
                 </button>
 
                 <!-- Auth -->
@@ -241,7 +256,7 @@
     </div>
 
     <!-- Mobile Navigation Drawer -->
-    <div x-show="showMobileMenu" class="fixed inset-0 z-[150] md:hidden" style="display: none;">
+    <div x-show="showMobileMenu" class="fixed inset-0 md:hidden" style="display: none; z-index: 150;">
         <div @click="showMobileMenu = false" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
         <div x-show="showMobileMenu" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
              class="absolute inset-y-0 left-0 w-[280px] bg-white flex flex-col border-r border-slate-50">
@@ -287,12 +302,21 @@
                 <a href="{{ route('contact') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
                     <i class="fas fa-envelope w-5 text-[var(--primary)]"></i> Contact
                 </a>
+                @auth
+                    <a href="{{ route('wishlist.index') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                        <i class="far fa-heart w-5 text-[var(--primary)]"></i> Wishlist
+                    </a>
+                @else
+                    <button @click="showLogin = true; showMobileMenu = false" class="flex items-center gap-4 p-5 border-b border-slate-100 w-full text-[12px] font-black uppercase tracking-widest text-slate-700">
+                        <i class="far fa-heart w-5 text-[var(--primary)]"></i> Wishlist
+                    </button>
+                @endauth
                 @guest
                     <button @click="showLogin = true; showMobileMenu = false" class="flex items-center gap-4 p-5 border-b border-slate-100 w-full text-[12px] font-black uppercase tracking-widest text-slate-700">
                         <i class="fas fa-user w-5 text-[var(--primary)]"></i> Connexion / Inscription
                     </button>
                 @else
-                    <a href="{{ route('profile') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
+                    <a href="{{ route('profile.edit') }}" class="flex items-center gap-4 p-5 border-b border-slate-100 text-[12px] font-bold uppercase tracking-widest text-slate-700">
                         <i class="fas fa-user w-5 text-[var(--primary)]"></i> Mon compte
                     </a>
                 @endguest
@@ -301,7 +325,7 @@
     </div>
 
     <!-- Panier latéral (type vitrine) -->
-    <div x-show="showCartDrawer" class="fixed inset-0 z-[1200] md:justify-end flex" style="display: none;">
+    <div x-show="showCartDrawer" class="fixed inset-0 md:justify-end flex" style="display: none; z-index: 1200;">
         <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="showCartDrawer = false"></div>
         <div x-show="showCartDrawer" x-transition:enter="transition transform ease-out duration-300" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
              class="relative ml-auto w-full max-w-md h-full bg-white shadow-2xl flex flex-col border-l border-slate-100">
@@ -340,13 +364,13 @@
     </div>
 
     <!-- Aperçu rapide -->
-    <div x-show="quickViewOpen" class="fixed inset-0 z-[1200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" style="display: none;" @click.self="quickViewOpen = false">
+    <div x-show="quickViewOpen" class="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" style="display: none; z-index: 1200;" @click.self="quickViewOpen = false">
         <div class="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl relative custom-scrollbar" @click.stop>
             <button type="button" @click="quickViewOpen = false" class="absolute top-4 right-4 z-10 text-slate-400 hover:text-slate-900"><i class="fas fa-times text-xl"></i></button>
             <div x-show="quickViewLoading" class="p-16 flex justify-center text-[var(--primary)]"><i class="fas fa-circle-notch fa-spin text-3xl"></i></div>
             <div x-show="!quickViewLoading && quickViewProduct.name">
-                <div class="aspect-square bg-slate-50">
-                    <img :src="quickViewProduct.image" :alt="quickViewProduct.name" class="w-full h-full object-cover">
+                <div class="relative w-full bg-slate-50/50 flex items-center justify-center p-4 min-h-[300px]">
+                    <img :src="quickViewProduct.image" :alt="quickViewProduct.name" class="max-w-full max-h-[40vh] object-contain rounded-xl shadow-sm">
                 </div>
                 <div class="p-6 space-y-3">
                     <p class="text-[10px] font-black uppercase tracking-widest text-[var(--primary)]" x-text="quickViewProduct.category"></p>
@@ -377,8 +401,8 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
-         style="display: none;"
+         class="fixed inset-0 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+         style="display: none; z-index: 200;"
          @click.self="showSettings = false">
 
         <div x-show="showSettings"

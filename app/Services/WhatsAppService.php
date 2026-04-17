@@ -31,7 +31,8 @@ class WhatsAppService
         try {
             $itemsText = "";
             foreach($order->items as $item) {
-                $itemsText .= "- " . $item->product->name . " x " . $item->quantity . " (" . number_format($item->unit_price * $item->quantity, 0, ',', ' ') . " CFA)\n";
+                $productName = $item->product ? $item->product->name : 'Produit supprimé';
+                $itemsText .= "- " . $productName . " x " . $item->quantity . " (" . number_format($item->unit_price * $item->quantity, 0, ',', ' ') . " CFA)\n";
             }
 
             $message = "📦 *NOUVELLE COMMANDE THIOTTY !*\n\n"

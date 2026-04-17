@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewOrderNotification;
 use App\Models\CartItem;
 use App\Models\DeliveryZone;
 use App\Models\Order;
@@ -12,6 +13,7 @@ use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
@@ -36,12 +38,21 @@ class CheckoutController extends Controller
             'customer_phone' => 'required|string',
             'customer_address' => 'required|string',
             'delivery_zone_id' => 'required|exists:delivery_zones,id',
-            'payment_method' => 'required|in:cash,wave,orange_money',
+            'payment_method' => 'required|in:cash,wave',
         ]);
 
         $cart = $cartService->getItems();
         if (empty($cart)) {
             return redirect()->route('shop.index');
+        }
+
+        // Check stock before proceeding
+        foreach ($cart as $id => $details) {
+            $product = \App\Models\Product::find($id);
+            if (!$product || $product->stock < $details['quantity']) {
+                $productName = $product ? $product->name : 'Un produit';
+                return back()->with('error', "Stock insuffisant pour : {$productName}. Veuillez réduire la quantité.");
+            }
         }
 
         $deliveryZone = DeliveryZone::find($request->delivery_zone_id);
@@ -70,9 +81,10 @@ class CheckoutController extends Controller
                     'quantity' => $details['quantity'],
                     'unit_price' => $details['price'],
                 ]);
+
+                \App\Models\Product::where('id', $id)->decrement('stock', $details['quantity']);
             }
 
-            // Create payment record
             Payment::create([
                 'order_id' => $order->id,
                 'user_id' => auth()->id(),
@@ -83,25 +95,33 @@ class CheckoutController extends Controller
 
             DB::commit();
 
-            Session::forget('cart');
-            if (auth()->check()) {
-                CartItem::where('user_id', auth()->id())->delete();
-            }
-
+            // Envoi e-mail de notification admin pour toute nouvelle commande
             try {
                 $order->load(['items.product', 'deliveryZone']);
-                $telegram = new \App\Services\TelegramService;
-                $telegram->sendOrderNotification($order);
+                Mail::to('mandawdieng10@gmail.com')->send(new NewOrderNotification($order));
             } catch (\Exception $e) {
-                // Silently fail if Telegram service has issues, don't block the user
-                \Illuminate\Support\Facades\Log::error('Erreur lors de l\'envoi de la notification Telegram: '.$e->getMessage());
+                Log::error('Erreur e-mail notification commande: ' . $e->getMessage());
             }
 
+            // Si c'est en espèces (Paiement à la livraison), on confirme la commande immédiatement
             if ($request->payment_method === 'cash') {
+                Session::forget('cart');
+                if (auth()->check()) {
+                    CartItem::where('user_id', auth()->id())->delete();
+                }
+
+                try {
+                    $telegram = new \App\Services\TelegramService;
+                    $telegram->sendOrderNotification($order);
+                } catch (\Exception $e) {
+                    Log::error('Erreur lors de l\'envoi de la notification Telegram: '.$e->getMessage());
+                }
+
                 return redirect()->route('order.confirmation', $order)->with('success', 'Commande passée avec succès ! Payer à la livraison.');
             }
 
-            return redirect()->route('payment.show', $order)->with('success', 'Commande passée ! Veuillez procéder au paiement.');
+            // Pour Wave et autres paiements, on redirige vers le paiement
+            return redirect()->route('payment.show', $order)->with('info', 'Veuillez procéder au paiement pour valider votre commande.');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -111,13 +131,22 @@ class CheckoutController extends Controller
 
     public function confirmation(Order $order)
     {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $order->load(['items.product', 'deliveryZone']);
 
         // Generate WhatsApp message
         $itemsText = '';
         foreach ($order->items as $item) {
-            $itemsText .= '- '.$item->product->name.' x '.$item->quantity.' ('.number_format($item->unit_price * $item->quantity, 0, ',', ' ')." CFA)\n";
+            $productName = $item->product ? $item->product->name : 'Produit supprimé';
+            $itemsText .= '- '.$productName.' x '.$item->quantity.' ('.number_format($item->unit_price * $item->quantity, 0, ',', ' ')." CFA)\n";
         }
+
+        $statusLine = $order->payment_status === 'paid'
+            ? 'Payé / confirmé'
+            : ($order->payment_method === 'cash' ? 'Paiement à la livraison' : 'Paiement en attente de confirmation');
 
         $message = "📦 *NOUVELLE COMMANDE THIOTTY !*\n\n"
                  .'🔖 *Réf:* #'.str_pad($order->id, 5, '0', STR_PAD_LEFT)."\n"
@@ -128,7 +157,7 @@ class CheckoutController extends Controller
                  ."🛒 *ARTICLES:*\n".$itemsText."\n"
                  .'💰 *TOTAL À PAYER: '.number_format($order->total_amount, 0, ',', ' ')." CFA*\n\n"
                  .'✨ *Mode:* '.strtoupper(str_replace('_', ' ', $order->payment_method))."\n"
-                 .'🚀 *Statut:* Paiement à la livraison';
+                 .'🚀 *Statut:* '.$statusLine;
 
         $whatsappUrl = 'https://wa.me/221783577431?text='.urlencode($message);
 

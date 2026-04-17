@@ -163,14 +163,14 @@
                         @foreach($order->items as $item)
                             <div class="flex items-center gap-6 group">
                                 <div class="w-16 h-16 bg-slate-50 rounded-2xl flex-shrink-0 flex items-center justify-center text-slate-300 border border-slate-100 group-hover:bg-primary/5 transition-colors">
-                                    @if($item->product && $item->product->image)
-                                        <img src="{{ asset('storage/' . $item->product->image) }}" class="w-full h-full object-cover rounded-2xl">
+                                    @if($item->product)
+                                        <img src="{{ $item->product->image_url }}" class="w-full h-full object-cover rounded-2xl">
                                     @else
                                         <i class="fas fa-box text-xl"></i>
                                     @endif
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-sm font-black text-slate-900 group-hover:text-primary transition-colors text-slate-900">{{ $item->product->name ?? 'Produit Thiotty' }}</h4>
+                                    <h4 class="text-sm font-black text-slate-900 group-hover:text-primary transition-colors text-slate-900">{{ $item->product?->name ?? 'Produit (Supprimé)' }}</h4>
                                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{{ $item->quantity }} x {{ number_format($item->unit_price, 0, ',', ' ') }} CFA</p>
                                 </div>
                                 <div class="text-right">

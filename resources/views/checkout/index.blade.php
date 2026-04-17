@@ -15,6 +15,16 @@
         </div>
     </header>
 
+    @if(session('error'))
+        <div class="container-custom mt-8">
+            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 font-bold flex items-center gap-3">
+                <i class="fas fa-exclamation-circle text-xl"></i>
+                <p>{{ session('error') }}</p>
+            </div>
+        </div>
+    @endif
+
+
     <div class="py-12 lg:py-20 bg-slate-50/30" x-data="{ 
         deliveryFee: 0,
         subtotal: {{ $subtotal }},
@@ -89,21 +99,32 @@
                                 <h3 class="text-xl font-bold text-slate-900">Mode de Paiement</h3>
                             </div>
                             
-                            <div class="flex flex-col md:flex-row items-center gap-8 p-8 bg-slate-50 rounded-[28px] border border-slate-100 relative z-10">
-                                <div class="w-20 h-20 bg-white rounded-[24px] shadow-xl shadow-primary/10 flex items-center justify-center text-primary shrink-0 border border-primary/10 transition-transform hover:scale-105">
-                                    <i class="fas fa-hand-holding-dollar text-3xl"></i>
-                                </div>
-                                <div class="flex-1 text-center md:text-left">
-                                    <h4 class="text-lg font-black text-slate-900 mb-2 uppercase tracking-wide">Paiement à la livraison</h4>
-                                    <p class="text-sm text-slate-500 font-medium leading-relaxed max-w-sm">
-                                        Payez en espèces en toute sécurité dès que vous recevez vos produits. Pas de transaction en ligne requise.
-                                    </p>
-                                    <input type="hidden" name="payment_method" value="cash">
-                                </div>
-                                <div class="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-[10px] font-black uppercase tracking-widest shrink-0">
-                                    <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-                                    Activé par défaut
-                                </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10" x-data="{ selectedMethod: 'cash' }">
+                                <input type="hidden" name="payment_method" :value="selectedMethod">
+
+                                <!-- Cash -->
+                                <label class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border-2 cursor-pointer transition-all duration-300 text-center group"
+                                       :class="selectedMethod === 'cash' ? 'border-[var(--primary)] shadow-lg shadow-[var(--primary)]/10 ring-4 ring-[var(--primary)]/10' : 'border-slate-100 hover:border-slate-200 bg-slate-50'">
+                                    <input type="radio" value="cash" x-model="selectedMethod" class="sr-only">
+                                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-colors duration-300"
+                                         :class="selectedMethod === 'cash' ? 'bg-[var(--primary)] text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200'">
+                                        <i class="fas fa-hand-holding-dollar text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-sm font-black uppercase tracking-widest text-slate-900 mb-1">À la livraison</h4>
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Payer en espèces</p>
+                                </label>
+
+                                <!-- Wave -->
+                                <label class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border-2 cursor-pointer transition-all duration-300 text-center group"
+                                       :class="selectedMethod === 'wave' ? 'border-[#1ebff6] shadow-lg shadow-[#1ebff6]/10 ring-4 ring-[#1ebff6]/10' : 'border-slate-100 hover:border-slate-200 bg-slate-50'">
+                                    <input type="radio" value="wave" x-model="selectedMethod" class="sr-only">
+                                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-colors duration-300"
+                                         :class="selectedMethod === 'wave' ? 'bg-[#1ebff6] text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200'">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Wave_Mobile_Money_logo.png/640px-Wave_Mobile_Money_logo.png" alt="Wave" class="w-10 h-10 object-contain rounded-xl mix-blend-multiply" :class="selectedMethod === 'wave' ? 'brightness-200 grayscale contrast-100' : 'grayscale opacity-50'">
+                                    </div>
+                                    <h4 class="text-sm font-black uppercase tracking-widest text-[#1ebff6] mb-1">Wave Mobile</h4>
+                                    <p class="text-[10px] font-bold text-[#1ebff6]/60 uppercase tracking-wider">Sécurisé & Rapide</p>
+                                </label>
                             </div>
                         </div>
 

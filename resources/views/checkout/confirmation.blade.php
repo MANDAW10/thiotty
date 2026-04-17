@@ -2,15 +2,32 @@
     <div class="py-24 flex items-center justify-center min-h-[80vh] bg-white relative overflow-hidden">
         <div class="max-w-3xl mx-auto px-6 text-center reveal-zenith relative z-10 w-full">
             <div class="relative w-32 h-32 mx-auto mb-16">
-                <div class="absolute inset-0 bg-primary/10 rounded-full animate-ping opacity-20"></div>
-                <div class="relative w-full h-full bg-white rounded-3xl shadow-xl flex items-center justify-center text-primary border-2 border-slate-50 scale-110">
-                    <i class="fas fa-check-circle text-6xl"></i>
-                </div>
+                @if($order->payment_method === 'wave' && $order->payment_status !== 'paid')
+                    <div class="absolute inset-0 bg-amber-400/10 rounded-full animate-ping opacity-20"></div>
+                    <div class="relative w-full h-full bg-white rounded-3xl shadow-xl flex items-center justify-center text-amber-400 border-2 border-amber-50 scale-110">
+                        <i class="fas fa-clock text-6xl"></i>
+                    </div>
+                @else
+                    <div class="absolute inset-0 bg-primary/10 rounded-full animate-ping opacity-20"></div>
+                    <div class="relative w-full h-full bg-white rounded-3xl shadow-xl flex items-center justify-center text-primary border-2 border-slate-50 scale-110">
+                        <i class="fas fa-check-circle text-6xl"></i>
+                    </div>
+                @endif
             </div>
             
-            <h1 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight mb-8 tracking-tighter">
-                Commande <span class="text-primary italic">Confirmée</span>.
-            </h1>
+            @if($order->payment_method === 'wave' && $order->payment_status !== 'paid')
+                <h1 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight mb-4 tracking-tighter">
+                    Paiement <span class="text-amber-400 italic">en attente</span>.
+                </h1>
+                <p class="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-2xl px-6 py-4 mb-8 max-w-lg mx-auto font-bold">
+                    ⚠️ Votre commande sera validée dès que nous aurons confirmé votre paiement Wave.
+                    Vous serez contacté sur WhatsApp au <strong>{{ $order->customer_phone }}</strong>.
+                </p>
+            @else
+                <h1 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight mb-8 tracking-tighter">
+                    Commande <span class="text-primary italic">Confirmée</span>.
+                </h1>
+            @endif
             <p class="text-xl text-slate-500 mb-16 max-w-lg mx-auto leading-relaxed font-bold uppercase tracking-widest opacity-30 border-y border-slate-50 py-10">
                 Référence : #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}
             </p>

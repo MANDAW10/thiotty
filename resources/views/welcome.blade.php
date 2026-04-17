@@ -1,311 +1,466 @@
 <x-app-layout>
-    <!-- PREMIUM DYNAMIC HERO SLIDER (ALPINJS) -->
-    <section class="relative bg-white overflow-hidden shadow-sm"
-             x-data="{
-                activeSlide: 0,
-                slides: @js($slides),
-                next() { this.activeSlide = (this.activeSlide + 1) % this.slides.length },
-                start() { if(this.slides.length > 1) setInterval(() => this.next(), 6500) }
-             }"
-             x-init="start()">
+@push('seo')
+    @php
+        $seoTitle       = 'Thiotty Enterprise | Bétail, Chevaux & Agro-alimentaire au Sénégal';
+        $seoDescription = 'Thiotty Enterprise : achetez du bétail, des chevaux, des volailles et des produits agro-alimentaires de qualité directement en ligne. Livraison à domicile à Dakar et partout au Sénégal.';
+        $seoImage       = asset('assets/images/branding/vaches/troupeau vache.jpg');
+        $seoUrl         = url('/');
+    @endphp
+@endpush
+    <div class="px-4 md:px-8 lg:px-12 max-w-[1800px] mx-auto pt-4 mb-12">
+        <section class="relative overflow-hidden rounded-[2rem] shadow-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
 
-        <!-- Slides Container -->
-        <div class="relative h-[550px] md:h-[850px] w-full bg-slate-100">
-            @if($slides->count())
-                <div class="absolute inset-0 w-full h-full">
-                    <img src="{{ $slides->first()->image_url }}" alt="{{ $slides->first()->title }}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-slate-900/20 flex flex-col justify-center px-10 md:px-24">
-                        <div class="max-w-3xl">
-                            <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.1] mb-6 drop-shadow-2xl">{{ $slides->first()->title }}</h2>
-                            <p class="text-base md:text-2xl text-white/95 font-medium mb-10 drop-shadow-xl max-w-xl">{{ $slides->first()->subtitle }}</p>
-                            <a href="{{ $slides->first()->button_url ?? '/shop' }}"
-                               class="inline-block bg-[#206B13] hover:bg-[#1a550f] text-white px-10 py-5 rounded-full text-xs font-black uppercase tracking-[0.2em] transition-all transform hover:scale-105 shadow-xl">
-                                {{ $slides->first()->button_text ?? 'Voir Boutique' }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endif
-            <template x-for="(slide, index) in slides" :key="index">
-                <div x-show="activeSlide === index"
-                     x-transition:enter="transition ease-out duration-1000"
-                     x-transition:enter-start="opacity-0 scale-105"
-                     x-transition:enter-end="opacity-100 scale-100"
-                     x-transition:leave="transition ease-in duration-800"
-                     x-transition:leave-start="opacity-100 scale-100"
-                     x-transition:leave-end="opacity-0 scale-95"
-                     class="absolute inset-0 w-full h-full">
+        {{-- Slides --}}
+        <div class="relative" x-data="{ current: 0, total: 3 }" x-init="setInterval(() => current = (current + 1) % total, 5000)">
 
-                    <img :src="slide.image_url" :alt="slide.title" class="w-full h-full object-cover">
-                    <!-- Overlay with Text -->
-                    <div class="absolute inset-0 bg-slate-900/20 flex flex-col justify-center px-10 md:px-24">
-                        <div class="max-w-3xl"
-                             x-show="activeSlide === index"
-                             x-transition:enter="transition ease-out delay-500 duration-1000"
-                             x-transition:enter-start="opacity-0 translate-y-10"
-                             x-transition:enter-end="opacity-100 translate-y-0">
-                            <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tight leading-[1.1] mb-6 drop-shadow-2xl" x-text="slide.title"></h2>
-                            <p class="text-base md:text-2xl text-white/95 font-medium mb-10 drop-shadow-xl max-w-xl" x-text="slide.subtitle"></p>
-                            <a :href="slide.button_url || '/shop'"
-                               class="inline-block bg-[#206B13] hover:bg-[#1a550f] text-white px-10 py-5 rounded-full text-xs font-black uppercase tracking-[0.2em] transition-all transform hover:scale-105 shadow-xl"
-                               x-text="slide.button_text || 'Voir Boutique'">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </div>
-
-        <!-- DOUBLE WAVE LAYER (THE "GAME") -->
-        <div class="absolute bottom-[-2px] left-0 w-full overflow-hidden leading-[0] z-20">
-            <!-- Semi-transparent Wave -->
-            <svg class="absolute bottom-0 left-0 w-full h-[80px] md:h-[150px] opacity-40 translate-y-2 md:translate-y-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5,73.84-4.36,147.54,16.88,218.2,35.26,69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="#ffffff"></path>
-            </svg>
-            <!-- Solid White Wave -->
-            <svg class="relative block w-full h-[60px] md:h-[120px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C58.42,86.36,125.17,92.32,185.06,94.75,232,96.53,276.7,65.34,321.39,56.44Z" fill="#ffffff"></path>
-            </svg>
-        </div>
-
-        <!-- Slider Pagination Dots -->
-        <div class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-            <template x-for="(slide, index) in slides" :key="index">
-                <button @click="activeSlide = index"
-                        class="w-3 h-3 rounded-full transition-all border-2 border-white shadow-sm"
-                        :class="activeSlide === index ? 'bg-white w-10' : 'bg-white/30 hover:bg-white/50'"></button>
-            </template>
-        </div>
-    </section>
-
-    <!-- CAAWOGI 1:1 HERO SECTION (TWO-COLUMN INDUSTRIAL) -->
-    <section class="relative bg-white pt-2 sm:pt-4">
-        <div class="container-custom px-2 sm:px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-4">
-                <!-- LEFT: VIANDE DE BOEUF -->
-                <a href="{{ route('shop.index', ['category' => 'agro-alimentaire']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Viande de Boeuf">
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                        <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">VIANDE DE BOEUF</h2>
-                        <span class="inline-block px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
-                            Voir Plus
-                        </span>
-                    </div>
-                </a>
-
-                <!-- RIGHT: POULET DE CHAIR -->
-                <a href="{{ route('shop.index', ['category' => 'volaille']) }}" class="relative group h-[400px] md:h-[550px] overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" alt="Poulet de Chair">
-                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
-                        <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-6">POULET DE CHAIR</h2>
-                        <span class="inline-block px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
-                            Voir Plus
-                        </span>
-                    </div>
-                </a>
+            {{-- Slide 1 --}}
+            <div class="absolute inset-0 transition-opacity duration-700"
+                :class="current === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                <img src="{{ asset('assets/images/branding/vaches/troupeau vache.jpg') }}" alt="Élevage moderne africain"
+                    class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-slate-900/30 to-slate-900/60"></div>
             </div>
+
+            {{-- Slide 2 --}}
+            <div class="absolute inset-0 transition-opacity duration-700"
+                :class="current === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                <img src="{{ asset('assets/images/branding/vaches/troupeau de mouton.jpg') }}" alt="Alimentation bétail"
+                    class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-slate-900/30 to-slate-900/60"></div>
+            </div>
+
+            {{-- Slide 3 --}}
+            <div class="absolute inset-0 transition-opacity duration-700"
+                :class="current === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                <img src="{{ asset('assets/images/branding/vaches/ferme poulet.jpg') }}" alt="Accompagnement éleveurs"
+                    class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-slate-900/30 to-slate-900/60"></div>
+            </div>
+
+            {{-- Contenu --}}
+            <div class="relative z-20 container-custom min-h-[860px] flex flex-col justify-center py-24">
+
+                {{-- Contenu Slide 1 --}}
+                <div class="max-w-3xl transition-all duration-700"
+                    :class="current === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none absolute'">
+                    <span
+                        class="inline-flex px-4 py-2 mb-6 text-xs font-black uppercase tracking-[0.35em] bg-white/10 text-white">Thiotty
+                        Senegal</span>
+                    <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight mb-6">Moderniser
+                        l'élevage africain avec des produits de qualité</h1>
+                    <p class="max-w-2xl text-sm md:text-base text-slate-200 leading-relaxed mb-10">Vente de bétail,
+                        alimentation, intrants et accompagnement pour un élevage durable, rentable et respectueux de
+                        l'environnement.</p>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <a href="{{ route('shop.index') }}"
+                            class="inline-flex items-center justify-center rounded-full bg-[#f8b703] px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-slate-900 shadow-xl hover:bg-[#e0a000] transition">Voir
+                            Boutique</a>
+                        <a href="#categories"
+                            class="inline-flex items-center justify-center rounded-full border border-white bg-white/10 px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-white hover:bg-white hover:text-slate-900 transition">Nos
+                            catégories</a>
+                    </div>
+                </div>
+
+                {{-- Contenu Slide 2 --}}
+                <div class="max-w-3xl transition-all duration-700"
+                    :class="current === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none absolute'">
+                    <span
+                        class="inline-flex px-4 py-2 mb-6 text-xs font-black uppercase tracking-[0.35em] bg-white/10 text-white">Alimentation
+                        & Intrants</span>
+                    <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight mb-6">Des aliments
+                        de qualité pour un bétail en bonne santé</h1>
+                    <p class="max-w-2xl text-sm md:text-base text-slate-200 leading-relaxed mb-10">Suppléments
+                        nutritionnels, compléments minéraux et aliments équilibrés pour maximiser la productivité de
+                        votre élevage.</p>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <a href="{{ route('shop.index') }}"
+                            class="inline-flex items-center justify-center rounded-full bg-[#f8b703] px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-slate-900 shadow-xl hover:bg-[#e0a000] transition">Découvrir</a>
+                        <a href="#categories"
+                            class="inline-flex items-center justify-center rounded-full border border-white bg-white/10 px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-white hover:bg-white hover:text-slate-900 transition">En
+                            savoir plus</a>
+                    </div>
+                </div>
+
+                {{-- Contenu Slide 3 --}}
+                <div class="max-w-3xl transition-all duration-700"
+                    :class="current === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none absolute'">
+                    <span
+                        class="inline-flex px-4 py-2 mb-6 text-xs font-black uppercase tracking-[0.35em] bg-white/10 text-white">Accompagnement</span>
+                    <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight leading-tight mb-6">Un suivi
+                        expert pour votre réussite</h1>
+                    <p class="max-w-2xl text-sm md:text-base text-slate-200 leading-relaxed mb-10">Nos conseillers
+                        spécialisés vous guident à chaque étape pour optimiser vos pratiques et garantir la rentabilité
+                        de votre exploitation.</p>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <a href="{{ route('contact') }}"
+                            class="inline-flex items-center justify-center rounded-full bg-[#f8b703] px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-slate-900 shadow-xl hover:bg-[#e0a000] transition">Nous
+                            contacter</a>
+                        <a href="#categories"
+                            class="inline-flex items-center justify-center rounded-full border border-white bg-white/10 px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-white hover:bg-white hover:text-slate-900 transition">Nos
+                            services</a>
+                    </div>
+                </div>
+
+            </div>
+
+            {{-- Navigation arrows --}}
+            <button @click="current = (current - 1 + total) % total"
+                class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/25 transition">
+                &#8592;
+            </button>
+            <button @click="current = (current + 1) % total"
+                class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/25 transition">
+                &#8594;
+            </button>
+
+            {{-- Dots --}}
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+                <template x-for="i in total" :key="i">
+                    <button @click="current = i - 1" :class="current === i - 1 ? 'bg-[#f8b703] w-6' : 'bg-white/40 w-2'"
+                        class="h-2 rounded-full transition-all duration-300">
+                    </button>
+                </template>
+            </div>
+
         </div>
     </section>
-    </section>
+    </div>
 
-    <!-- CAAWOGI FEATURES SECTION -->
-    <section class="py-12 border-b border-slate-100 bg-white">
+    <section id="categories" class="py-20 bg-white">
         <div class="container-custom">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="group overflow-hidden rounded-[32px] border border-slate-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div class="relative h-72 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1523966211572-3c6b0cf63ac0?q=80&w=1200&auto=format&fit=crop" alt="Livraison Express" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-slate-950/40"></div>
-                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                            <span class="text-[10px] uppercase tracking-[0.35em] text-white/70 mb-2">Livraison</span>
-                            <h3 class="text-xl font-black uppercase tracking-tight">Livraison Express</h3>
-                            <p class="mt-3 text-[11px] uppercase tracking-[0.25em] text-white/80">Sénégal & Sous-région</p>
+            <div class="text-center mb-16">
+                <span class="text-xs uppercase tracking-[0.35em] text-slate-500">NOS CATÉGORIES</span>
+                <h2 class="mt-4 text-3xl md:text-4xl font-black text-slate-900">
+                    Découvrez nos gammes de produits
+                </h2>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2">
+
+                <!-- VIANDE DE BOEUF -->
+                <a href="{{ route('shop.category', 'viande-boeuf') }}"
+                    class="group relative overflow-hidden shadow-lg transition hover:-translate-y-1 hover:shadow-xl">
+
+                    <img src="https://images.unsplash.com/photo-1546964124-0cce460f38ef?w=800&auto=format"
+                        alt="Viande de boeuf"
+                        class="h-80 w-full object-cover transition duration-700 group-hover:scale-105">
+
+                    <!-- BOUTON CENTRÉ -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="bg-white px-8 py-4 shadow-md">
+                            <p class="text-sm font-black uppercase tracking-widest text-slate-900">
+                                VIANDE DE BOEUF
+                            </p>
                         </div>
                     </div>
-                </div>
-                <div class="group overflow-hidden rounded-[32px] border border-slate-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div class="relative h-72 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop" alt="Qualité Certifiée" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-slate-950/40"></div>
-                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                            <span class="text-[10px] uppercase tracking-[0.35em] text-white/70 mb-2">Garantie</span>
-                            <h3 class="text-xl font-black uppercase tracking-tight">Qualité Certifiée</h3>
-                            <p class="mt-3 text-[11px] uppercase tracking-[0.25em] text-white/80">Contrôles Stricts</p>
+                </a>
+
+                <!-- POULETS -->
+                <a href="{{ route('shop.category', 'poulets') }}"
+                    class="group relative overflow-hidden shadow-lg transition hover:-translate-y-1 hover:shadow-xl">
+
+                    <img src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=800&auto=format"
+                        alt="Poulets" class="h-80 w-full object-cover transition duration-700 group-hover:scale-105">
+
+                    <!-- BOUTON CENTRÉ -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="bg-white px-8 py-4 shadow-md">
+                            <p class="text-sm font-black uppercase tracking-widest text-slate-900">
+                                POULETS
+                            </p>
                         </div>
                     </div>
-                </div>
-                <div class="group overflow-hidden rounded-[32px] border border-slate-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div class="relative h-72 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1500336624523-d727130c3328?q=80&w=1200&auto=format&fit=crop" alt="Produits Bio" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-slate-950/40"></div>
-                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                            <span class="text-[10px] uppercase tracking-[0.35em] text-white/70 mb-2">Nature</span>
-                            <h3 class="text-xl font-black uppercase tracking-tight">Produits Bio</h3>
-                            <p class="mt-3 text-[11px] uppercase tracking-[0.25em] text-white/80">Héritage Terroir</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="group overflow-hidden rounded-[32px] border border-slate-100 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <div class="relative h-72 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1556740720-88f23c3a7d3b?q=80&w=1200&auto=format&fit=crop" alt="Support Client" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-slate-950/40"></div>
-                        <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                            <span class="text-[10px] uppercase tracking-[0.35em] text-white/70 mb-2">Assistance</span>
-                            <h3 class="text-xl font-black uppercase tracking-tight">Support Client</h3>
-                            <p class="mt-3 text-[11px] uppercase tracking-[0.25em] text-white/80">Assistance 24/7</p>
-                        </div>
-                    </div>
-                </div>
+                </a>
+
             </div>
         </div>
     </section>
 
-    <!-- Meilleures ventes (type Caawogi) -->
     <section class="py-20 bg-[var(--light-bg)] border-y border-slate-100">
         <div class="container-custom">
             <div class="text-center max-w-3xl mx-auto mb-14">
-                <h2 class="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tight mb-4">{{ __('messages.best_sellers_title') }}</h2>
-                <p class="text-slate-500 text-sm md:text-base font-medium leading-relaxed">{{ __('messages.best_sellers_intro') }}</p>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tight mb-4">Découvrez nos
+                    produits les plus vendus</h2>
+                <p class="text-slate-500 text-sm md:text-base font-medium leading-relaxed">Qualité, fraîcheur et
+                    satisfaction garanties. Nos meilleures références sont sélectionnées pour répondre à vos besoins.
+                </p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-                @foreach($bestSellers->take(6) as $product)
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+                @foreach ($bestSellers->take(8) as $product)
                     <x-product-card :product="$product" />
                 @endforeach
             </div>
+
             <div class="mt-12 text-center">
-                <a href="{{ route('shop.index') }}" class="inline-flex px-12 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-slate-900 transition-colors">
-                    {{ __('messages.shop') }}
-                </a>
+                <a href="{{ route('shop.index') }}"
+                    class="inline-flex px-12 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-slate-900 transition-colors">Voir
+                    Boutique</a>
             </div>
         </div>
     </section>
 
-    <!-- CAAWOGI VEDETTE SECTION (REFINED) -->
-    <section class="py-24 bg-white">
+    <section class="pt-24 pb-0 bg-white">
+        <div class="container-custom mb-20">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <span class="text-xs uppercase tracking-[0.35em] text-slate-500">moderniser l'élevage africain</span>
+                <h2 class="mt-4 text-4xl md:text-5xl font-black text-slate-900 leading-tight">Des solutions complètes
+                    pour l'élevage, la protection et la confiance.</h2>
+                <p class="mt-6 text-base text-slate-600 leading-relaxed">Nous intervenons dans la vente de bétail
+                    (vaches, génisses, moutons, volailles), de produits carnés, d'intrants et aliments pour bétail,
+                    ainsi que dans la formation et l'accompagnement à travers des initiatives comme Thiotty Academy.</p>
+            </div>
+
+            <div class="grid gap-8 sm:grid-cols-3">
+                <div class="rounded-[30px] border border-slate-200 bg-[var(--light-bg)] p-8 shadow-sm">
+                    <span
+                        class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--primary)] text-white text-xl mb-4"><i
+                            class="fas fa-cow"></i></span>
+                    <h3 class="text-sm font-black uppercase tracking-[0.35em] text-slate-900">Génisses Montbéliard
+                    </h3>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">une race reconnue pour : Leur excellente
+                        production laitière Leur robustesse Leur adaptation aux conditions africaines Leur
+                        croissance régulière et leur bonne fertilité</p>
+                </div>
+                <div class="rounded-[30px] border border-slate-200 bg-[var(--light-bg)] p-8 shadow-sm">
+                    <span
+                        class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--primary)] text-white text-xl mb-4"><i
+                            class="fas fa-shield-alt"></i></span>
+                    <h3 class="text-sm font-black uppercase tracking-[0.35em] text-slate-900">Protection</h3>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Thiotty mise sur des produits de qualité
+                        pour assurer une protection durable, saine et respectueuse.</p>
+                </div>
+                <div class="rounded-[30px] border border-slate-200 bg-[var(--light-bg)] p-8 shadow-sm">
+                    <span
+                        class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--primary)] text-white text-xl mb-4"><i
+                            class="fas fa-hands-helping"></i></span>
+                    <h3 class="text-sm font-black uppercase tracking-[0.35em] text-slate-900">confiance</h3>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">Parce que votre sécurité et votre
+                        bien-être comptent, Thiotty vous accompagne avec des solutions efficaces.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full h-[500px] lg:h-[700px] relative">
+            <img src="https://images.unsplash.com/photo-1596733430284-f7437764b1a9?q=80&w=2400&auto=format&fit=crop"
+                alt="Élevage africain moderne" class="h-full w-full object-cover">
+        </div>
+    </section>
+
+    <section class="py-24 bg-[var(--light-bg)]">
         <div class="container-custom">
             <div class="flex flex-col items-center mb-20 text-center">
                 <h3 class="text-3xl md:text-4xl font-black text-[#5BC0DE] mb-5">Produits en vedette</h3>
-                <p class="text-slate-800 text-[15px] md:text-base max-w-3xl font-medium leading-relaxed">
-                    Chez <strong>Thiotty</strong>, nous mettons en avant des produits de qualité, pensés pour répondre à vos besoins au quotidien.
-                </p>
+                <p class="text-slate-800 text-[15px] md:text-base max-w-3xl font-medium leading-relaxed">Chez Thiotty,
+                    nous mettons en avant des produits de qualité, pensés pour répondre à vos besoins au quotidien.</p>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
-                @foreach($featuredProducts->take(8) as $product)
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+                @foreach ($featuredProducts->take(8) as $product)
                     <x-product-card :product="$product" />
                 @endforeach
             </div>
 
             <div class="mt-20 text-center">
-                <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-6 px-16 py-6 bg-slate-900 text-white font-black text-[12px] uppercase tracking-widest hover:bg-[var(--primary)] transition-all">
-                    Explorer Notre Boutique
-                </a>
+                <a href="{{ route('shop.index') }}"
+                    class="inline-flex items-center gap-6 px-16 py-6 bg-slate-900 text-white font-black text-[12px] uppercase tracking-widest hover:bg-[var(--primary)] transition-all">Explorer
+                    Notre Boutique</a>
             </div>
         </div>
     </section>
 
-    <!-- CAAWOGI ICON BAR (TRUST BAR) -->
-    <section class="py-12 border-y border-slate-100 bg-[#F9F9F9]">
-        <div class="container-custom">
-            <div class="flex flex-wrap items-center justify-around gap-12 opacity-40">
-                <i class="fas fa-star text-3xl hover:opacity-100 transition-opacity"></i>
-                <i class="fas fa-gem text-3xl hover:opacity-100 transition-opacity"></i>
-                <i class="fas fa-leaf text-3xl hover:opacity-100 transition-opacity"></i>
-                <i class="fas fa-phone-flip text-3xl hover:opacity-100 transition-opacity"></i>
-                <i class="fas fa-envelope text-3xl hover:opacity-100 transition-opacity"></i>
-                <i class="fas fa-crown text-3xl hover:opacity-100 transition-opacity"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- Newsletter + confiance -->
-    <section class="py-20 bg-white border-t border-slate-100">
+    {{-- <section class="py-20 bg-white border-t border-slate-100">
         <div class="container-custom grid lg:grid-cols-2 gap-16 items-center">
             <div>
-                <h3 class="text-3xl font-black uppercase text-slate-900 mb-2">{{ __('messages.newsletter_title') }}</h3>
-                <p class="text-slate-500 mb-6 font-medium">{{ __('messages.newsletter_subtitle') }}</p>
-                @if(session('newsletter_ok'))
-                    <p class="text-green-600 font-bold text-sm mb-4">{{ __('messages.newsletter_success') }}</p>
+                <h3 class="text-3xl font-black uppercase text-slate-900 mb-2">Abonnez-vous dès aujourd'hui !</h3>
+                <p class="text-slate-500 mb-6 font-medium">Et recevez un cadeau</p>
+                <p class="text-slate-600 mb-6 text-sm">Abonnez-vous dès aujourd'hui pour profiter de nos offres et
+                    conseils exclusifs.</p>
+                @if (session('newsletter_ok'))
+                    <p class="text-green-600 font-bold text-sm mb-4">Merci ! Votre inscription a bien été prise en
+                        compte.</p>
                 @endif
-                <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex flex-col sm:flex-row gap-3">
+                <form action="{{ route('newsletter.subscribe') }}" method="POST"
+                    class="flex flex-col sm:flex-row gap-3">
                     @csrf
-                    <input type="email" name="email" required placeholder="{{ __('messages.newsletter_placeholder') }}"
-                           class="flex-1 px-5 py-4 border border-slate-200 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none"
-                           value="{{ old('email') }}">
-                    <button type="submit" class="px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-slate-900 transition-colors">
-                        {{ __('messages.newsletter_cta') }}
+                    <input type="email" name="email" required placeholder="Votre adresse e-mail"
+                        class="flex-1 px-5 py-4 border border-slate-200 text-sm font-bold focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none"
+                        value="{{ old('email') }}">
+                    <button type="submit"
+                        class="px-8 py-4 bg-[var(--primary)] text-white font-black text-[11px] uppercase tracking-widest hover:bg-slate-900 transition-colors">S'inscrire</button>
+                </form>
+                @error('email')
+                    <p class="text-red-500 text-xs font-bold mt-2">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="text-center">
+                <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=600&auto=format&fit=crop"
+                    alt="Poulet de qualité" class="rounded-2xl shadow-lg max-w-sm mx-auto">
+            </div>
+        </div>
+    </section> --}}
+
+    <!-- TENDANCE ACTUELLE (BLOG SECTION) -->
+    <section class="py-20 bg-slate-50">
+        <div class="container-custom">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tight mb-4">Tendance
+                    actuelle</h2>
+            </div>
+
+            <div class="grid gap-8 md:grid-cols-3">
+                <article
+                    class="group bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=800&auto=format&fit=crop"
+                            alt="Relance de l'aviculture"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors">
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3
+                            class="text-xl font-black text-slate-900 mb-3 group-hover:text-[#206B13] transition-colors">
+                            Relance de l'aviculture</h3>
+                        <p class="text-slate-500 text-[14px] leading-relaxed mb-6 font-medium">Perspectives et bonnes pratiques pour
+                            les éleveurs sénégalais.</p>
+                        <a href="#"
+                            class="inline-flex items-center text-[13px] font-black text-[#206B13] hover:text-slate-900 transition-colors uppercase tracking-wide">
+                            Lire plus <i class="fas fa-arrow-right ml-2 text-[11px]"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article
+                    class="group bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=800&auto=format&fit=crop"
+                            alt="Produits locaux & e-commerce"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors">
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3
+                            class="text-xl font-black text-slate-900 mb-3 group-hover:text-[#206B13] transition-colors">
+                            Produits locaux & e-commerce</h3>
+                        <p class="text-slate-500 text-[14px] leading-relaxed mb-6 font-medium">Comment la digitalisation soutient la
+                            filière et les producteurs.</p>
+                        <a href="#"
+                            class="inline-flex items-center text-[13px] font-black text-[#206B13] hover:text-slate-900 transition-colors uppercase tracking-wide">
+                            Lire plus <i class="fas fa-arrow-right ml-2 text-[11px]"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article
+                    class="group bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=800&auto=format&fit=crop"
+                            alt="Qualité et traçabilité"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors">
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3
+                            class="text-xl font-black text-slate-900 mb-3 group-hover:text-[#206B13] transition-colors">
+                            Qualité et traçabilité</h3>
+                        <p class="text-slate-500 text-[14px] leading-relaxed mb-6 font-medium">Nos engagements pour une chaîne courte
+                            et transparente.</p>
+                        <a href="#"
+                            class="inline-flex items-center text-[13px] font-black text-[#206B13] hover:text-slate-900 transition-colors uppercase tracking-wide">
+                            Lire plus <i class="fas fa-arrow-right ml-2 text-[11px]"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="py-20 bg-slate-50">
+        <div class="container-custom">
+            <div class="grid gap-8 md:grid-cols-4 text-center">
+                <div class="group">
+                    <div
+                        class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow">
+                        <i class="fas fa-truck-fast text-2xl text-[var(--primary)]"></i>
+                    </div>
+                    <h3 class="text-lg font-black uppercase tracking-tight text-slate-900 mb-3">Livraison gratuite</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Profitez de votre achat en toute tranquillité :
+                        nous prenons en charge la livraison pour vous garantir rapidité, sécurité et zéro coût
+                        additionnel. Achetez, on s'occupe du reste !</p>
+                </div>
+
+                <div class="group">
+                    <div
+                        class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow">
+                        <i class="fas fa-lock text-2xl text-[var(--primary)]"></i>
+                    </div>
+                    <h3 class="text-lg font-black uppercase tracking-tight text-slate-900 mb-3">Paiement sécurisé en
+                        ligne</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Effectuez vos achats en toute confiance grâce à
+                        un système de paiement fiable et protégé, garantissant la sécurité de vos transactions du début
+                        à la fin.</p>
+                </div>
+
+                <div class="group">
+                    <div
+                        class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow">
+                        <i class="fas fa-headset text-2xl text-[var(--primary)]"></i>
+                    </div>
+                    <h3 class="text-lg font-black uppercase tracking-tight text-slate-900 mb-3">Assistance en ligne
+                        24h/24 et 7j/7</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Notre équipe est disponible à tout moment pour
+                        répondre à vos questions, vous accompagner et vous offrir un service rapide et efficace, où que
+                        vous soyez.</p>
+                </div>
+
+                <div class="group">
+                    <div
+                        class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow">
+                        <i class="fas fa-rotate-left text-2xl text-[var(--primary)]"></i>
+                    </div>
+                    <h3 class="text-lg font-black uppercase tracking-tight text-slate-900 mb-3">Remboursement garanti
+                    </h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Votre satisfaction est notre priorité. En cas de
+                        problème conforme à nos conditions, vous bénéficiez d'un remboursement rapide et transparent, en
+                        toute confiance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER SECTION -->
+    <section class="bg-white">
+        <div class="container-custom grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+            <div class="py-16 lg:py-24">
+                <h3 class="text-[32px] lg:text-[40px] font-black uppercase text-[#0f172a] leading-tight mb-2 tracking-tight">ABONNEZ-VOUS DÈS AUJOURD'HUI !</h3>
+                <p class="text-slate-500 text-[16px] font-semibold mb-8">Et recevez un cadeau</p>
+                <p class="text-slate-700 text-[15px] mb-8 leading-relaxed">Abonnez-vous dès aujourd'hui pour profiter de nos offres et conseils exclusifs.</p>
+                
+                @if (session('newsletter_ok'))
+                    <p class="text-[#206B13] font-bold text-sm mb-4">Merci ! Votre inscription a bien été prise en compte.</p>
+                @endif
+                
+                <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex flex-col sm:flex-row w-full max-w-xl">
+                    @csrf
+                    <input type="email" name="email" required placeholder="Votre adresse e-mail"
+                        class="flex-1 w-full px-5 py-4 border border-slate-200 sm:border-r-0 text-[14px] font-bold text-[#4B5563] placeholder-[#6b7280] focus:outline-none focus:ring-0 focus:border-[var(--primary)] focus:z-10 transition-colors"
+                        value="{{ old('email') }}">
+                    <button type="submit"
+                        class="px-10 py-4 bg-[var(--primary)] text-white font-black text-xs uppercase tracking-widest hover:bg-slate-900 transition-colors whitespace-nowrap z-0">
+                        S'INSCRIRE
                     </button>
                 </form>
                 @error('email')
                     <p class="text-red-500 text-xs font-bold mt-2">{{ $message }}</p>
                 @enderror
             </div>
-            <div class="grid sm:grid-cols-2 gap-6">
-                <div class="relative overflow-hidden rounded-[32px] h-[280px] bg-slate-100 shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop" alt="Service client" class="w-full h-full object-cover transition-transform duration-1000 hover:scale-105">
-                    <div class="absolute inset-0 bg-slate-900/40"></div>
-                    <div class="absolute inset-0 p-8 flex flex-col justify-end text-white">
-                        <span class="text-[10px] uppercase tracking-[0.35em] text-white/80 mb-2">Confiance</span>
-                        <h4 class="text-xl font-black uppercase tracking-tight">Engagement client</h4>
-                    </div>
-                </div>
-                <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
-                    <i class="fas fa-truck-fast text-[var(--primary)] text-xl mb-3"></i>
-                    <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_free_shipping') }}</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed">{{ __('messages.trust_free_shipping_desc') }}</p>
-                </div>
-                <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
-                    <i class="fas fa-lock text-[var(--caawogi-blue)] text-xl mb-3"></i>
-                    <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_secure_pay') }}</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed">{{ __('messages.trust_secure_pay_desc') }}</p>
-                </div>
-                <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
-                    <i class="fas fa-headset text-[var(--secondary)] text-xl mb-3"></i>
-                    <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_support') }}</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed">{{ __('messages.trust_support_desc') }}</p>
-                </div>
-                <div class="p-6 border border-slate-100 bg-[var(--light-bg)]">
-                    <i class="fas fa-rotate-left text-slate-700 text-xl mb-3"></i>
-                    <h4 class="font-black text-xs uppercase tracking-widest text-slate-900 mb-2">{{ __('messages.trust_refund') }}</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed">{{ __('messages.trust_refund_desc') }}</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CAAWOGI MASSIVE BRAND BANNER -->
-    <section class="relative h-[500px] flex items-center overflow-hidden">
-        <div class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Héritage Thiotty">
-            <div class="absolute inset-0 bg-[var(--primary)]/80 mix-blend-multiply"></div>
-        </div>
-        <div class="container-custom relative z-10 text-center text-white">
-            <h2 class="text-4xl md:text-7xl font-black uppercase tracking-tight mb-8">L'EXCELLENCE À<br>PORTÉE DE MAIN</h2>
-            <p class="text-lg md:text-xl font-medium mb-12 max-w-3xl mx-auto text-white/80">
-                Thiotty Enterprise s'engage pour une agriculture moderne, durable et respectueuse de l'environnement au Sénégal.
-            </p>
-            <a href="{{ route('gallery') }}" class="inline-flex items-center gap-4 px-12 py-5 border-2 border-white text-white font-black text-[11px] uppercase tracking-widest hover:bg-white hover:text-[var(--primary)] transition-all">
-                VOIR NOTRE HISTOIRE
-            </a>
-        </div>
-    </section>
-
-    <!-- CATEGORIES GRID (INDUSTRIAL) -->
-    <section class="py-24 bg-slate-50">
-        <div class="container-custom">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @foreach($categories->take(3) as $cat)
-                    <a href="{{ route('shop.category', $cat->slug) }}" class="relative group h-[350px] overflow-hidden border border-slate-200">
-                        <img src="{{ $cat->image_url }}" class="absolute inset-0 w-full h-full object-cover grayscale brightness-75 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110" alt="{{ $cat->display_name }}">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
-                        <div class="absolute bottom-10 left-10">
-                            <h4 class="text-3xl font-black text-white uppercase tracking-tight mb-4">{{ $cat->display_name }}</h4>
-                            <div class="h-1 w-12 bg-[var(--primary)] group-hover:w-full transition-all duration-500"></div>
-                        </div>
-                    </a>
-                @endforeach
+            <div class="w-full">
+                <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?q=80&w=1200&auto=format&fit=crop"
+                    alt="Volaille de qualité supérieure" class="w-full h-auto object-contain rounded-xl">
             </div>
         </div>
     </section>

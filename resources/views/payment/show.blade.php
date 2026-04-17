@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
@@ -9,214 +7,185 @@
             <p class="text-slate-600">Commande #{{ $order->id }} • {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y à H:i') }}</p>
         </div>
 
+        @if(session('error'))
+            <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 font-bold flex items-center gap-3">
+                <i class="fas fa-exclamation-circle text-xl hover:scale-110 transition-transform"></i>
+                <p>{{ session('error') }}</p>
+            </div>
+        @endif
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left: Payment Methods -->
             <div class="lg:col-span-2">
-                <div class="bg-white rounded-lg shadow-md p-8 mb-6">
-                    <!-- Order Summary -->
-                    <div class="mb-8 pb-8 border-b border-slate-200">
-                        <h2 class="text-lg font-semibold text-slate-900 mb-4">Récapitulatif de la commande</h2>
-                        <div class="space-y-3">
-                            @foreach($order->items as $item)
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-center gap-3 flex-1">
-                                        @if($item->product->image)
-                                            <img src="{{ $item->product->image_url }}" alt="{{ $item->product->name }}" class="w-12 h-12 object-cover rounded">
-                                        @endif
-                                        <div>
-                                            <p class="text-slate-900 font-medium">{{ $item->product->name }}</p>
-                                            <p class="text-sm text-slate-500">Qty: {{ $item->quantity }}</p>
-                                        </div>
-                                    </div>
-                                    <p class="text-slate-900 font-semibold">{{ number_format($item->price * $item->quantity, 2) }} FCFA</p>
-                                </div>
-                            @endforeach
+                @php
+                    $payment = \App\Models\Payment::where('order_id', $order->id)->first();
+                    $callbackUrl    = route('payment.callback.wave', $payment ?? 1);
+                    $waveBaseUrl    = 'https://pay.wave.com/m/M_sn_EyJvzOI5RXM7/c/sn/?amount=' . round($order->total_amount);
+                    $wavePayUrl     = $waveBaseUrl . '&success_url=' . urlencode($callbackUrl);
+                    $qrApiUrl       = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=4&ecc=L&data=' . urlencode($waveBaseUrl);
+                @endphp
+                @if($order->payment_method === 'wave' || $order->payment_method === 'mobile')
+                    <!-- Interface Wave simplifiée -->
+                    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-8 border border-slate-100 mb-6 text-center">
+                        <div class="w-24 h-24 mx-auto flex items-center justify-center mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-20 h-20 shadow-sm rounded-2xl">
+                                <rect width="100" height="100" rx="20" fill="#1ebff6"/>
+                                <path d="M 50 15 C 33 15, 29 42, 29 65 C 29 82, 40 85, 50 85 C 60 85, 71 82, 71 65 C 71 42, 67 15, 50 15 Z" fill="#111827"/>
+                                <path d="M 50 42 C 40 42, 35 55, 35 68 C 35 78, 41 82, 50 82 C 59 82, 65 78, 65 68 C 65 55, 60 42, 50 42 Z" fill="#ffffff"/>
+                                <circle cx="42" cy="32" r="3.5" fill="#ffffff"/>
+                                <circle cx="58" cy="32" r="3.5" fill="#ffffff"/>
+                                <path d="M 45 38 L 55 38 L 50 43 Z" fill="#f59e0b"/>
+                                <path d="M 33 42 C 20 42, 18 30, 18 30 C 18 30, 25 55, 32 60 Z" fill="#111827"/>
+                                <ellipse cx="38" cy="85" rx="8" ry="4" fill="#f59e0b"/>
+                                <ellipse cx="62" cy="85" rx="8" ry="4" fill="#f59e0b"/>
+                            </svg>
                         </div>
-                    </div>
+                        <h2 class="text-2xl font-black text-slate-900 mb-2">Paiement via Wave</h2>
+                        <p class="text-slate-400 text-sm mb-8">Après votre paiement Wave, vous recevrez automatiquement un <strong class="text-slate-700">code de confirmation par email</strong>.</p>
 
-                    <!-- Pricing Breakdown -->
-                    <div class="space-y-3 mb-8 pb-8 border-b border-slate-200">
-                        <div class="flex justify-between text-slate-600">
-                            <span>Sous-total</span>
-                            <span>{{ number_format($order->total_amount - $order->delivery_fee, 2) }} FCFA</span>
+                        <!-- MOBILE -->
+                        <div class="block md:hidden">
+                            <a href="{{ $wavePayUrl }}"
+                               style="background-color: #1ebff6; color: white;"
+                               class="inline-flex items-center justify-center gap-3 w-full max-w-xs mx-auto font-black py-5 px-6 rounded-2xl transition-all duration-300 shadow-xl active:scale-95 text-lg mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-7 h-7 bg-white rounded-lg p-0.5">
+                                    <rect width="100" height="100" rx="20" fill="#1ebff6"/>
+                                    <path d="M 50 15 C 33 15, 29 42, 29 65 C 29 82, 40 85, 50 85 C 60 85, 71 82, 71 65 C 71 42, 67 15, 50 15 Z" fill="#111827"/>
+                                    <path d="M 50 42 C 40 42, 35 55, 35 68 C 35 78, 41 82, 50 82 C 59 82, 65 78, 65 68 C 65 55, 60 42, 50 42 Z" fill="#ffffff"/>
+                                    <circle cx="42" cy="32" r="3.5" fill="#ffffff"/>
+                                    <circle cx="58" cy="32" r="3.5" fill="#ffffff"/>
+                                    <path d="M 45 38 L 55 38 L 50 43 Z" fill="#f59e0b"/>
+                                    <path d="M 33 42 C 20 42, 18 30, 18 30 C 18 30, 25 55, 32 60 Z" fill="#111827"/>
+                                    <ellipse cx="38" cy="85" rx="8" ry="4" fill="#f59e0b"/>
+                                    <ellipse cx="62" cy="85" rx="8" ry="4" fill="#f59e0b"/>
+                                </svg>
+                                Payer {{ number_format($order->total_amount, 0, ',', ' ') }} CFA
+                            </a>
+
+                            <!-- Bouton "J'ai payé" -->
+                            <form action="{{ route('payment.process', $order) }}" method="POST" class="mt-8" id="waveFormMobile">
+                                @csrf
+                                <input type="hidden" name="payment_method" value="wave">
+                                
+                                <div class="mb-4 text-left border-t border-slate-100 pt-6">
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1 text-center">Code de transaction SMS</label>
+                                    <p class="text-[10px] text-slate-400 mb-3 text-center">Prouvez votre paiement en collant l'ID reçu par SMS de Wave.</p>
+                                    <input type="text" name="wave_transaction_id" id="waveCodeMobile" required placeholder="Ex: CI2409ABCD..."
+                                        class="w-full max-w-xs block mx-auto px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#1ebff6] outline-none transition text-sm font-bold text-slate-900 text-center uppercase">
+                                </div>
+
+                                <button type="submit" id="waveBtnMobile" disabled
+                                    class="w-full max-w-xs mx-auto flex flex-col items-center justify-center py-3 px-6 bg-slate-300 text-white font-black rounded-2xl shadow-none transition-all active:scale-95 duration-200 cursor-not-allowed">
+                                    <span class="flex items-center gap-2"><i class="fas fa-check-circle"></i> Valider ce code</span>
+                                    <span class="text-[9px] font-normal opacity-90 uppercase mt-1 tracking-wider" id="btnHelpTextMobile">Numéro Wave manquant</span>
+                                </button>
+                            </form>
                         </div>
-                        @if($order->delivery_fee > 0)
-                            <div class="flex justify-between text-slate-600">
-                                <span>Frais de livraison</span>
-                                <span>{{ number_format($order->delivery_fee, 2) }} FCFA</span>
-                            </div>
-                        @endif
-                        <div class="flex justify-between text-lg font-bold text-slate-900 pt-3">
-                            <span>Total à payer</span>
-                            <span class="text-{{ custom color class }}">{{ number_format($order->total_amount, 2) }} FCFA</span>
-                        </div>
-                    </div>
 
-                    <!-- Payment Methods -->
-                    <div>
-                        <h2 class="text-lg font-semibold text-slate-900 mb-6">Méthode de paiement</h2>
-
-                        <form id="paymentForm" @submit.prevent="handlePayment" class="space-y-4">
-                            @csrf
-                            <input type="hidden" name="amount" value="{{ $order->total_amount }}">
-
-                            <!-- Card Payment -->
-                            <label class="relative flex items-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-blue-400 transition-colors" @click="selectedMethod = 'card'">
-                                <input type="radio" name="payment_method" value="card" v-model="selectedMethod" class="w-4 h-4">
-                                <div class="flex-1 ml-4">
-                                    <p class="font-semibold text-slate-900">Carte bancaire</p>
-                                    <p class="text-sm text-slate-500">Visa, Mastercard, American Express</p>
-                                </div>
-                                <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M20 8H4V6h16m0 8H4v-2h16m0 8H4v-2h16z"/>
-                                </svg>
-                            </label>
-
-                            <!-- Mobile Money Payment -->
-                            <label class="relative flex items-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-green-400 transition-colors" @click="selectedMethod = 'mobile'">
-                                <input type="radio" name="payment_method" value="mobile" v-model="selectedMethod" class="w-4 h-4">
-                                <div class="flex-1 ml-4">
-                                    <p class="font-semibold text-slate-900">Portefeuille mobile</p>
-                                    <p class="text-sm text-slate-500">Orange Money, Wave, Wari, etc.</p>
-                                </div>
-                                <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M17 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-5-5zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v3z"/>
-                                </svg>
-                            </label>
-
-                            <!-- Bank Transfer -->
-                            <label class="relative flex items-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-purple-400 transition-colors" @click="selectedMethod = 'bank'">
-                                <input type="radio" name="payment_method" value="bank" v-model="selectedMethod" class="w-4 h-4">
-                                <div class="flex-1 ml-4">
-                                    <p class="font-semibold text-slate-900">Virement bancaire</p>
-                                    <p class="text-sm text-slate-500">Virement direct depuis votre banque</p>
-                                </div>
-                                <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M21 8a2 2 0 0 0-1-1.72l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8z"/>
-                                </svg>
-                            </label>
-
-                            <!-- Cash on Delivery -->
-                            <label class="relative flex items-center p-4 border-2 border-slate-200 rounded-lg cursor-pointer hover:border-amber-400 transition-colors" @click="selectedMethod = 'cash'">
-                                <input type="radio" name="payment_method" value="cash" v-model="selectedMethod" class="w-4 h-4">
-                                <div class="flex-1 ml-4">
-                                    <p class="font-semibold text-slate-900">Paiement à la livraison</p>
-                                    <p class="text-sm text-slate-500">Payez directement au livreur</p>
-                                </div>
-                                <svg class="w-8 h-8 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-                                </svg>
-                            </label>
-
-                            <!-- Dynamic Form Fields based on selected method -->
-                            <transition name="fade">
-                                <div v-if="selectedMethod === 'card'" class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                                    <p class="text-sm text-slate-600 mb-4">Les informations de carte sont traitées de manière sécurisée.</p>
-                                    <div class="space-y-3">
-                                        <input type="text" placeholder="Numéro de carte" class="w-full px-4 py-2 border border-slate-200 rounded-lg" name="card_token">
-                                        <div class="grid grid-cols-2 gap-3">
-                                            <input type="text" placeholder="MM/AA" class="px-4 py-2 border border-slate-200 rounded-lg">
-                                            <input type="text" placeholder="CVV" class="px-4 py-2 border border-slate-200 rounded-lg">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div v-if="selectedMethod === 'mobile'" class="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                                    <p class="text-sm text-slate-600 mb-4">Entrez votre numéro de téléphone pour recevoir une demande de paiement.</p>
-                                    <input type="tel" placeholder="Numéro de téléphone" class="w-full px-4 py-2 border border-slate-200 rounded-lg" name="phone_number" pattern="[0-9+\-\s]{10,}">
-                                </div>
-
-                                <div v-if="selectedMethod === 'bank'" class="mt-6 p-4 bg-purple-50 rounded-lg border border-purple-200">
-                                    <p class="text-sm text-slate-600 mb-4">Les détails du virement bancaire seront affichés après validation.</p>
-                                    <div class="space-y-2 text-sm">
-                                        <p><strong>Banque:</strong> Le détail sera fourni</p>
-                                        <p><strong>Référence:</strong> Commande #{{ $order->id }}</p>
-                                    </div>
-                                </div>
-
-                                <div v-if="selectedMethod === 'cash'" class="mt-6 p-4 bg-amber-50 rounded-lg border border-amber-200">
-                                    <p class="text-sm text-slate-600">Vous devrez payer <strong>{{ number_format($order->total_amount, 2) }} FCFA</strong> au livreur à la réception de votre colis.</p>
-                                </div>
-                            </transition>
-
-                            <!-- Security Notice -->
-                            <div class="mt-8 p-4 bg-green-50 rounded-lg border border-green-200">
-                                <div class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                                    </svg>
-                                    <div>
-                                        <p class="font-semibold text-green-900 text-sm">Paiement sécurisé</p>
-                                        <p class="text-xs text-green-700">Vos données sont chiffrées et protégées avec le protocole SSL 256-bit.</p>
-                                    </div>
+                        <!-- DESKTOP -->
+                        <div class="hidden md:block">
+                            <p class="text-slate-500 mb-4 text-sm">Scannez ce QR code avec votre téléphone pour payer, ou utilisez le bouton ci-dessous.</p>
+                            <div class="mx-auto mb-4" style="max-width: 150px;">
+                                <div class="bg-white rounded-xl p-2 border-2 border-slate-200">
+                                    <img src="{{ $qrApiUrl }}" alt="QR Code Wave" class="w-full h-auto" style="width: 150px; height: 150px; display: block;">
                                 </div>
                             </div>
+                            <div class="text-2xl font-black text-slate-900 mb-5">
+                                {{ number_format($order->total_amount, 0, ',', ' ') }} <span class="text-base text-slate-400">CFA</span>
+                            </div>
 
-                            <!-- Submit Button -->
-                            <button type="submit" :disabled="!selectedMethod || isProcessing" class="w-full mt-8 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-slate-400 disabled:to-slate-500 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
-                                <span v-if="!isProcessing">Procéder au paiement</span>
-                                <span v-if="isProcessing">Traitement en cours...</span>
-                            </button>
-                        </form>
+                            <!-- Bouton desktop Wave -->
+                            <a href="{{ $wavePayUrl }}" target="_blank"
+                               style="background-color: #1ebff6; color: white;"
+                               class="inline-flex items-center justify-center gap-3 font-black py-4 px-8 rounded-2xl transition-all duration-300 shadow-xl mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-6 h-6 bg-white rounded-lg p-0.5">
+                                    <rect width="100" height="100" rx="20" fill="#1ebff6"/>
+                                    <path d="M 50 15 C 33 15, 29 42, 29 65 C 29 82, 40 85, 50 85 C 60 85, 71 82, 71 65 C 71 42, 67 15, 50 15 Z" fill="#111827"/>
+                                    <path d="M 50 42 C 40 42, 35 55, 35 68 C 35 78, 41 82, 50 82 C 59 82, 65 78, 65 68 C 65 55, 60 42, 50 42 Z" fill="#ffffff"/>
+                                    <circle cx="42" cy="32" r="3.5" fill="#ffffff"/>
+                                    <circle cx="58" cy="32" r="3.5" fill="#ffffff"/>
+                                    <path d="M 45 38 L 55 38 L 50 43 Z" fill="#f59e0b"/>
+                                    <path d="M 33 42 C 20 42, 18 30, 18 30 C 18 30, 25 55, 32 60 Z" fill="#111827"/>
+                                    <ellipse cx="38" cy="85" rx="8" ry="4" fill="#f59e0b"/>
+                                    <ellipse cx="62" cy="85" rx="8" ry="4" fill="#f59e0b"/>
+                                </svg>
+                                Ouvrir Wave pour payer
+                            </a>
+
+                            <!-- Bouton "J'ai payé" desktop -->
+                            <form action="{{ route('payment.process', $order) }}" method="POST" id="waveFormDesktop" class="mt-8">
+                                @csrf
+                                <input type="hidden" name="payment_method" value="wave">
+                                
+                                <div class="mb-4 max-w-sm mx-auto text-left border-t border-slate-100 pt-6">
+                                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1 text-center">Code de transaction Wave</label>
+                                    <p class="text-[10px] text-slate-400 mb-3 text-center">Le code secret de transaction que vous avez reçu par SMS.</p>
+                                    <input type="text" name="wave_transaction_id" id="waveCodeDesktop" required placeholder="Collez l'ID reçu par SMS"
+                                        class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#1ebff6] outline-none transition text-sm font-bold text-slate-900 text-center uppercase">
+                                </div>
+
+                                <button type="submit" id="waveBtnDesktop" disabled
+                                    class="flex flex-col items-center justify-center mx-auto py-3 px-10 bg-slate-300 text-white font-black rounded-2xl shadow-none transition-all duration-200 cursor-not-allowed">
+                                    <span class="flex items-center gap-2 text-base"><i class="fas fa-check-circle"></i> Valider la transaction</span>
+                                    <span class="text-[10px] font-normal opacity-90 uppercase mt-1 tracking-wider" id="btnHelpTextDesktop">Numéro Wave manquant</span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                @else
+                    {{-- Anciennes commandes (ex. orange_money) : plus de flux automatisé ici --}}
+                    <div class="bg-white rounded-[32px] shadow-sm border border-slate-100 p-8 mb-6">
+                        <h2 class="text-lg font-semibold text-slate-900 mb-4">Paiement non pris en charge sur cette page</h2>
+                        <p class="text-slate-600 mb-6">Ce mode de paiement n’est plus géré en ligne pour les nouvelles commandes. Pour cette commande, contactez-nous sur WhatsApp avec votre référence <strong>#{{ str_pad((string) $order->id, 5, '0', STR_PAD_LEFT) }}</strong>.</p>
+                        <a href="{{ route('orders.show', $order) }}" class="inline-flex items-center justify-center w-full sm:w-auto bg-slate-900 text-white font-bold py-3 px-6 rounded-xl">Voir ma commande</a>
+                    </div>
+                @endif
             </div>
 
             <!-- Right: Delivery Info -->
-            <div>
+            <div class="lg:col-span-1">
                 <!-- Delivery Information -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h3 class="text-lg font-semibold text-slate-900 mb-4">Livraison</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <p class="text-sm text-slate-500">Nom du client</p>
-                            <p class="font-medium text-slate-900">{{ $order->customer_name }}</p>
+                <div class="bg-white rounded-[32px] shadow-sm border border-slate-100 p-8 mb-6">
+                    <h3 class="text-lg font-black uppercase tracking-widest text-slate-900 mb-6">Livraison</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-slate-50 rounded-2xl">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Nom du client</p>
+                            <p class="font-black text-slate-900">{{ $order->customer_name }}</p>
                         </div>
-                        <div>
-                            <p class="text-sm text-slate-500">Téléphone</p>
-                            <p class="font-medium text-slate-900">{{ $order->customer_phone }}</p>
+                        <div class="p-4 bg-slate-50 rounded-2xl">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Téléphone</p>
+                            <p class="font-black text-slate-900">{{ $order->customer_phone }}</p>
                         </div>
-                        <div>
-                            <p class="text-sm text-slate-500">Adresse</p>
-                            <p class="font-medium text-slate-900">{{ $order->customer_address }}</p>
+                        <div class="p-4 bg-slate-50 rounded-2xl">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Adresse</p>
+                            <p class="font-medium text-slate-700 text-sm leading-relaxed">{{ $order->customer_address }}</p>
                         </div>
-                        <div>
-                            <p class="text-sm text-slate-500">Zone de livraison</p>
-                            <p class="font-medium text-slate-900">{{ $order->deliveryZone->name ?? 'N/A' }}</p>
+                        <div class="p-4 bg-[var(--primary)]/5 rounded-2xl border border-[var(--primary)]/10">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[var(--primary)] mb-1">Zone de livraison</p>
+                            <p class="font-black text-slate-900">{{ $order->deliveryZone->name ?? 'N/A' }}</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Current Status -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-slate-900 mb-4">Statut du paiement</h3>
-                    @if($payment)
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-2">
-                                <span class="inline-block w-3 h-3 rounded-full @if($payment->isCompleted()) bg-green-500 @elseif($payment->isProcessing()) bg-yellow-500 @elseif($payment->isFailed()) bg-red-500 @else bg-slate-300 @endif"></span>
-                                <span class="font-medium text-slate-900">
-                                    @switch($payment->status)
-                                        @case('completed')
-                                            Payé
-                                        @break
-                                        @case('processing')
-                                            En traitement
-                                        @break
-                                        @case('failed')
-                                            Échoué
-                                        @break
-                                        @default
-                                            En attente
-                                    @endswitch
-                                </span>
-                            </div>
-                            @if($payment->transaction_id)
-                                <p class="text-sm text-slate-500">ID: {{ $payment->transaction_id }}</p>
-                            @endif
+                <!-- Récapitulatif -->
+                <div class="bg-white rounded-[32px] shadow-sm border border-slate-100 p-8">
+                    <h3 class="text-lg font-black uppercase tracking-widest text-slate-900 mb-6">Récapitulatif</h3>
+                    <div class="space-y-3 mb-6 pb-6 border-b border-slate-100">
+                        <div class="flex justify-between text-sm font-bold text-slate-500">
+                            <span>Sous-total</span>
+                            <span class="text-slate-900">{{ number_format($order->total_amount - $order->delivery_fee, 0, ',', ' ') }} CFA</span>
                         </div>
-                    @else
-                        <p class="text-slate-500">Pas encore de paiement enregistré</p>
-                    @endif
+                        @if($order->delivery_fee > 0)
+                            <div class="flex justify-between text-sm font-bold text-slate-500">
+                                <span>Livraison</span>
+                                <span class="text-slate-900">{{ number_format($order->delivery_fee, 0, ',', ' ') }} CFA</span>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <span class="text-xs font-black uppercase tracking-widest text-slate-400">Total</span>
+                        <span class="text-2xl font-black text-[var(--primary)]">{{ number_format($order->total_amount, 0, ',', ' ') }} CFA</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -224,55 +193,38 @@
 </div>
 
 <script>
-    // Simple Vue-like reactive behavior (if Vue not available, fallback to vanilla JS)
-    const paymentForm = {
-        selectedMethod: 'card',
-        isProcessing: false,
+    document.addEventListener('DOMContentLoaded', function() {
+        // Logique Mobile
+        const inputMob = document.getElementById('waveCodeMobile');
+        const btnMob = document.getElementById('waveBtnMobile');
+        const textMob = document.getElementById('btnHelpTextMobile');
 
-        handlePayment() {
-            this.isProcessing = true;
+        // Logique Desktop
+        const inputDesk = document.getElementById('waveCodeDesktop');
+        const btnDesk = document.getElementById('waveBtnDesktop');
+        const textDesk = document.getElementById('btnHelpTextDesktop');
 
-            const formData = new FormData(document.getElementById('paymentForm'));
-            formData.append('payment_method', this.selectedMethod);
-
-            fetch('{{ route("payment.process", $order) }}', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = data.redirect || '{{ route("order.confirmation", $order) }}';
+        function validateInput(input, btn, text) {
+            if (!input || !btn) return;
+            input.addEventListener('input', function(e) {
+                let val = e.target.value.trim();
+                // Check if it's long enough to be a Wave ID
+                if (val.length >= 5) {
+                    btn.disabled = false;
+                    btn.classList.remove('bg-slate-300', 'shadow-none', 'cursor-not-allowed');
+                    btn.classList.add('bg-[#206B13]', 'shadow-lg', 'hover:bg-slate-900');
+                    text.textContent = "Poursuivre par email";
                 } else {
-                    alert('Erreur: ' + (data.error || 'Une erreur s\'est produite'));
-                    this.isProcessing = false;
+                    btn.disabled = true;
+                    btn.classList.add('bg-slate-300', 'shadow-none', 'cursor-not-allowed');
+                    btn.classList.remove('bg-[#206B13]', 'shadow-lg', 'hover:bg-slate-900');
+                    text.textContent = "Numéro Wave manquant";
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Une erreur s\'est produite');
-                this.isProcessing = false;
             });
         }
-    };
 
-    // Add event listeners
-    const form = document.getElementById('paymentForm');
-    if (form) {
-        const radios = form.querySelectorAll('input[name="payment_method"]');
-        radios.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                paymentForm.selectedMethod = e.target.value;
-            });
-        });
-
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            paymentForm.handlePayment();
-        });
-    }
+        validateInput(inputMob, btnMob, textMob);
+        validateInput(inputDesk, btnDesk, textDesk);
+    });
 </script>
-@endsection
+</x-app-layout>

@@ -80,45 +80,46 @@
             <span class="absolute top-0 right-0 px-3 py-1.5 bg-slate-900 text-white text-[9px] font-black uppercase tracking-widest z-10">Épuisé</span>
         @endif
 
-        <!-- CAAWOGI Hover Icons Bar (Expanded) -->
-        <div class="absolute bottom-0 inset-x-0 bg-white shadow-xl flex items-center justify-between py-4 px-8 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10">
-            <!-- Add to Cart -->
-            <button @click.prevent="addToCart()" 
-                    class="text-slate-800 hover:text-[#206B13] transition-all transform hover:scale-110"
-                    title="Ajouter au Panier">
-                <i x-show="!cartLoading" class="fas fa-shopping-basket text-[18px]"></i>
-                <i x-show="cartLoading" class="fas fa-circle-notch animate-spin text-[18px]"></i>
-            </button>
+    </div>
 
-            <div class="w-[1.5px] h-5 bg-slate-100"></div>
+    <!-- THIOTTY Permanent Icons Bar -->
+    <div class="bg-white flex items-center justify-between py-4 px-8 border-b border-slate-50 mb-4">
+        <!-- Add to Cart -->
+        <button @click.prevent="addToCart()" 
+                class="text-slate-800 hover:text-[#206B13] transition-all transform hover:scale-110"
+                title="Ajouter au Panier">
+            <i x-show="!cartLoading" class="fas fa-shopping-basket text-[18px]"></i>
+            <i x-show="cartLoading" class="fas fa-circle-notch animate-spin text-[18px]"></i>
+        </button>
 
-            <!-- Wishlist -->
-            <button @click.prevent="toggleWishlist()" 
-                    :class="isFavorited ? 'text-[#206B13]' : 'text-slate-800 hover:text-[#206B13]'"
-                    class="transition-all transform hover:scale-110"
-                    title="Favoris">
-                <i :class="isFavorited ? 'fas fa-heart' : 'far fa-heart'" class="text-[17px]"></i>
-            </button>
+        <div class="w-[1.5px] h-5 bg-slate-100"></div>
 
-            <div class="w-[1.5px] h-5 bg-slate-100"></div>
+        <!-- Wishlist -->
+        <button @click.prevent="toggleWishlist()" 
+                :class="isFavorited ? 'text-[#206B13]' : 'text-slate-800 hover:text-[#206B13]'"
+                class="transition-all transform hover:scale-110"
+                title="Favoris">
+            <i :class="isFavorited ? 'fas fa-heart' : 'far fa-heart'" class="text-[17px]"></i>
+        </button>
 
-            <!-- Compare -->
-            <button @click.prevent="toggleCompare()"
-                    :class="inCompare ? 'text-[#206B13]' : 'text-slate-800 hover:text-[#206B13]'"
-                    class="transition-all transform hover:scale-110"
-                    title="Comparer">
-                <i class="fas fa-random text-[17px]"></i>
-            </button>
+        <div class="w-[1.5px] h-5 bg-slate-100"></div>
 
-            <div class="w-[1.5px] h-5 bg-slate-100"></div>
+        <!-- Compare -->
+        <button @click.prevent="toggleCompare()"
+                :class="inCompare ? 'text-[#206B13]' : 'text-slate-800 hover:text-[#206B13]'"
+                class="transition-all transform hover:scale-110"
+                title="Comparer">
+            <i class="fas fa-random text-[17px]"></i>
+        </button>
 
-            <!-- Quick View -->
-            <button @click.prevent="$dispatch('open-quick-view', { url: '{{ route('shop.product.quick', $product) }}' })"
-                    class="text-slate-800 hover:text-[#206B13] transition-all transform hover:scale-110"
-                    title="Aperçu rapide">
-                <i class="fas fa-eye text-[18px]"></i>
-            </button>
-        </div>
+        <div class="w-[1.5px] h-5 bg-slate-100"></div>
+
+        <!-- Quick View -->
+        <button @click.prevent="$dispatch('open-quick-view', { url: '{{ route('shop.product.quick', $product) }}' })"
+                class="text-slate-800 hover:text-[#206B13] transition-all transform hover:scale-110"
+                title="Aperçu rapide">
+            <i class="fas fa-eye text-[18px]"></i>
+        </button>
     </div>
 
     <!-- Product Details -->

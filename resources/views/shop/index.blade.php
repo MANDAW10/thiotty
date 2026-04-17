@@ -1,4 +1,14 @@
 <x-app-layout>
+@push('seo')
+    @php
+        $currentCategorySlug = request('category');
+        $currentCat = $currentCategorySlug ? \App\Models\Category::where('slug', $currentCategorySlug)->first() : null;
+        $catLabel   = $currentCat ? $currentCat->display_name . ' — ' : '';
+        $seoTitle       = $catLabel . 'Boutique Thiotty Enterprise | Bétail, Chevaux & Volailles au Sénégal';
+        $seoDescription = 'Parcourez notre boutique en ligne : bétail, chevaux, volailles et produits agro-alimentaires de qualité. Commandez en ligne et recevez à domicile partout au Sénégal.';
+        $seoUrl         = url()->current();
+    @endphp
+@endpush
     <div class="py-12 bg-white min-h-screen" x-data="{ showFilters: false }">
         <div class="container-custom">
             <!-- Header Section (Industrial) -->
@@ -24,13 +34,14 @@
                             <span class="w-8 h-[2px] bg-[var(--primary)]"></span>
                         </h3>
                         <div class="space-y-3">
-                            <a href="{{ route('shop.index') }}" class="group flex items-center justify-between text-[11px] font-bold uppercase tracking-widest {{ !request('category') || request('category') == 'all' ? 'text-[var(--primary)]' : 'text-slate-500 hover:text-slate-900' }}">
+                            @php $currentCatSlug = request()->route('category')?->slug ?? request('category'); @endphp
+                            <a href="{{ route('shop.index') }}" class="group flex items-center justify-between text-[11px] font-bold uppercase tracking-widest {{ !$currentCatSlug || $currentCatSlug == 'all' ? 'text-[var(--primary)]' : 'text-slate-500 hover:text-slate-900' }}">
                                 <span>{{ __('messages.view_all') }}</span>
                                 <span class="text-[9px] opacity-40 group-hover:opacity-100">({{ \App\Models\Product::count() }})</span>
                             </a>
                             @foreach($categories as $cat)
                                 <a href="{{ route('shop.index', ['category' => $cat->slug] + request()->except('category', 'page')) }}"
-                                   class="group flex items-center justify-between text-[11px] font-bold uppercase tracking-widest {{ request('category') == $cat->slug ? 'text-[var(--primary)]' : 'text-slate-500 hover:text-slate-900' }}">
+                                   class="group flex items-center justify-between text-[11px] font-bold uppercase tracking-widest {{ $currentCatSlug == $cat->slug ? 'text-[var(--primary)]' : 'text-slate-500 hover:text-slate-900' }}">
                                     <span>{{ $cat->name }}</span>
                                     <span class="text-[9px] opacity-40 group-hover:opacity-100">({{ $cat->products_count }})</span>
                                 </a>

@@ -1,4 +1,14 @@
 <x-app-layout>
+@push('seo')
+    @php
+        $productDesc    = Str::limit(strip_tags($product->description ?? ''), 155, '…');
+        $seoTitle       = $product->display_name . ' — Thiotty Enterprise | Achat en ligne au Sénégal';
+        $seoDescription = $productDesc ?: 'Achetez ' . $product->display_name . ' en ligne sur Thiotty Enterprise. Livraison rapide à Dakar et dans tout le Sénégal.';
+        $seoImage       = $product->image_url ?? asset('assets/images/branding/vaches/troupeau vache.jpg');
+        $seoUrl         = route('shop.product', $product->slug);
+        $seoType        = 'product';
+    @endphp
+@endpush
     <!-- Product Detail Header (Simplified) -->
     <header class="py-8 bg-slate-50 border-b border-slate-100">
         <div class="container-custom">

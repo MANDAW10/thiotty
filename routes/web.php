@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\PasswordRecoveryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CompareController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
@@ -58,7 +59,7 @@ Route::get('/setup-final-admin', function (Request $request) use ($deploySetupGa
         Artisan::call('db:seed', ['--force' => true]);
 
         return "Boutique configurée ! <br>✅ Compte Admin : <b>admin@thiotty.com</b> (Pass: thiotty2026) <br>✅ Catégories & Produits insérés ! <br><a href='/login'>Aller à la connexion</a>";
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         return 'Erreur : '.$e->getMessage();
     }
 });
@@ -71,7 +72,7 @@ Route::get('/update-visuals', function (Request $request) use ($deploySetupGate)
         (new ProductSeeder)->run();
 
         return '✨ Visuels Premium activés avec succès ! <br>Les images haute définition sont maintenant opérationnelles sur toute la plateforme.';
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         return 'Erreur lors de la mise à jour : '.$e->getMessage();
     }
 });
@@ -83,7 +84,7 @@ Route::get('/sync-setup', function (Request $request) use ($deploySetupGate) {
         Artisan::call('migrate', ['--force' => true]);
 
         return '✨ Synchronisation Universelle activée ! <br>✅ Base de données mise à jour. <br>✅ Panier & Thème persistants opérationnels.';
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         return "Erreur lors de l'activation : ".$e->getMessage();
     }
 });
@@ -100,6 +101,61 @@ Route::get('/product/{product:slug}/quick', [ShopController::class, 'productQuic
 Route::get('/product/{product:slug}', [ShopController::class, 'product'])->name('shop.product');
 Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::post('/newsletter', [ShopController::class, 'newsletterSubscribe'])->name('newsletter.subscribe');
+
+// ═══════════════════════════════════════════
+// SEO : Sitemap XML dynamique
+// ═══════════════════════════════════════════
+Route::get('/sitemap.xml', function () {
+    $products   = \App\Models\Product::where('stock', '>', 0)->latest()->get();
+    $categories = \App\Models\Category::all();
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+    // Pages statiques
+    $staticPages = [
+        ['url' => url('/'),               'priority' => '1.0', 'freq' => 'daily'],
+        ['url' => route('shop.index'),    'priority' => '0.9', 'freq' => 'daily'],
+        ['url' => route('about'),         'priority' => '0.6', 'freq' => 'monthly'],
+        ['url' => route('blog.index'),    'priority' => '0.7', 'freq' => 'weekly'],
+        ['url' => url('/contact'),        'priority' => '0.5', 'freq' => 'monthly'],
+    ];
+
+    foreach ($staticPages as $page) {
+        $xml .= "  <url>\n";
+        $xml .= "    <loc>{$page['url']}</loc>\n";
+        $xml .= "    <changefreq>{$page['freq']}</changefreq>\n";
+        $xml .= "    <priority>{$page['priority']}</priority>\n";
+        $xml .= "  </url>\n";
+    }
+
+    // Pages catégories
+    foreach ($categories as $cat) {
+        $url = route('shop.category', $cat->slug);
+        $xml .= "  <url>\n";
+        $xml .= "    <loc>{$url}</loc>\n";
+        $xml .= "    <changefreq>weekly</changefreq>\n";
+        $xml .= "    <priority>0.8</priority>\n";
+        $xml .= "  </url>\n";
+    }
+
+    // Pages produits
+    foreach ($products as $product) {
+        $url     = route('shop.product', $product->slug);
+        $lastmod = $product->updated_at->toAtomString();
+        $xml .= "  <url>\n";
+        $xml .= "    <loc>{$url}</loc>\n";
+        $xml .= "    <lastmod>{$lastmod}</lastmod>\n";
+        $xml .= "    <changefreq>weekly</changefreq>\n";
+        $xml .= "    <priority>0.7</priority>\n";
+        $xml .= "  </url>\n";
+    }
+
+    $xml .= '</urlset>';
+
+    return response($xml, 200)->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
 Route::get('/a-propos', function () {
     return view('about');
 })->name('about');
@@ -152,6 +208,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/{order}', [PaymentController::class, 'show'])->name('payment.show');
     Route::post('/payment/{order}/initiate', [PaymentController::class, 'initiate'])->name('payment.initiate');
     Route::post('/payment/{order}/process', [PaymentController::class, 'process'])->name('payment.process');
+    Route::get('/payment/{order}/otp', [PaymentController::class, 'otpShow'])->name('payment.otp');
+    Route::post('/payment/{order}/otp/verify', [PaymentController::class, 'otpVerify'])->name('payment.otp.verify');
+    Route::get('/payment/callback/wave/{payment}', [PaymentController::class, 'waveCallback'])->name('payment.callback.wave');
     Route::get('/payment/{order}/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
     Route::get('/payment/history', [PaymentController::class, 'history'])->name('payment.history');
     Route::get('/payment/details/{payment}', [PaymentController::class, 'details'])->name('payment.details');
@@ -160,9 +219,7 @@ Route::middleware('auth')->group(function () {
 // Payment Webhook (public, no auth)
 Route::post('/payment/confirm', [PaymentController::class, 'confirm'])->name('payment.confirm');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

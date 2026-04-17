@@ -11,7 +11,7 @@ class DashboardController extends Controller
      * Afficher le tableau de bord utilisateur
      * Redirige automatiquement vers le bon endroit selon le type d'utilisateur
      */
-    public function index(): View
+    public function index()
     {
         if (!Auth::check()) {
             return redirect()->route('login');
@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $totalPayments = $user->payments()->count();
 
         // Dernières commandes
-        $recentOrders = $user->orders()->latest()->take(5)->get();
+        $recentOrders = $user->orders()->with('items')->latest()->take(5)->get();
 
         // Derniers favoris
         $recentWishlists = $user->wishlists()->latest()->take(8)->with('product')->get();

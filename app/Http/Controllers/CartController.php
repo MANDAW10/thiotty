@@ -35,9 +35,26 @@ class CartController extends Controller
         ]);
     }
 
-    public function add(Product $product)
+    public function add(Request $request, Product $product)
     {
-        $this->cartService->add($product);
+        $qtyToAdd = $request->input('quantity', 1);
+
+        // Simple stock check - won't exceed max available
+        $items = collect($this->cartService->getItems());
+        $currentInCart = isset($items[$product->id]) ? $items[$product->id]['quantity'] : 0;
+        
+        if ($currentInCart + $qtyToAdd > $product->stock) {
+            if (request()->ajax() || request()->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Stock disponible atteint.',
+                    'count' => count($items),
+                ]);
+            }
+            return back()->with('error', 'Stock insuffisant pour ce produit.');
+        }
+
+        $this->cartService->add($product, $qtyToAdd);
         $cart = $this->cartService->getItems();
 
         if (request()->ajax() || request()->wantsJson()) {
@@ -53,6 +70,10 @@ class CartController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        if ($request->quantity > $product->stock) {
+            return back()->with('error', 'Quantité demandée supérieure au stock disponible.');
+        }
+
         if ($request->quantity > 0) {
             $this->cartService->update($product, $request->quantity);
 

@@ -80,12 +80,16 @@ class ShopController extends Controller
         }
 
         $products = $query->paginate(12)->withQueryString();
-        $categories = Category::withCount('products')->whereNull('parent_id')->get();
+        extract($this->getCommonShopData());
 
-        // Fetch Max Price for Slider
+        return view('shop.index', compact('products', 'categories', 'bestSellers', 'maxPriceInDb'));
+    }
+
+    private function getCommonShopData()
+    {
+        $categories = Category::withCount('products')->whereNull('parent_id')->get();
         $maxPriceInDb = Product::max('price') ?? 100000;
 
-        // Fetch Best Sellers for Sidebar
         $bestSellerIds = DB::table('order_items')
             ->select('product_id', DB::raw('SUM(quantity) as qty'))
             ->groupBy('product_id')
@@ -100,15 +104,15 @@ class ShopController extends Controller
             $bestSellers = $bestSellerIds->map(fn ($id) => $byId->get($id))->filter();
         }
 
-        return view('shop.index', compact('products', 'categories', 'bestSellers', 'maxPriceInDb'));
+        return compact('categories', 'maxPriceInDb', 'bestSellers');
     }
 
     public function category(Category $category)
     {
         $products = $category->products()->paginate(12);
-        $categories = Category::all();
+        extract($this->getCommonShopData());
 
-        return view('shop.index', compact('category', 'products', 'categories'));
+        return view('shop.index', compact('category', 'products', 'categories', 'maxPriceInDb', 'bestSellers'));
     }
 
     public function product(Product $product)
@@ -171,14 +175,26 @@ class ShopController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->input('query');
-        $products = Product::where('name', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
-            ->paginate(12);
+        $searchText = $request->input('query');
+        
+        $queryBuilder = Product::where(function ($q) use ($searchText) {
+            $q->where('name', 'ilike', "%{$searchText}%")
+              ->orWhere('description', 'ilike', "%{$searchText}%");
+        });
 
-        $categories = Category::all();
+        // Filter by Category from the search dropdown
+        if ($request->filled('category')) {
+            $queryBuilder->whereHas('category', function ($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
+        }
 
-        return view('shop.index', compact('products', 'categories', 'query'));
+        $products = $queryBuilder->paginate(12)->withQueryString();
+
+        extract($this->getCommonShopData());
+
+        $query = $searchText;
+        return view('shop.index', compact('products', 'categories', 'query', 'maxPriceInDb', 'bestSellers'));
     }
 
     public function contactStore(Request $request)

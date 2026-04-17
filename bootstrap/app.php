@@ -23,6 +23,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\SetLocaleMiddleware::class,
         ]);
+        
+        $middleware->validateCsrfTokens(except: [
+            '/payment/confirm',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

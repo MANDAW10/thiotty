@@ -1,2 +1,17 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Bloquer les pages privées
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /checkout
+Disallow: /cart
+Disallow: /payment/
+Disallow: /profile
+Disallow: /orders/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+
+# Sitemap
+Sitemap: https://thiotty.com/sitemap.xml
